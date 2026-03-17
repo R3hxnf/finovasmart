@@ -1,458 +1,1632 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Finova — Personal Finance</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Finova — Personal Finance</title>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║  ⚙️  CONFIGURATION — Replace all YOUR_... values below      ║
+     ╚══════════════════════════════════════════════════════════════╝ -->
+<script>
+window.CFG = {
+  SUPABASE_URL:'https://cwhnihpneuypsvjqwktv.supabase.co',       // e.g. https://abc.supabase.co
+  SUPABASE_ANON_KEY:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3aG5paHBuZXV5cHN2anF3a3R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3MTM4NjAsImV4cCI6MjA4OTI4OTg2MH0.mZvRhAX4lfnBxSa1zbZvCHClbxBAzee9f2nAFlpAkPk',  // from Settings → API
+  FINNHUB_KEY:        'd6s49jpr01qrb5i8ilngd6s49jpr01qrb5i8ilo0',
+  ALPHA_VANTAGE_KEY:  'AHUXAW7EYLG96JIZ',
+  TWELVE_DATA_KEY:    '1da37bc6e58f46d6b647b81fe077d658',
+  REFRESH_MS:         60000,  // auto-refresh stocks every 60 s
+};
+</script>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
+        onerror="document.getElementById('cdn-err').style.display='flex'"></script>
+
+<style>
+/* ═══════════════════════ DESIGN TOKENS ═══════════════════════ */
+:root{
+  --bg:#0b0b12;--sur:#12121c;--ele:#181826;
+  --gl:rgba(255,255,255,.055);--gl2:rgba(255,255,255,.1);
+  --bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.18);
+  --t1:#eeeef8;--t2:rgba(238,238,248,.55);--t3:rgba(238,238,248,.28);
+  --blue:#3b82f6;--bgl:rgba(59,130,246,.2);
+  --teal:#2dd4bf;--green:#4ade80;--red:#f87171;--amber:#fbbf24;--purple:#a78bfa;
+  --r6:6px;--r10:10px;--r16:16px;--r22:22px;
+  --sh:0 8px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.055);
+  --tr:.18s cubic-bezier(.4,0,.2,1);
+  --sw:240px;
+}
+[data-theme=light]{
+  --bg:#f2f2f7;--sur:#fff;--ele:#ececf4;
+  --gl:rgba(255,255,255,.72);--gl2:rgba(255,255,255,.92);
+  --bd:rgba(0,0,0,.07);--bd2:rgba(0,0,0,.15);
+  --t1:#1c1c2e;--t2:rgba(28,28,46,.55);--t3:rgba(28,28,46,.28);
+  --sh:0 4px 20px rgba(0,0,0,.09),inset 0 1px 0 rgba(255,255,255,.9);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;
+  transition:background .3s,color .3s;font-size:15px}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+input,select{font:inherit;background:none;border:none;outline:none;color:var(--t1)}
+img{max-width:100%}
+.dn{display:none!important}
+.pos{color:var(--green)!important}.neg{color:var(--red)!important}
+.mono{font-variant-numeric:tabular-nums}
+
+/* ════════════════════ CDN ERROR ════════════════════ */
+#cdn-err{display:none;position:fixed;inset:0;z-index:99999;
+  background:var(--bg);align-items:center;justify-content:center;flex-direction:column;gap:1rem;text-align:center;padding:2rem}
+#cdn-err h2{color:var(--red);font-size:1.4rem}
+#cdn-err p{color:var(--t2);max-width:480px;line-height:1.6}
+#cdn-err code{background:var(--ele);padding:.2rem .5rem;border-radius:4px;font-size:.85rem}
+
+/* ════════════════════ AUTH ════════════════════ */
+#auth-ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  z-index:9999;background:var(--bg);overflow:hidden}
+.orbs{position:absolute;inset:0;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.32;
+  animation:afloat 9s ease-in-out infinite alternate}
+.o1{width:440px;height:440px;background:radial-gradient(#3b82f6,transparent 70%);top:-120px;left:-100px}
+.o2{width:360px;height:360px;background:radial-gradient(#a78bfa,transparent 70%);bottom:-80px;right:-80px;animation-delay:-4s}
+.o3{width:270px;height:270px;background:radial-gradient(#2dd4bf,transparent 70%);top:44%;left:44%;animation-delay:-7s}
+@keyframes afloat{from{transform:translate(0,0)scale(1)}to{transform:translate(28px,16px)scale(1.07)}}
+
+.acard{position:relative;width:100%;max-width:410px;padding:2.5rem;
+  background:var(--gl);backdrop-filter:blur(40px)saturate(180%);
+  border:1px solid var(--bd);border-radius:var(--r22);box-shadow:var(--sh);
+  animation:sup .5s cubic-bezier(.4,0,.2,1) both}
+@keyframes sup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.alogo{display:flex;align-items:center;gap:.55rem;margin-bottom:.4rem}
+.alogo-i{font-size:2rem;color:var(--blue)}.alogo-t{font-size:1.7rem;font-weight:700;letter-spacing:-.04em}
+.atag{color:var(--t2);font-size:.88rem;margin-bottom:1.7rem}
+
+.atabs{display:flex;background:rgba(0,0,0,.18);border-radius:var(--r10);padding:4px;
+  margin-bottom:1.5rem;border:1px solid var(--bd)}
+[data-theme=light] .atabs{background:rgba(0,0,0,.05)}
+.atab{flex:1;padding:.48rem;border-radius:7px;font-size:.83rem;font-weight:600;
+  color:var(--t2);transition:all var(--tr)}
+.atab.on{background:var(--blue);color:#fff;box-shadow:0 2px 10px rgba(59,130,246,.4)}
+
+.aform{display:none;flex-direction:column;gap:.9rem}
+.aform.on{display:flex}
+
+.fg{display:flex;flex-direction:column;gap:.32rem}
+.fg label{font-size:.74rem;font-weight:700;color:var(--t2);letter-spacing:.04em;text-transform:uppercase}
+.fg input{width:100%;padding:.72rem 1rem;background:rgba(0,0,0,.18);
+  border:1.5px solid var(--bd);border-radius:var(--r10);font-size:.94rem;
+  transition:border var(--tr),box-shadow var(--tr);color:var(--t1)}
+[data-theme=light] .fg input{background:rgba(0,0,0,.04)}
+.fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--bgl)}
+#amsg{min-height:1.1rem;font-size:.8rem;font-weight:600;text-align:center;margin-top:.4rem;transition:color .2s}
+
+/* ════════════════════ BUTTONS ════════════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  padding:.68rem 1.3rem;border-radius:var(--r10);font-size:.875rem;font-weight:600;
+  cursor:pointer;transition:all var(--tr);border:none}
+.bp{background:var(--blue);color:#fff}
+.bp:hover{background:#2563eb;box-shadow:0 4px 18px rgba(59,130,246,.5);transform:translateY(-1px)}
+.bp:active{transform:translateY(0)}
+.bp:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.bg{background:var(--gl);color:var(--t1);border:1.5px solid var(--bd)}
+.bg:hover{background:var(--gl2);border-color:var(--bd2)}
+.bfull{width:100%}
+.bdel{background:rgba(248,113,113,.1);color:var(--red);
+  border:1px solid rgba(248,113,113,.22);padding:.28rem .65rem;
+  border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;transition:all var(--tr)}
+.bdel:hover{background:rgba(248,113,113,.22)}
+.iBtn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;background:var(--gl);border:1.5px solid var(--bd);
+  color:var(--t2);font-size:1rem;transition:all var(--tr)}
+.iBtn:hover{background:var(--gl2);color:var(--t1)}
+
+/* ════════════════════ APP LAYOUT ════════════════════ */
+#app{display:flex;min-height:100vh}
+
+/* sidebar */
+.sb{width:var(--sw);height:100vh;position:fixed;left:0;top:0;
+  background:var(--gl);backdrop-filter:blur(40px)saturate(160%);
+  border-right:1px solid var(--bd);
+  display:flex;flex-direction:column;z-index:100;
+  transition:transform .32s cubic-bezier(.4,0,.2,1)}
+.sbh{padding:1.4rem 1.2rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:.5rem}
+.li{font-size:1.35rem;color:var(--blue)}.lt{font-size:1.15rem;font-weight:700;letter-spacing:-.03em}
+#sbclose{display:none}
+.sbnav{flex:1;padding:.5rem .7rem;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.sbnav::-webkit-scrollbar{width:3px}
+.sbnav::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+.ni{display:flex;align-items:center;gap:.7rem;padding:.62rem .85rem;border-radius:var(--r10);
+  font-size:.875rem;font-weight:500;color:var(--t2);cursor:pointer;
+  transition:all var(--tr);border:1.5px solid transparent}
+.ni-dot{font-size:.5rem;color:var(--t3);transition:color var(--tr)}
+.ni:hover{background:var(--gl2);color:var(--t1)}.ni:hover .ni-dot{color:var(--blue)}
+.ni.on{background:linear-gradient(135deg,rgba(59,130,246,.16),rgba(59,130,246,.05));
+  color:var(--blue);border-color:rgba(59,130,246,.24)}.ni.on .ni-dot{color:var(--blue)}
+.sbf{padding:.95rem 1.2rem;border-top:1px solid var(--bd)}
+.ubadge{display:flex;align-items:center;gap:.7rem;margin-bottom:.85rem}
+.uav{width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;color:#fff;flex-shrink:0}
+.un{font-size:.875rem;font-weight:600}.ur{font-size:.72rem;color:var(--t2)}
+.sbacts{display:flex;gap:.5rem}
+.sbbd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+.sbbd.on{display:block}
+
+/* main */
+.mn{flex:1;margin-left:var(--sw);display:flex;flex-direction:column;min-height:100vh}
+.tb{position:sticky;top:0;padding:.9rem 1.8rem;display:flex;align-items:center;gap:1rem;
+  background:rgba(11,11,18,.88);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bd);z-index:50}
+[data-theme=light] .tb{background:rgba(242,242,247,.88)}
+.hbtn{display:none;font-size:1.3rem;color:var(--t2);cursor:pointer}
+#tbtitle{font-size:.98rem;font-weight:600;flex:1}
+.tbr{display:flex;align-items:center;gap:.7rem;margin-left:auto}
+#tmtog{display:none}
+.live{display:flex;align-items:center;gap:.38rem;font-size:.72rem;color:var(--green);font-weight:600}
+.ldot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:lpulse 2s ease-in-out infinite}
+@keyframes lpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.78)}}
+
+.ct{padding:1.8rem;max-width:1380px;margin:0 auto;width:100%}
+
+/* sections */
+.sec{display:none;animation:sIn .25s ease both}
+.sec.on{display:block}
+@keyframes sIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.sh{display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:1.6rem;gap:1rem;flex-wrap:wrap}
+.sh h1{font-size:1.65rem;font-weight:700;letter-spacing:-.03em;line-height:1.2}
+.ssub{color:var(--t2);font-size:.85rem;margin-top:.2rem}
+
+/* glass card */
+.gc{background:var(--gl);backdrop-filter:blur(20px)saturate(160%);
+  border:1.5px solid var(--bd);border-radius:var(--r16);box-shadow:var(--sh);
+  transition:border-color var(--tr)}
+.gc:hover{border-color:var(--bd2)}
+
+/* hero */
+.hero{padding:1.8rem 2.2rem;display:flex;align-items:center;
+  justify-content:space-between;margin-bottom:1.4rem;
+  background:linear-gradient(135deg,rgba(59,130,246,.13),rgba(167,139,250,.07));
+  border-color:rgba(59,130,246,.24)}
+.hlbl{display:block;font-size:.72rem;font-weight:700;color:var(--t2);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:.35rem}
+.hval{font-size:2.6rem;font-weight:700;letter-spacing:-.04em;font-variant-numeric:tabular-nums;
+  background:linear-gradient(135deg,var(--t1),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hchg{display:flex;align-items:center;gap:.3rem;font-size:.83rem;font-weight:600;margin-top:.38rem}
+
+/* stats */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.4rem}
+.sc{padding:1.1rem 1.4rem;display:flex;align-items:center;gap:.9rem;transition:all var(--tr);cursor:default}
+.sc:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,0,0,.28)}
+.sicon{font-size:1.8rem;flex-shrink:0}
+.sv label{font-size:.7rem;color:var(--t2);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.sval{font-size:1.12rem;font-weight:700;margin-top:.18rem;font-variant-numeric:tabular-nums}
+
+/* 2-col chart grid */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.4rem}
+.wide{grid-column:1/-1}
+.cc{padding:1.3rem}
+.cc h3{font-size:.9rem;font-weight:700;margin-bottom:.9rem;color:var(--t1)}
+
+/* banner */
+.bnr{padding:1.4rem 1.8rem;display:flex;flex-direction:column;margin-bottom:1.4rem}
+.bnr label{font-size:.7rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.06em}
+.bnrv{font-size:2.1rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.03em;margin-top:.22rem}
+
+/* items grid */
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:1rem}
+.itm{padding:1.3rem;display:flex;flex-direction:column;gap:.65rem;transition:all var(--tr)}
+.itm:hover{transform:translateY(-2px);border-color:var(--bd2)}
+.ih{display:flex;align-items:center;justify-content:space-between}
+.inm{font-size:.96rem;font-weight:700}
+.isub{font-size:.76rem;color:var(--t2);margin-top:.1rem}
+.iamt{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.bdg{padding:.2rem .55rem;background:var(--gl);border:1px solid var(--bd);
+  border-radius:99px;font-size:.7rem;font-weight:600;color:var(--t2)}
+
+/* progress */
+.pw{display:flex;flex-direction:column;gap:.3rem}
+.plbls{display:flex;justify-content:space-between;font-size:.7rem;color:var(--t2)}
+.pb{height:5px;background:var(--ele);border-radius:99px;overflow:hidden}
+.pf{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .7s cubic-bezier(.4,0,.2,1)}
+.pf.warn{background:linear-gradient(90deg,var(--amber),var(--red))}
+
+/* credit card */
+.ccv{height:128px;background:linear-gradient(135deg,#1b395e,#1e4e36,#1b395e);
+  border-radius:var(--r10);padding:1rem;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-between}
+.ccv::before{content:'';position:absolute;width:180px;height:180px;
+  background:rgba(255,255,255,.055);border-radius:50%;top:-50px;right:-50px}
+.ccnum{font-size:.78rem;letter-spacing:.13em;color:rgba(255,255,255,.72);font-variant-numeric:tabular-nums}
+.ccbot{display:flex;justify-content:space-between;align-items:flex-end}
+.ccnm{font-size:.76rem;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.04em}
+.cclm{font-size:.68rem;color:rgba(255,255,255,.5)}
+
+.fdcnt{display:flex;align-items:center;gap:.32rem;font-size:.76rem;color:var(--amber);font-weight:600}
+
+/* portfolio */
+.ph{padding:1.6rem 1.8rem;margin-bottom:1.4rem}
+.pst{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem}
+.ps label{font-size:.7rem;color:var(--t2);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.psv{font-size:1.4rem;font-weight:700;font-variant-numeric:tabular-nums;margin-top:.22rem;letter-spacing:-.02em}
+
+/* table */
+.tcrd{padding:0;overflow:hidden}
+.tbl{width:100%;border-collapse:collapse}
+.tbl thead tr{background:var(--gl);border-bottom:1.5px solid var(--bd)}
+.tbl th{padding:.75rem 1rem;text-align:left;font-size:.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--t2)}
+.tbl td{padding:.85rem 1rem;font-size:.875rem;border-bottom:1px solid var(--bd);transition:background var(--tr)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr:hover td{background:var(--gl)}
+.ec{text-align:center;color:var(--t2);padding:2.5rem!important}
+.sym{font-weight:700;color:var(--blue);font-variant-numeric:tabular-nums}
+
+/* expenses */
+.esum{padding:1.6rem 1.8rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;margin-bottom:1.4rem}
+
+/* budgets */
+.bl{display:flex;flex-direction:column;gap:.9rem}
+.bi{padding:1.1rem 1.4rem;display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap}
+.bcat{font-weight:700;min-width:110px;font-size:.9rem}
+.bamt{display:flex;align-items:baseline;gap:.35rem;font-variant-numeric:tabular-nums}
+.bused{font-size:1.05rem;font-weight:700}
+.bsep{color:var(--t3)}.blim{color:var(--t2);font-size:.88rem}
+.bbar{flex:1;min-width:160px}
+.bst{padding:.18rem .55rem;border-radius:99px;font-size:.7rem;font-weight:700;flex-shrink:0}
+.bok{background:rgba(74,222,128,.12);color:var(--green)}
+.bwrn{background:rgba(251,191,36,.12);color:var(--amber)}
+.bovr{background:rgba(248,113,113,.12);color:var(--red)}
+
+/* net worth */
+.nwh{padding:2.2rem;text-align:center;margin-bottom:1.4rem;
+  background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(167,139,250,.08))}
+.nwg{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.nwc{padding:1.3rem}
+.nwt{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--bd)}
+.nwt.a{color:var(--green)}.nwt.l{color:var(--red)}
+.nwr{display:flex;justify-content:space-between;align-items:center;
+  padding:.5rem 0;border-bottom:1px solid var(--bd);font-size:.862rem}
+.nwr:last-of-type{border-bottom:none}
+.nwrv{font-variant-numeric:tabular-nums;font-weight:600}
+.nwtot{display:flex;justify-content:space-between;padding-top:.7rem;margin-top:.38rem;
+  border-top:1.5px solid var(--bd2);font-weight:700;font-size:.9rem}
+.nwtot span{font-variant-numeric:tabular-nums}
+
+/* insights */
+.ins{padding:1.3rem}
+.ins h3{font-size:.92rem;font-weight:700;margin-bottom:.9rem}
+.insl{display:flex;flex-direction:column;gap:.65rem}
+.insit{display:flex;align-items:flex-start;gap:.65rem;padding:.75rem .95rem;
+  background:var(--gl);border-radius:var(--r10);border:1.5px solid var(--bd);
+  animation:sIn .35s ease both}
+.insit:nth-child(2){animation-delay:.1s}.insit:nth-child(3){animation-delay:.2s}
+.insic{font-size:1.05rem;flex-shrink:0}
+.insit p{font-size:.82rem;line-height:1.55;color:var(--t2)}
+
+/* modal */
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;z-index:9000;padding:1rem;
+  animation:sIn .16s ease}
+.mdl{width:100%;max-width:490px;max-height:90vh;overflow-y:auto;animation:sup .26s cubic-bezier(.4,0,.2,1) both}
+.mh{padding:1.3rem 1.3rem 0;display:flex;justify-content:space-between;align-items:center}
+.mh h2{font-size:1.1rem;font-weight:700}
+.mb{padding:1.3rem;display:flex;flex-direction:column;gap:.85rem}
+.mf{padding:0 1.3rem 1.3rem;display:flex;gap:.65rem;justify-content:flex-end}
+.mfg{display:flex;flex-direction:column;gap:.3rem}
+.mfg label{font-size:.72rem;font-weight:700;color:var(--t2);letter-spacing:.04em;text-transform:uppercase}
+.mfg input,.mfg select{width:100%;padding:.68rem .95rem;background:var(--ele);
+  border:1.5px solid var(--bd);border-radius:var(--r10);font-size:.9rem;
+  transition:border var(--tr),box-shadow var(--tr);color:var(--t1)}
+.mfg input:focus,.mfg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--bgl)}
+.mfg select option{background:var(--ele);color:var(--t1)}
+.mcl{width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;color:var(--t2);cursor:pointer;transition:all var(--tr)}
+.mcl:hover{background:var(--gl2);color:var(--t1)}
+
+/* toast */
+.tw{position:fixed;bottom:1.8rem;right:1.8rem;z-index:9999;display:flex;flex-direction:column;gap:.45rem}
+.tst{padding:.75rem 1.1rem;background:var(--ele);border:1.5px solid var(--bd);
+  border-radius:var(--r16);font-size:.82rem;font-weight:600;box-shadow:var(--sh);
+  animation:sIn .25s ease both;max-width:300px}
+.ts{border-left:3px solid var(--green)}.te{border-left:3px solid var(--red)}.ti{border-left:3px solid var(--blue)}
+.tout{animation:tout .25s ease both}
+@keyframes tout{to{opacity:0;transform:translateX(14px)}}
+
+/* spinning loader */
+.spin{display:inline-block;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* logo */
+.logo-svg{width:32px;height:32px;flex-shrink:0}
+.alogo-svg{width:44px;height:44px;flex-shrink:0}
+
+.emp{grid-column:1/-1;text-align:center;color:var(--t2);padding:2.5rem;font-size:.875rem}
+.stup{font-size:.75rem;color:var(--t2);margin-top:.2rem}
+
+/* stock price badge */
+.live-price{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;
+  background:rgba(74,222,128,.1);color:var(--green);border-radius:99px;
+  padding:.18rem .5rem;font-weight:600}
+
+/* ════════════════════ RESPONSIVE ════════════════════ */
+@media(max-width:1100px){
+  .sgrid{grid-template-columns:repeat(2,1fr)}
+  .cgrid{grid-template-columns:1fr}.wide{grid-column:1}
+}
+@media(max-width:860px){
+  :root{--sw:0px}
+  .sb{width:272px;transform:translateX(-100%)}
+  .sb.open{transform:translateX(0)}
+  #sbclose{display:flex}
+  .mn{margin-left:0}.hbtn{display:flex}
+  #thtog{display:none}#tmtog{display:flex}
+  .ct{padding:1.1rem}.hero{flex-direction:column;gap:1rem}
+  .hval{font-size:1.9rem}
+  .nwg,.pst,.esum{grid-template-columns:1fr}
+  .sgrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){
+  .sgrid{grid-template-columns:1fr}
+  .hval,.bnrv{font-size:1.65rem}
+  .sh h1{font-size:1.4rem}
+  .tbl th:nth-child(4),.tbl td:nth-child(4),
+  .tbl th:nth-child(5),.tbl td:nth-child(5){display:none}
+}
+</style>
 </head>
 <body>
 
-<!-- ─── AUTH OVERLAY ─────────────────────────────────────────────────────── -->
-<div id="auth-overlay" class="auth-overlay">
-  <div class="auth-bg">
-    <div class="auth-orb auth-orb-1"></div>
-    <div class="auth-orb auth-orb-2"></div>
-    <div class="auth-orb auth-orb-3"></div>
-  </div>
-  <div class="auth-card">
-    <div class="auth-logo">
-      <div class="auth-logo-icon">◈</div>
-      <span class="auth-logo-text">Finova</span>
-    </div>
-    <p class="auth-tagline">Your wealth. Unified.</p>
+<!-- CDN load failure message -->
+<div id="cdn-err">
+  <h2>⚠️ Failed to load Supabase</h2>
+  <p>The app requires an internet connection to load the Supabase library. Please check your connection and refresh the page.</p>
+  <p>If this keeps happening, try opening the file in Chrome or Firefox and ensure <code>cdn.jsdelivr.net</code> is reachable.</p>
+  <button class="btn bp" onclick="location.reload()">Retry</button>
+</div>
 
-    <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="login">Sign In</button>
-      <button class="auth-tab" data-tab="signup">Create Account</button>
+<!-- ═════════════════════════ AUTH ═════════════════════════════ -->
+<div id="auth-ov">
+  <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+  <div class="acard">
+    <div class="alogo">
+      <svg class="alogo-svg" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lg1" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#60a5fa"/>
+            <stop offset="100%" stop-color="#3b82f6"/>
+          </linearGradient>
+          <linearGradient id="lg2" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#1d4ed8"/>
+          </linearGradient>
+        </defs>
+        <rect width="44" height="44" rx="12" fill="url(#lg2)"/>
+        <rect width="44" height="44" rx="12" fill="white" fill-opacity="0.06"/>
+        <path d="M13 12h18v4H17v6h12v4H17v8h-4V12z" fill="white" fill-opacity="0.95"/>
+        <circle cx="34" cy="10" r="4" fill="#60a5fa" fill-opacity="0.8"/>
+      </svg>
+      <span class="alogo-t">Finova</span>
     </div>
-
-    <div id="auth-login" class="auth-form active">
-      <div class="field-group">
-        <label>Email</label>
-        <input type="email" id="login-email" placeholder="you@example.com" />
-      </div>
-      <div class="field-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••" />
-      </div>
-      <button class="btn-primary btn-full" id="btn-login">Sign In</button>
-      <button class="btn-ghost btn-full" id="btn-demo">Continue with Demo Data</button>
+    <p class="atag">Your wealth, unified.</p>
+    <div class="atabs">
+      <button class="atab on" data-tab="login">Sign In</button>
+      <button class="atab" data-tab="signup">Create Account</button>
     </div>
-
-    <div id="auth-signup" class="auth-form">
-      <div class="field-group">
-        <label>Full Name</label>
-        <input type="text" id="signup-name" placeholder="Alex Johnson" />
-      </div>
-      <div class="field-group">
-        <label>Email</label>
-        <input type="email" id="signup-email" placeholder="you@example.com" />
-      </div>
-      <div class="field-group">
-        <label>Password</label>
-        <input type="password" id="signup-password" placeholder="Min. 8 characters" />
-      </div>
-      <button class="btn-primary btn-full" id="btn-signup">Create Account</button>
+    <!-- login -->
+    <div id="af-login" class="aform on">
+      <div class="fg"><label>Email</label>
+        <input id="li-em" type="email" placeholder="you@example.com" autocomplete="email"/></div>
+      <div class="fg"><label>Password</label>
+        <input id="li-pw" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
+      <button id="btn-signin" class="btn bp bfull">Sign In</button>
     </div>
-
-    <p class="auth-notice" id="auth-message"></p>
+    <!-- signup -->
+    <div id="af-signup" class="aform">
+      <div class="fg"><label>Full Name</label>
+        <input id="su-nm" type="text" placeholder="Alex Johnson" autocomplete="name"/></div>
+      <div class="fg"><label>Email</label>
+        <input id="su-em" type="email" placeholder="you@example.com" autocomplete="email"/></div>
+      <div class="fg"><label>Password <span style="font-weight:400;text-transform:none">(min 6 chars)</span></label>
+        <input id="su-pw" type="password" placeholder="••••••••" autocomplete="new-password"/></div>
+      <button id="btn-signup" class="btn bp bfull">Create Account</button>
+    </div>
+    <p id="amsg"></p>
   </div>
 </div>
 
-<!-- ─── APP SHELL ────────────────────────────────────────────────────────── -->
-<div id="app" class="app hidden">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
+<!-- ═════════════════════════ APP ══════════════════════════════ -->
+<div id="app" class="dn">
+  <div class="sbbd" id="sbbd"></div>
+  <aside class="sb" id="sb">
+    <div class="sbh">
       <div class="logo">
-        <span class="logo-icon">◈</span>
-        <span class="logo-text">Finova</span>
+        <svg class="logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="9" fill="#3b82f6"/>
+          <rect width="32" height="32" rx="9" fill="white" fill-opacity="0.07"/>
+          <path d="M9 8h14v3.2H12.4v4.4h9v3.2h-9v6.4H9V8z" fill="white" fill-opacity="0.95"/>
+          <circle cx="25" cy="7" r="3" fill="#60a5fa" fill-opacity="0.85"/>
+        </svg>
+        <span class="lt">Finova</span>
       </div>
-      <button class="sidebar-close" id="sidebar-close">✕</button>
+      <button id="sbclose" class="iBtn">✕</button>
     </div>
-
-    <nav class="sidebar-nav">
-      <a class="nav-item active" data-section="dashboard">
-        <span class="nav-icon">⬡</span> Overview
-      </a>
-      <a class="nav-item" data-section="banks">
-        <span class="nav-icon">⬡</span> Bank Accounts
-      </a>
-      <a class="nav-item" data-section="cards">
-        <span class="nav-icon">⬡</span> Cards
-      </a>
-      <a class="nav-item" data-section="stocks">
-        <span class="nav-icon">⬡</span> Stocks
-      </a>
-      <a class="nav-item" data-section="fixed-deposits">
-        <span class="nav-icon">⬡</span> Fixed Deposits
-      </a>
-      <a class="nav-item" data-section="funds">
-        <span class="nav-icon">⬡</span> Funds
-      </a>
-      <a class="nav-item" data-section="expenses">
-        <span class="nav-icon">⬡</span> Expenses
-      </a>
-      <a class="nav-item" data-section="budgets">
-        <span class="nav-icon">⬡</span> Budgets
-      </a>
-      <a class="nav-item" data-section="networth">
-        <span class="nav-icon">⬡</span> Net Worth
-      </a>
+    <nav class="sbnav">
+      <a class="ni on"  data-s="dash">    <span class="ni-dot">◉</span> Overview</a>
+      <a class="ni" data-s="banks">   <span class="ni-dot">◉</span> Bank Accounts</a>
+      <a class="ni" data-s="cards">   <span class="ni-dot">◉</span> Cards</a>
+      <a class="ni" data-s="stocks">  <span class="ni-dot">◉</span> Stocks</a>
+      <a class="ni" data-s="fd">      <span class="ni-dot">◉</span> Fixed Deposits</a>
+      <a class="ni" data-s="funds">   <span class="ni-dot">◉</span> Funds</a>
+      <a class="ni" data-s="expenses"><span class="ni-dot">◉</span> Expenses</a>
+      <a class="ni" data-s="budgets"> <span class="ni-dot">◉</span> Budgets</a>
+      <a class="ni" data-s="networth"><span class="ni-dot">◉</span> Net Worth</a>
     </nav>
-
-    <div class="sidebar-footer">
-      <div class="user-badge" id="user-badge">
-        <div class="user-avatar" id="user-avatar">A</div>
-        <div class="user-info">
-          <span class="user-name" id="user-name">Alex Johnson</span>
-          <span class="user-role">Personal Account</span>
-        </div>
+    <div class="sbf">
+      <div class="ubadge">
+        <div class="uav" id="uav">A</div>
+        <div><div class="un" id="uname">User</div><div class="ur">Personal Account</div></div>
       </div>
-      <div class="sidebar-actions">
-        <button class="icon-btn" id="theme-toggle" title="Toggle theme">☽</button>
-        <button class="icon-btn" id="btn-logout" title="Sign out">↪</button>
+      <div class="sbacts">
+        <button class="iBtn" id="thtog"  title="Theme">☽</button>
+        <button class="iBtn" id="tmtog"  title="Theme">☽</button>
+        <button class="iBtn" id="btn-out" title="Sign out">⏻</button>
       </div>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
-  <main class="main">
-    <header class="topbar">
-      <button class="hamburger" id="hamburger">☰</button>
-      <div class="topbar-title" id="topbar-title">Overview</div>
-      <div class="topbar-right">
-        <button class="icon-btn" id="theme-toggle-mobile" title="Toggle theme">☽</button>
-        <div class="refresh-indicator" id="refresh-indicator">
-          <span class="refresh-dot"></span> Live
-        </div>
+  <main class="mn">
+    <header class="tb">
+      <button class="hbtn" id="hbtn">☰</button>
+      <div id="tbtitle">Overview</div>
+      <div class="tbr">
+        <div class="live"><div class="ldot"></div>Live</div>
+        <button class="iBtn" id="rf-btn" title="Refresh prices">↻</button>
       </div>
     </header>
 
-    <div class="content" id="content">
+    <div class="ct">
 
-      <!-- ══ DASHBOARD ══════════════════════════════════════════════════════ -->
-      <section id="section-dashboard" class="section active">
-        <div class="section-header">
-          <h1>Good morning, <span id="greeting-name">Alex</span> 👋</h1>
-          <p class="section-sub">Here's your financial overview for today.</p>
+      <!-- DASHBOARD -->
+      <section id="sec-dash" class="sec on">
+        <div class="sh">
+          <div><h1>Good morning, <span id="gname">there</span> 👋</h1>
+          <p class="ssub">Here's your complete financial picture.</p></div>
         </div>
-
-        <!-- NET WORTH HERO -->
-        <div class="hero-card glass-card">
-          <div class="hero-left">
-            <label class="hero-label">Total Net Worth</label>
-            <div class="hero-value" id="dash-networth">LKR 0</div>
-            <div class="hero-change positive" id="dash-change">
-              <span>↑</span> <span id="dash-change-val">0%</span> this month
-            </div>
+        <div class="hero gc">
+          <div>
+            <span class="hlbl">Total Net Worth</span>
+            <div class="hval" id="d-nw">LKR 0</div>
+            <div class="hchg pos" id="d-chg">↑ loading…</div>
           </div>
-          <div class="hero-chart-wrap">
-            <canvas id="chart-networth-mini" height="80"></canvas>
-          </div>
+          <div id="spark" style="flex-shrink:0;width:200px"></div>
         </div>
-
-        <!-- QUICK STATS -->
-        <div class="stats-grid">
-          <div class="stat-card glass-card">
-            <div class="stat-icon bank-icon">🏦</div>
-            <div class="stat-body">
-              <label>Bank Balance</label>
-              <div class="stat-value" id="dash-banks">LKR 0</div>
-            </div>
-          </div>
-          <div class="stat-card glass-card">
-            <div class="stat-icon stock-icon">📈</div>
-            <div class="stat-body">
-              <label>Portfolio Value</label>
-              <div class="stat-value" id="dash-stocks">LKR 0</div>
-            </div>
-          </div>
-          <div class="stat-card glass-card">
-            <div class="stat-icon fd-icon">🏛️</div>
-            <div class="stat-body">
-              <label>Fixed Deposits</label>
-              <div class="stat-value" id="dash-fds">LKR 0</div>
-            </div>
-          </div>
-          <div class="stat-card glass-card">
-            <div class="stat-icon expense-icon">💳</div>
-            <div class="stat-body">
-              <label>This Month Spent</label>
-              <div class="stat-value" id="dash-expenses">LKR 0</div>
-            </div>
-          </div>
+        <div class="sgrid">
+          <div class="sc gc"><div class="sicon">🏦</div><div class="sv"><label>Bank Balance</label><div class="sval" id="d-banks">LKR 0</div></div></div>
+          <div class="sc gc"><div class="sicon">📈</div><div class="sv"><label>Portfolio Value</label><div class="sval" id="d-stocks">LKR 0</div></div></div>
+          <div class="sc gc"><div class="sicon">🏛️</div><div class="sv"><label>Fixed Deposits</label><div class="sval" id="d-fds">LKR 0</div></div></div>
+          <div class="sc gc"><div class="sicon">💸</div><div class="sv"><label>This Month Spent</label><div class="sval" id="d-exp">LKR 0</div></div></div>
         </div>
-
-        <!-- CHARTS ROW -->
-        <div class="charts-grid">
-          <div class="chart-card glass-card">
-            <div class="chart-header">
-              <h3>Asset Allocation</h3>
-            </div>
-            <div class="chart-wrap doughnut-wrap">
-              <canvas id="chart-allocation"></canvas>
-            </div>
-          </div>
-          <div class="chart-card glass-card">
-            <div class="chart-header">
-              <h3>Monthly Expenses</h3>
-            </div>
-            <div class="chart-wrap">
-              <canvas id="chart-expenses-bar"></canvas>
-            </div>
-          </div>
-          <div class="chart-card glass-card wide-card">
-            <div class="chart-header">
-              <h3>Net Worth Trend</h3>
-            </div>
-            <div class="chart-wrap">
-              <canvas id="chart-networth-trend"></canvas>
-            </div>
-          </div>
+        <div class="cgrid">
+          <div class="cc gc"><h3>Asset Allocation</h3><div id="ch-alloc"></div></div>
+          <div class="cc gc"><h3>Monthly Expenses (6 mo)</h3><div id="ch-mexp"></div></div>
+          <div class="cc gc wide"><h3>Net Worth Trend</h3><div id="ch-nwt"></div></div>
         </div>
-
-        <!-- AI INSIGHTS -->
-        <div class="insights-section glass-card">
-          <h3>🤖 AI Insights</h3>
-          <div class="insights-list" id="insights-list">
-            <div class="insight-item">
-              <span class="insight-icon">💡</span>
-              <p>Loading insights...</p>
-            </div>
-          </div>
-        </div>
+        <div class="ins gc"><h3>🤖 AI Insights</h3><div class="insl" id="ins-list">
+          <div class="insit"><span class="insic">⏳</span><p>Loading insights…</p></div>
+        </div></div>
       </section>
 
-      <!-- ══ BANK ACCOUNTS ══════════════════════════════════════════════════ -->
-      <section id="section-banks" class="section">
-        <div class="section-header">
-          <div>
-            <h1>Bank Accounts</h1>
-            <p class="section-sub">Track all your bank balances in one place.</p>
-          </div>
-          <button class="btn-primary" id="btn-add-bank">+ Add Account</button>
+      <!-- BANKS -->
+      <section id="sec-banks" class="sec">
+        <div class="sh">
+          <div><h1>Bank Accounts</h1><p class="ssub">Track all your balances in one place.</p></div>
+          <button class="btn bp" id="badd">+ Add Account</button>
         </div>
-        <div class="total-banner glass-card">
-          <label>Total Bank Balance</label>
-          <div class="banner-value" id="banks-total">LKR 0</div>
-        </div>
-        <div class="cards-grid" id="banks-list">
-          <div class="empty-state">No bank accounts added yet.</div>
-        </div>
+        <div class="bnr gc"><label>Total Bank Balance</label><div class="bnrv" id="b-tot">LKR 0</div></div>
+        <div class="ig" id="banks-list"><div class="emp">No accounts yet.</div></div>
       </section>
 
-      <!-- ══ CARDS ══════════════════════════════════════════════════════════ -->
-      <section id="section-cards" class="section">
-        <div class="section-header">
-          <div>
-            <h1>Cards</h1>
-            <p class="section-sub">Credit & debit card management.</p>
-          </div>
-          <button class="btn-primary" id="btn-add-card">+ Add Card</button>
+      <!-- CARDS -->
+      <section id="sec-cards" class="sec">
+        <div class="sh">
+          <div><h1>Cards</h1><p class="ssub">Credit & debit card management.</p></div>
+          <button class="btn bp" id="cadd">+ Add Card</button>
         </div>
-        <div class="cards-grid" id="cards-list">
-          <div class="empty-state">No cards added yet.</div>
-        </div>
+        <div class="ig" id="cards-list"><div class="emp">No cards yet.</div></div>
       </section>
 
-      <!-- ══ STOCKS ══════════════════════════════════════════════════════════ -->
-      <section id="section-stocks" class="section">
-        <div class="section-header">
-          <div>
-            <h1>Stock Portfolio</h1>
-            <p class="section-sub">Real-time tracking including CSE stocks.</p>
-          </div>
-          <button class="btn-primary" id="btn-add-stock">+ Add Stock</button>
+      <!-- STOCKS -->
+      <section id="sec-stocks" class="sec">
+        <div class="sh">
+          <div><h1>Stock Portfolio</h1><p class="ssub">Real-time tracking · CSE &amp; international.</p></div>
+          <button class="btn bp" id="sadd">+ Add Stock</button>
         </div>
-        <div class="portfolio-hero glass-card">
-          <div class="portfolio-stats">
-            <div class="port-stat">
-              <label>Portfolio Value</label>
-              <div class="port-value" id="stocks-total">LKR 0</div>
-            </div>
-            <div class="port-stat">
-              <label>Total Invested</label>
-              <div class="port-value" id="stocks-invested">LKR 0</div>
-            </div>
-            <div class="port-stat">
-              <label>Total P&L</label>
-              <div class="port-value" id="stocks-pnl">LKR 0</div>
-            </div>
+        <div class="ph gc">
+          <div class="pst">
+            <div class="ps"><label>Portfolio Value</label><div class="psv" id="s-tot">LKR 0</div></div>
+            <div class="ps"><label>Total Invested</label><div class="psv" id="s-inv">LKR 0</div></div>
+            <div class="ps"><label>Total P&amp;L</label><div class="psv" id="s-pnl">LKR 0</div></div>
           </div>
         </div>
-        <div class="table-card glass-card">
-          <table class="data-table" id="stocks-table">
-            <thead>
-              <tr>
-                <th>Symbol</th>
-                <th>Company</th>
-                <th>Shares</th>
-                <th>Avg Price</th>
-                <th>Current</th>
-                <th>Value</th>
-                <th>P&L</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="stocks-tbody">
-              <tr><td colspan="8" class="empty-cell">No stocks added yet.</td></tr>
-            </tbody>
+        <div class="tcrd gc">
+          <table class="tbl">
+            <thead><tr><th>Symbol</th><th>Company</th><th>Shares</th><th>Cost</th><th>Price</th><th>Value</th><th>P&amp;L</th><th></th></tr></thead>
+            <tbody id="s-body"><tr><td colspan="8" class="ec">No stocks yet.</td></tr></tbody>
           </table>
         </div>
       </section>
 
-      <!-- ══ FIXED DEPOSITS ══════════════════════════════════════════════════ -->
-      <section id="section-fixed-deposits" class="section">
-        <div class="section-header">
-          <div>
-            <h1>Fixed Deposits</h1>
-            <p class="section-sub">Monitor maturity dates and interest earned.</p>
-          </div>
-          <button class="btn-primary" id="btn-add-fd">+ Add FD</button>
+      <!-- FIXED DEPOSITS -->
+      <section id="sec-fd" class="sec">
+        <div class="sh">
+          <div><h1>Fixed Deposits</h1><p class="ssub">Maturity tracking &amp; interest calculator.</p></div>
+          <button class="btn bp" id="fdadd">+ Add FD</button>
         </div>
-        <div class="total-banner glass-card">
-          <label>Total FD Value</label>
-          <div class="banner-value" id="fd-total">LKR 0</div>
-        </div>
-        <div class="cards-grid" id="fd-list">
-          <div class="empty-state">No fixed deposits added yet.</div>
-        </div>
+        <div class="bnr gc"><label>Total FD Value (at maturity)</label><div class="bnrv" id="fd-tot">LKR 0</div></div>
+        <div class="ig" id="fd-list"><div class="emp">No fixed deposits yet.</div></div>
       </section>
 
-      <!-- ══ FUNDS ══════════════════════════════════════════════════════════ -->
-      <section id="section-funds" class="section">
-        <div class="section-header">
-          <div>
-            <h1>Funds</h1>
-            <p class="section-sub">Mutual funds & money market accounts.</p>
-          </div>
-          <button class="btn-primary" id="btn-add-fund">+ Add Fund</button>
+      <!-- FUNDS -->
+      <section id="sec-funds" class="sec">
+        <div class="sh">
+          <div><h1>Funds</h1><p class="ssub">Mutual funds &amp; money market accounts.</p></div>
+          <button class="btn bp" id="funadd">+ Add Fund</button>
         </div>
-        <div class="cards-grid" id="funds-list">
-          <div class="empty-state">No funds added yet.</div>
-        </div>
+        <div class="ig" id="funds-list"><div class="emp">No funds yet.</div></div>
       </section>
 
-      <!-- ══ EXPENSES ══════════════════════════════════════════════════════ -->
-      <section id="section-expenses" class="section">
-        <div class="section-header">
-          <div>
-            <h1>Expenses</h1>
-            <p class="section-sub">Track your daily spending.</p>
-          </div>
-          <button class="btn-primary" id="btn-add-expense">+ Add Expense</button>
+      <!-- EXPENSES -->
+      <section id="sec-expenses" class="sec">
+        <div class="sh">
+          <div><h1>Expenses</h1><p class="ssub">Daily spending tracker.</p></div>
+          <button class="btn bp" id="exadd">+ Log Expense</button>
         </div>
-        <div class="expense-summary glass-card">
-          <div class="port-stat">
-            <label>This Month</label>
-            <div class="port-value" id="exp-month-total">LKR 0</div>
-          </div>
-          <div class="port-stat">
-            <label>This Week</label>
-            <div class="port-value" id="exp-week-total">LKR 0</div>
-          </div>
-          <div class="port-stat">
-            <label>Today</label>
-            <div class="port-value" id="exp-today-total">LKR 0</div>
-          </div>
+        <div class="esum gc">
+          <div class="ps"><label>This Month</label><div class="psv" id="ex-m">LKR 0</div></div>
+          <div class="ps"><label>This Week</label><div class="psv" id="ex-w">LKR 0</div></div>
+          <div class="ps"><label>Today</label><div class="psv" id="ex-d">LKR 0</div></div>
         </div>
-        <div class="charts-grid">
-          <div class="chart-card glass-card">
-            <h3>By Category</h3>
-            <div class="chart-wrap doughnut-wrap">
-              <canvas id="chart-exp-cat"></canvas>
-            </div>
-          </div>
-          <div class="chart-card glass-card">
-            <h3>Daily Trend</h3>
-            <div class="chart-wrap">
-              <canvas id="chart-exp-trend"></canvas>
-            </div>
-          </div>
+        <div class="cgrid">
+          <div class="cc gc"><h3>By Category (this month)</h3><div id="ch-ecat"></div></div>
+          <div class="cc gc"><h3>Daily Trend (14 days)</h3><div id="ch-etrnd"></div></div>
         </div>
-        <div class="table-card glass-card">
-          <table class="data-table">
-            <thead>
-              <tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr>
-            </thead>
-            <tbody id="expenses-tbody">
-              <tr><td colspan="5" class="empty-cell">No expenses logged yet.</td></tr>
-            </tbody>
+        <div class="tcrd gc">
+          <table class="tbl">
+            <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead>
+            <tbody id="ex-body"><tr><td colspan="5" class="ec">No expenses yet.</td></tr></tbody>
           </table>
         </div>
       </section>
 
-      <!-- ══ BUDGETS ══════════════════════════════════════════════════════ -->
-      <section id="section-budgets" class="section">
-        <div class="section-header">
-          <div>
-            <h1>Budgets</h1>
-            <p class="section-sub">Monthly spending limits per category.</p>
-          </div>
-          <button class="btn-primary" id="btn-add-budget">+ Set Budget</button>
+      <!-- BUDGETS -->
+      <section id="sec-budgets" class="sec">
+        <div class="sh">
+          <div><h1>Budgets</h1><p class="ssub">Monthly spending limits per category.</p></div>
+          <button class="btn bp" id="budadd">+ Set Budget</button>
         </div>
-        <div class="budgets-list" id="budgets-list">
-          <div class="empty-state">No budgets set yet.</div>
-        </div>
+        <div class="bl" id="bud-list"><div class="emp">No budgets set yet.</div></div>
       </section>
 
-      <!-- ══ NET WORTH ══════════════════════════════════════════════════════ -->
-      <section id="section-networth" class="section">
-        <div class="section-header">
-          <h1>Net Worth</h1>
-          <p class="section-sub">Assets minus liabilities — your true financial position.</p>
+      <!-- NET WORTH -->
+      <section id="sec-networth" class="sec">
+        <div class="sh"><h1>Net Worth</h1><p class="ssub">Total assets minus total liabilities.</p></div>
+        <div class="nwh gc">
+          <span class="hlbl">Net Worth</span>
+          <div class="hval" id="nw-val">LKR 0</div>
         </div>
-        <div class="networth-hero glass-card">
-          <label class="hero-label">Net Worth</label>
-          <div class="hero-value" id="nw-total">LKR 0</div>
-        </div>
-        <div class="nw-breakdown">
-          <div class="nw-col glass-card">
-            <h3 class="nw-col-title assets">Assets</h3>
-            <div id="nw-assets-list"></div>
-            <div class="nw-total-row"><label>Total Assets</label><span id="nw-assets-total">LKR 0</span></div>
+        <div class="nwg">
+          <div class="nwc gc">
+            <h3 class="nwt a">Assets</h3>
+            <div id="nw-assets"></div>
+            <div class="nwtot"><span>Total Assets</span><span id="nw-atot">LKR 0</span></div>
           </div>
-          <div class="nw-col glass-card">
-            <h3 class="nw-col-title liabilities">Liabilities</h3>
-            <div id="nw-liabilities-list"></div>
-            <div class="nw-total-row"><label>Total Liabilities</label><span id="nw-liabilities-total">LKR 0</span></div>
+          <div class="nwc gc">
+            <h3 class="nwt l">Liabilities</h3>
+            <div id="nw-liabs"></div>
+            <div class="nwtot"><span>Total Liabilities</span><span id="nw-ltot">LKR 0</span></div>
           </div>
         </div>
-        <div class="chart-card glass-card" style="margin-top:1.5rem">
-          <h3>Net Worth Composition</h3>
-          <canvas id="chart-nw-composition" height="300"></canvas>
-        </div>
+        <div class="cc gc" style="margin-top:1.3rem"><h3>Asset Breakdown</h3><div id="ch-nwcomp"></div></div>
       </section>
 
-    </div><!-- /content -->
+    </div><!-- /ct -->
   </main>
 </div><!-- /app -->
 
-<!-- ─── MODAL ────────────────────────────────────────────────────────────── -->
-<div id="modal-overlay" class="modal-overlay hidden">
-  <div class="modal glass-card" id="modal">
-    <div class="modal-header">
-      <h2 id="modal-title">Add Item</h2>
-      <button class="modal-close" id="modal-close">✕</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-footer">
-      <button class="btn-ghost" id="modal-cancel">Cancel</button>
-      <button class="btn-primary" id="modal-save">Save</button>
+<!-- MODAL -->
+<div class="mov dn" id="mov">
+  <div class="mdl gc" id="mdl">
+    <div class="mh"><h2 id="mtitle">Add</h2><button class="mcl" id="mclose">✕</button></div>
+    <div class="mb" id="mbody"></div>
+    <div class="mf">
+      <button class="btn bg" id="mcancel">Cancel</button>
+      <button class="btn bp" id="msave">Save</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast-container" id="toast-container"></div>
+<div class="tw" id="tw"></div>
 
-<script src="app.js"></script>
+<!-- ═══════════════════════ APPLICATION LOGIC ═══════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+// ── Wait for Supabase SDK ──────────────────────────────────────────────
+if(typeof window.supabase === 'undefined'){
+  // SDK not yet loaded – check again after a short delay
+  let tries = 0;
+  const wait = setInterval(()=>{
+    tries++;
+    if(typeof window.supabase !== 'undefined'){ clearInterval(wait); init(); return; }
+    if(tries > 30){ clearInterval(wait); document.getElementById('cdn-err').style.display='flex'; }
+  }, 200);
+  return;
+}
+init();
+
+function init(){
+
+// ── CONFIG CHECK ──────────────────────────────────────────────────────
+const CFG = window.CFG;
+const SB_READY = CFG.SUPABASE_URL !== 'YOUR_SUPABASE_URL' && CFG.SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY';
+
+// ── SUPABASE CLIENT ───────────────────────────────────────────────────
+let sb = null;
+if(SB_READY){
+  try{ sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY); }
+  catch(e){ console.error('Supabase init error:', e); }
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+const $  = id => document.getElementById(id);
+const Q  = s  => document.querySelectorAll(s);
+const setText = (id,v) => { const e=$(id); if(e) e.textContent=v; };
+const setHTML = (id,v) => { const e=$(id); if(e) e.innerHTML=v; };
+
+function fmt(n){ n=+n||0; return 'LKR\u00a0'+Math.round(n).toLocaleString('en-US'); }
+function fmtD(n){ return (+n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtP(n){ return (n>=0?'+':'')+fmtD(n)+'%'; }
+function today(){ return new Date().toISOString().split('T')[0]; }
+function daysUntil(ds){ return Math.ceil((new Date(ds)-new Date())/864e5); }
+function fdMat(p,r,s,m){ const y=(new Date(m)-new Date(s))/(365.25*864e5); return p*Math.pow(1+r/100,y); }
+function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+function toast(msg,t='i'){
+  const d=document.createElement('div');
+  d.className=`tst t${t}`; d.textContent=msg;
+  $('tw').appendChild(d);
+  setTimeout(()=>{ d.classList.add('tout'); setTimeout(()=>d.remove(),260); },3200);
+}
+
+// ── STATE ─────────────────────────────────────────────────────────────
+const S = {
+  user: null,
+  theme: localStorage.getItem('fv_theme')||'dark',
+  data: { banks:[], cards:[], fd:[], funds:[], stocks:[], expenses:[], budgets:[] },
+  stockRefreshTimer: null,
+};
+
+// ── THEME ─────────────────────────────────────────────────────────────
+function applyTheme(t){
+  S.theme = t;
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('fv_theme',t);
+  const ic = t==='dark'?'☀':'☽';
+  [$('thtog'),$('tmtog')].forEach(b=>{ if(b) b.textContent=ic; });
+}
+applyTheme(S.theme);
+[$('thtog'),$('tmtog')].forEach(b=>b&&b.addEventListener('click',()=>applyTheme(S.theme==='dark'?'light':'dark')));
+
+// ── AUTH MESSAGE ──────────────────────────────────────────────────────
+function amsg(msg,ok){ const e=$('amsg'); e.textContent=msg; e.style.color=ok?'var(--green)':'var(--red)'; }
+function btnLoad(id,loading,label){
+  const b=$(id); if(!b)return;
+  b.disabled=loading; b.textContent=loading?'…':label;
+}
+
+// ── AUTH TABS ─────────────────────────────────────────────────────────
+Q('.atab').forEach(t=>t.addEventListener('click',()=>{
+  Q('.atab,.aform').forEach(e=>e.classList.remove('on'));
+  t.classList.add('on');
+  $('af-'+t.dataset.tab).classList.add('on');
+  $('amsg').textContent='';
+}));
+
+// ── SIGN IN ───────────────────────────────────────────────────────────
+$('btn-signin').addEventListener('click', async()=>{
+  const email=($('li-em').value||'').trim();
+  const pass =($('li-pw').value||'');
+  if(!email){ amsg('Enter your email.'); return; }
+  if(!pass ) { amsg('Enter your password.'); return; }
+
+  if(!sb){
+    amsg('Supabase not configured. Add your keys at the top of the file, or use Demo.','');
+    return;
+  }
+  btnLoad('btn-signin',true,'Sign In');
+  try{
+    const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
+    if(error){ amsg(error.message); return; }
+    S.user = data.user;
+    await loadAll();
+    launch();
+  }catch(e){ amsg('Connection error: '+e.message); }
+  finally{ btnLoad('btn-signin',false,'Sign In'); }
+});
+
+// ── SIGN UP ───────────────────────────────────────────────────────────
+$('btn-signup').addEventListener('click', async()=>{
+  const name =($('su-nm').value||'').trim();
+  const email=($('su-em').value||'').trim();
+  const pass =($('su-pw').value||'');
+  if(!name )  { amsg('Enter your full name.'); return; }
+  if(!email||!email.includes('@')){ amsg('Enter a valid email.'); return; }
+  if(pass.length<6){ amsg('Password must be at least 6 characters.'); return; }
+
+  if(!sb){
+    amsg('Supabase not configured. Add your keys at the top of the file, or use Demo.','');
+    return;
+  }
+  btnLoad('btn-signup',true,'Create Account');
+  try{
+    const {data,error} = await sb.auth.signUp({
+      email, password:pass,
+      options:{
+        data:{ full_name:name },
+        emailRedirectTo:'https://finovasmart.netlify.app'
+      }
+    });
+    if(error){ amsg(error.message); return; }
+    if(data.session){
+      // Email confirm disabled → logged in immediately
+      S.user = data.user;
+      await loadAll();
+      launch();
+    } else {
+      amsg('✅ Account created! Check your email for a confirmation link, then sign in.',true);
+      setTimeout(()=>document.querySelector('.atab[data-tab=login]')?.click(),1800);
+    }
+  }catch(e){ amsg('Connection error: '+e.message); }
+  finally{ btnLoad('btn-signup',false,'Create Account'); }
+});
+
+// Enter key on auth inputs
+[$('li-em'),$('li-pw')].forEach(i=>i&&i.addEventListener('keydown',e=>{ if(e.key==='Enter') $('btn-signin').click(); }));
+[$('su-nm'),$('su-em'),$('su-pw')].forEach(i=>i&&i.addEventListener('keydown',e=>{ if(e.key==='Enter') $('btn-signup').click(); }));
+
+// ── LOGOUT ────────────────────────────────────────────────────────────
+$('btn-out').addEventListener('click',async()=>{
+  clearInterval(S.stockRefreshTimer);
+  if(sb) await sb.auth.signOut();
+  S.user=null;
+  location.reload();
+});
+
+// ── AUTO-LOGIN (Supabase session) ─────────────────────────────────────
+if(sb){
+  sb.auth.onAuthStateChange(async(event,session)=>{
+    if(session?.user && !S.user){
+      S.user=session.user;
+      await loadAll();
+      launch();
+    }
+  });
+}
+
+// ── SUPABASE DATA LOADING ─────────────────────────────────────────────
+async function loadAll(){
+  if(!sb||!S.user) return;
+  const uid=S.user.id;
+  const tbls=[
+    {key:'banks',   tbl:'bank_accounts'},
+    {key:'cards',   tbl:'cards'},
+    {key:'fd',      tbl:'fixed_deposits'},
+    {key:'funds',   tbl:'funds'},
+    {key:'stocks',  tbl:'stocks'},
+    {key:'expenses',tbl:'expenses'},
+    {key:'budgets', tbl:'budgets'},
+  ];
+  await Promise.all(tbls.map(async({key,tbl})=>{
+    const {data,error}=await sb.from(tbl).select('*').eq('user_id',uid).order('created_at',{ascending:false});
+    if(!error) S.data[key]=data||[];
+  }));
+}
+
+// ── SUPABASE INSERT ───────────────────────────────────────────────────
+async function dbInsert(tbl,record){
+  if(!sb) return {data:record,error:null};
+  record.user_id=S.user.id;
+  const {data,error}=await sb.from(tbl).insert([record]).select().single();
+  return {data,error};
+}
+
+// ── SUPABASE DELETE ───────────────────────────────────────────────────
+async function dbDelete(tbl,id){
+  if(!sb) return {error:null};
+  return sb.from(tbl).delete().eq('id',id).eq('user_id',S.user.id);
+}
+
+// Map from state key → Supabase table name
+const TBL={banks:'bank_accounts',cards:'cards',fd:'fixed_deposits',
+  funds:'funds',stocks:'stocks',expenses:'expenses',budgets:'budgets'};
+
+// ── LAUNCH APP ────────────────────────────────────────────────────────
+function launch(){
+  $('auth-ov').classList.add('dn');
+  $('app').classList.remove('dn');
+  const name=S.user?.user_metadata?.full_name||S.user?.email?.split('@')[0]||'User';
+  setText('uname',name); setText('gname',name.split(' ')[0]);
+  $('uav').textContent=name[0].toUpperCase();
+  renderAll();
+  if(SB_READY){
+    S.stockRefreshTimer=setInterval(refreshStockPrices,CFG.REFRESH_MS);
+    refreshStockPrices();
+  }
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────
+const TITLES={dash:'Overview',banks:'Bank Accounts',cards:'Cards',stocks:'Stock Portfolio',
+  fd:'Fixed Deposits',funds:'Funds',expenses:'Expenses',budgets:'Budgets',networth:'Net Worth'};
+
+Q('.ni').forEach(item=>item.addEventListener('click',()=>{
+  const s=item.dataset.s;
+  Q('.ni').forEach(n=>n.classList.remove('on'));
+  item.classList.add('on');
+  Q('.sec').forEach(sec=>sec.classList.remove('on'));
+  $('sec-'+s)?.classList.add('on');
+  setText('tbtitle',TITLES[s]||s);
+  closeSB();
+}));
+
+$('hbtn').addEventListener('click',()=>{ $('sb').classList.add('open'); $('sbbd').classList.add('on'); });
+function closeSB(){ $('sb').classList.remove('open'); $('sbbd').classList.remove('on'); }
+$('sbclose').addEventListener('click',closeSB);
+$('sbbd').addEventListener('click',closeSB);
+
+// ── STOCK PRICE APIs ──────────────────────────────────────────────────
+async function fetchPrice(symbol){
+  // Skip CSE stocks for live API (not supported by these APIs)
+  if(symbol.includes('.N')||symbol.includes('.X')) return null;
+
+  // 1. Finnhub
+  if(CFG.FINNHUB_KEY!=='YOUR_FINNHUB_KEY'){
+    try{
+      const r=await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${CFG.FINNHUB_KEY}`);
+      const d=await r.json();
+      if(d.c&&d.c>0) return d.c;
+    }catch(_){}
+  }
+  // 2. Twelve Data
+  if(CFG.TWELVE_DATA_KEY!=='YOUR_TWELVE_DATA_KEY'){
+    try{
+      const r=await fetch(`https://api.twelvedata.com/price?symbol=${symbol}&apikey=${CFG.TWELVE_DATA_KEY}`);
+      const d=await r.json();
+      if(d.price) return parseFloat(d.price);
+    }catch(_){}
+  }
+  // 3. Alpha Vantage
+  if(CFG.ALPHA_VANTAGE_KEY!=='YOUR_ALPHA_VANTAGE_KEY'){
+    try{
+      const r=await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${CFG.ALPHA_VANTAGE_KEY}`);
+      const d=await r.json();
+      const p=d['Global Quote']?.['05. price'];
+      if(p) return parseFloat(p);
+    }catch(_){}
+  }
+  return null;
+}
+
+async function refreshStockPrices(){
+  const btn=$('rf-btn');
+  if(btn) btn.classList.add('spin');
+  const intl=S.data.stocks.filter(s=>!s.symbol.includes('.N')&&!s.symbol.includes('.X'));
+  if(intl.length){
+    await Promise.all(intl.map(async stock=>{
+      const p=await fetchPrice(stock.symbol);
+      if(p!==null){
+        stock.current_price=p;
+        // update in Supabase
+        if(sb) sb.from('stocks').update({current_price:p}).eq('id',stock.id).eq('user_id',S.user.id);
+      }
+    }));
+    renderStocks();
+    renderDash();
+    renderNetWorth();
+  }
+  if(btn) btn.classList.remove('spin');
+}
+
+$('rf-btn').addEventListener('click',refreshStockPrices);
+
+// ── TOTALS HELPER ─────────────────────────────────────────────────────
+function calcTotals(){
+  const banks  = S.data.banks.reduce((s,b)=>s+(+b.balance||0),0);
+  const fdv    = S.data.fd.reduce((s,f)=>s+fdMat(+f.principal,+f.rate||+f.interest_rate,f.start_date||f.start,f.maturity_date||f.maturity),0);
+  const funds  = S.data.funds.reduce((s,f)=>s+(+f.current_value||0),0);
+  const stocks = S.data.stocks.reduce((s,st)=>s+((+st.current_price||+st.purchase_price||0)*(+st.shares||0)),0);
+  const cards  = S.data.cards.reduce((s,c)=>s+(+c.outstanding||+c.outstanding_balance||0),0);
+  const assets = banks+fdv+funds+stocks;
+  const now=new Date(), ms=new Date(now.getFullYear(),now.getMonth(),1);
+  const ws=new Date(now); ws.setDate(now.getDate()-7);
+  const td=today();
+  const mExp  = S.data.expenses.filter(e=>new Date(e.date)>=ms).reduce((s,e)=>s+(+e.amount||0),0);
+  const wExp  = S.data.expenses.filter(e=>new Date(e.date)>=ws).reduce((s,e)=>s+(+e.amount||0),0);
+  const dExp  = S.data.expenses.filter(e=>e.date===td).reduce((s,e)=>s+(+e.amount||0),0);
+  const totExp= S.data.expenses.reduce((s,e)=>s+(+e.amount||0),0);
+  // Net worth = assets − card liabilities − total cumulative expenses
+  const nw = assets - cards - totExp;
+  return {banks,fdv,funds,stocks,cards,assets,nw,mExp,wExp,dExp,totExp};
+}
+
+// ══════════════════════════════════════════════════════
+//  SVG MINI CHARTS
+// ══════════════════════════════════════════════════════
+const PALETTE=['#3b82f6','#a78bfa','#2dd4bf','#4ade80','#fbbf24','#f87171','#60a5fa','#c084fc'];
+
+function svgSparkline(data,w,h,color){
+  if(!data||data.length<2) return '';
+  const mn=Math.min(...data),mx=Math.max(...data),rng=mx-mn||1;
+  const pts=data.map((v,i)=>{
+    const x=2+i*(w-4)/(data.length-1);
+    const y=h-2-((v-mn)/rng)*(h-4);
+    return `${x},${y}`;
+  });
+  const fill=`M2,${h-2} L${pts.join('L')} L${w-2},${h-2}Z`;
+  return `<svg width="${w}" height="${h}" style="display:block">
+    <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${color}" stop-opacity=".25"/>
+      <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="${fill}" fill="url(#sg)"/>
+    <polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function svgBars(labels,values,w,h){
+  if(!labels||!labels.length) return '<p style="color:var(--t2);padding:1.5rem;text-align:center;font-size:.82rem">No data yet</p>';
+  const max=Math.max(...values,1);
+  const pH=22, pT=8, pL=0, pR=0;
+  const bW=((w-pL-pR)/labels.length)*0.62;
+  const gap=((w-pL-pR)/labels.length);
+  const tc=getComputedStyle(document.documentElement).getPropertyValue('--t2').trim()||'#888';
+  let out='';
+  labels.forEach((l,i)=>{
+    const bh=Math.max(2,((values[i]||0)/max)*(h-pH-pT));
+    const x=pL+i*gap+(gap-bW)/2;
+    const y=pT+(h-pH-pT)-bh;
+    out+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bW.toFixed(1)}" height="${bh.toFixed(1)}" rx="4" fill="${PALETTE[0]}" opacity=".82"/>
+    <text x="${(x+bW/2).toFixed(1)}" y="${h-2}" text-anchor="middle" font-size="10" fill="${tc}">${l}</text>`;
+  });
+  return `<svg width="${w}" height="${h}" style="display:block;width:100%;overflow:visible" viewBox="0 0 ${w} ${h}">${out}</svg>`;
+}
+
+function svgDonut(labels,values,size){
+  const tot=values.reduce((a,b)=>a+b,0)||1;
+  const cx=size/2,cy=size/2,R=size*0.37,ri=size*0.24;
+  let angle=-Math.PI/2,paths='',legend='';
+  const bg=getComputedStyle(document.documentElement).getPropertyValue('--sur').trim()||'#12121c';
+  const tc=getComputedStyle(document.documentElement).getPropertyValue('--t2').trim()||'#888';
+  values.forEach((v,i)=>{
+    const a=(v/tot)*Math.PI*2, end=angle+a;
+    const x1=cx+R*Math.cos(angle),y1=cy+R*Math.sin(angle);
+    const x2=cx+R*Math.cos(end),y2=cy+R*Math.sin(end);
+    const lg=a>Math.PI?1:0;
+    paths+=`<path d="M${cx},${cy} L${x1.toFixed(2)},${y1.toFixed(2)} A${R},${R} 0 ${lg},1 ${x2.toFixed(2)},${y2.toFixed(2)} Z" fill="${PALETTE[i%PALETTE.length]}" opacity=".88"/>`;
+    const pct=((v/tot)*100).toFixed(0);
+    legend+=`<rect x="0" y="${i*17}" width="9" height="9" rx="2" fill="${PALETTE[i%PALETTE.length]}"/>
+    <text x="13" y="${i*17+9}" font-size="10.5" fill="${tc}">${labels[i]} ${pct}%</text>`;
+    angle=end;
+  });
+  paths+=`<circle cx="${cx}" cy="${cy}" r="${ri}" fill="${bg}"/>`;
+  const lH=labels.length*17+6;
+  return `<svg viewBox="0 0 ${size} ${size+lH}" style="width:100%;max-width:${size}px;display:block;margin:0 auto">
+    ${paths}<g transform="translate(${size*.06},${size+4})">${legend}</g></svg>`;
+}
+
+function svgHBars(labels,values,w,h){
+  if(!labels||!labels.length) return '';
+  const mx=Math.max(...values.map(Math.abs),1);
+  const pL=118,pH=8,pB=4;
+  const rH=Math.max(14,((h-pH-pB)/labels.length)-5);
+  const tc=getComputedStyle(document.documentElement).getPropertyValue('--t2').trim()||'#888';
+  let out='';
+  labels.forEach((l,i)=>{
+    const bw=Math.max(2,(Math.abs(values[i])/mx)*(w-pL-16));
+    const y=pH+i*((h-pH-pB)/labels.length);
+    const col=values[i]<0?'rgba(248,113,113,.75)':PALETTE[i%6];
+    out+=`<rect x="${pL}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${rH}" rx="4" fill="${col}"/>
+    <text x="${pL-7}" y="${(y+rH/2+4).toFixed(1)}" text-anchor="end" font-size="11" fill="${tc}">${l}</text>`;
+  });
+  return `<svg width="${w}" height="${h}" style="display:block;width:100%" viewBox="0 0 ${w} ${h}">${out}</svg>`;
+}
+
+function trendData(cur,n){
+  // kept for sparkline only — simple smooth curve from 80% → current
+  const r=[];
+  for(let i=0;i<n;i++) r.push(Math.round(cur*(0.80+(0.20*(i+1)/n))));
+  return r;
+}
+
+// Real net worth per month: nw_at_month_start = currentNW + expenses_logged_since_that_month
+function realNWTrend(){
+  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now=new Date();
+  const T=calcTotals();
+  const labels=[], values=[];
+  for(let i=11;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    // expenses logged from this month start onwards
+    const expSince=S.data.expenses
+      .filter(e=>new Date(e.date)>=d)
+      .reduce((s,e)=>s+(+e.amount||0),0);
+    // NW at that point = current NW + those expenses (they hadn't been spent yet)
+    values.push(Math.max(0, T.nw + expSince));
+    labels.push(mn[d.getMonth()]);
+  }
+  return {labels,values};
+}
+
+function last6MonthsExp(){
+  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now=new Date(),lbs=[],vs=[];
+  for(let i=5;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    lbs.push(mn[d.getMonth()]);
+    vs.push(S.data.expenses.filter(e=>{const ed=new Date(e.date);
+      return ed.getMonth()===d.getMonth()&&ed.getFullYear()===d.getFullYear();
+    }).reduce((s,e)=>s+(+e.amount||0),0));
+  }
+  return {lbs,vs};
+}
+
+// ── RENDER ALL ────────────────────────────────────────────────────────
+function renderAll(){
+  renderDash();
+  renderBanks();
+  renderCards();
+  renderStocks();
+  renderFDs();
+  renderFunds();
+  renderExpenses();
+  renderBudgets();
+  renderNetWorth();
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────
+function renderDash(){
+  const T=calcTotals();
+  setText('d-nw',fmt(T.nw));
+  setText('d-banks',fmt(T.banks));
+  setText('d-stocks',fmt(T.stocks));
+  setText('d-fds',fmt(T.fdv));
+  setText('d-exp',fmt(T.mExp));
+
+  // Month-over-month change: compare NW now vs NW at start of this month
+  // NW at start of month = T.nw + this month's expenses (they hadn't been spent yet)
+  const nwStartOfMonth = T.nw + T.mExp;
+  const chgAmt = T.nw - nwStartOfMonth; // always = -mExp
+  const chgPct = nwStartOfMonth>0 ? (chgAmt/nwStartOfMonth*100) : 0;
+  const chg=$('d-chg');
+  chg.textContent=`${chgAmt>=0?'↑':'↓'} ${fmt(Math.abs(chgAmt))} (${Math.abs(chgPct).toFixed(1)}%) this month`;
+  chg.className='hchg '+(chgAmt>=0?'pos':'neg');
+
+  // Sparkline (smooth curve for hero visual)
+  $('spark').innerHTML=svgSparkline(trendData(T.nw,12),200,80,'#3b82f6');
+
+  // Donut allocation
+  const av=[T.banks,T.stocks,T.fdv,T.funds].filter(v=>v>0);
+  const al=['Banks','Stocks','FDs','Funds'].filter((_,i)=>[T.banks,T.stocks,T.fdv,T.funds][i]>0);
+  $('ch-alloc').innerHTML=av.length?svgDonut(al,av,200):'<p style="color:var(--t2);padding:2rem;text-align:center;font-size:.82rem">Add assets to see allocation</p>';
+
+  // Monthly expense bars
+  const me=last6MonthsExp();
+  $('ch-mexp').innerHTML=svgBars(me.lbs,me.vs,420,160);
+
+  // Net worth trend — REAL data derived from actual expenses
+  const nwt=realNWTrend();
+  $('ch-nwt').innerHTML=svgBars(nwt.labels,nwt.values,760,170);
+
+  // Insights
+  buildInsights(T);
+}
+
+function buildInsights(T){
+  const ins=[];
+  const tot=T.banks+T.stocks+T.fdv+T.funds||1;
+  const sp=((T.stocks/tot)*100).toFixed(0);
+  if(+sp<15) ins.push({i:'📊',t:`Stock allocation is only ${sp}% of total assets. Consider investing in equities for long-term wealth growth.`});
+  else if(+sp>65) ins.push({i:'⚠️',t:`${sp}% in stocks is high exposure. Consider rebalancing with fixed income or FDs to reduce volatility.`});
+  else ins.push({i:'✅',t:`Portfolio is well diversified — ${sp}% in equities alongside fixed deposits and cash.`});
+
+  if(T.cards>0){
+    const cl=S.data.cards.reduce((s,c)=>s+(+c.credit_limit||0),0)||1;
+    const ut=((T.cards/cl)*100).toFixed(0);
+    ins.push({i:+ut>30?'⚠️':'💳',t:`Credit utilization is ${ut}%. ${+ut>30?'Reduce outstanding balance to below 30% for healthy credit.':'Great job keeping utilization low!'}`});
+  }
+  const soon=S.data.fd.filter(f=>{const d=daysUntil(f.maturity_date||f.maturity);return d>0&&d<=30;});
+  if(soon.length) ins.push({i:'📅',t:`${soon.length} FD${soon.length>1?'s':''} mature within 30 days. Plan your reinvestment strategy now.`});
+  if(S.data.funds.length){
+    const fg=S.data.funds.reduce((s,f)=>s+((+f.current_value||0)-(+f.invested_amount||0)),0);
+    const fi=S.data.funds.reduce((s,f)=>s+(+f.invested_amount||0),0)||1;
+    ins.push({i:'💰',t:`Mutual funds are ${fg>=0?'up':'down'} ${Math.abs((fg/fi*100)).toFixed(1)}% overall. ${fg>=0?'Stay invested for compounding returns.':'Review fund performance against benchmark.'}`});
+  }
+  if(!ins.length) ins.push({i:'🚀',t:'Add your bank accounts, investments and expenses to unlock personalized AI insights.'});
+  $('ins-list').innerHTML=ins.map(x=>`<div class="insit"><span class="insic">${x.i}</span><p>${x.t}</p></div>`).join('');
+}
+
+// ── BANKS ─────────────────────────────────────────────────────────────
+function renderBanks(){
+  const banks=S.data.banks;
+  const tot=banks.reduce((s,b)=>s+(+b.balance||0),0);
+  setText('b-tot',fmt(tot));
+  $('banks-list').innerHTML=banks.length?banks.map(b=>`
+    <div class="gc itm">
+      <div class="ih">
+        <div><div class="inm">${esc(b.account_name)}</div><div class="isub">${esc(b.bank_name)}</div></div>
+        <span class="bdg">${esc(b.currency||'LKR')}</span>
+      </div>
+      <div class="iamt">${fmt(+b.balance)}</div>
+      <button class="bdel" onclick="rmItem('banks','${b.id}')">Delete</button>
+    </div>`).join(''):'<div class="emp">No bank accounts yet. Click "+ Add Account".</div>';
+}
+
+// ── CARDS ─────────────────────────────────────────────────────────────
+function renderCards(){
+  const cards=S.data.cards;
+  $('cards-list').innerHTML=cards.length?cards.map(c=>{
+    const out=+c.outstanding||+c.outstanding_balance||0;
+    const lim=+c.credit_limit||1;
+    const ut=Math.round((out/lim)*100);
+    const days=daysUntil(c.due_date);
+    return `<div class="gc itm">
+      <div class="ccv">
+        <div>💳</div>
+        <div class="ccnum">•••• •••• •••• 4242</div>
+        <div class="ccbot"><span class="ccnm">${esc(c.card_name)}</span><span class="cclm">Limit: ${fmt(lim)}</span></div>
+      </div>
+      <div class="isub">${esc(c.bank)}</div>
+      <div class="pw">
+        <div class="plbls"><span>Outstanding: ${fmt(out)}</span><span>${ut}%</span></div>
+        <div class="pb"><div class="pf${ut>50?' warn':''}" style="width:${Math.min(ut,100)}%"></div></div>
+      </div>
+      <div class="fdcnt">📅 Due ${days>0?'in '+days+' days':'OVERDUE'} — ${c.due_date}</div>
+      <button class="bdel" onclick="rmItem('cards','${c.id}')">Delete</button>
+    </div>`;}).join(''):'<div class="emp">No cards yet. Click "+ Add Card".</div>';
+}
+
+// ── STOCKS ────────────────────────────────────────────────────────────
+function renderStocks(){
+  const stocks=S.data.stocks;
+  const totV=stocks.reduce((s,st)=>s+((+st.current_price||+st.purchase_price||0)*(+st.shares||0)),0);
+  const totI=stocks.reduce((s,st)=>s+((+st.purchase_price||0)*(+st.shares||0)),0);
+  const pnl=totV-totI, pp=totI?(pnl/totI*100):0;
+  setText('s-tot',fmt(totV)); setText('s-inv',fmt(totI));
+  const pe=$('s-pnl'); pe.textContent=`${fmt(pnl)} (${fmtP(pp)})`; pe.className='psv '+(pnl>=0?'pos':'neg');
+
+  $('s-body').innerHTML=stocks.length?stocks.map(st=>{
+    const cur=+st.current_price||+st.purchase_price||0;
+    const val=cur*(+st.shares||0);
+    const pnl=(cur-(+st.purchase_price||0))*(+st.shares||0);
+    const pct=st.purchase_price?(cur-(+st.purchase_price))/(+st.purchase_price)*100:0;
+    const isCSE=st.symbol.includes('.N')||st.symbol.includes('.X');
+    return `<tr>
+      <td><span class="sym">${esc(st.symbol)}</span> ${isCSE?'<span class="bdg" title="CSE — manual price">CSE</span>':'<span class="live-price">●&nbsp;live</span>'}</td>
+      <td>${esc(st.company_name)}</td>
+      <td class="mono">${(+st.shares||0).toLocaleString()}</td>
+      <td class="mono">${fmtD(+st.purchase_price)}</td>
+      <td class="mono">${fmtD(cur)}</td>
+      <td class="mono">${fmt(val)}</td>
+      <td class="${pnl>=0?'pos':'neg'}">${fmt(pnl)} <small>(${fmtP(pct)})</small></td>
+      <td><button class="bdel" onclick="rmItem('stocks','${st.id}')">✕</button></td>
+    </tr>`;}).join(''):'<tr><td colspan="8" class="ec">No stocks yet. Click "+ Add Stock".</td></tr>';
+}
+
+// ── FIXED DEPOSITS ────────────────────────────────────────────────────
+function renderFDs(){
+  const fds=S.data.fd;
+  const tot=fds.reduce((s,f)=>s+fdMat(+f.principal,+f.rate||+f.interest_rate,f.start_date||f.start,f.maturity_date||f.maturity),0);
+  setText('fd-tot',fmt(tot));
+  $('fd-list').innerHTML=fds.length?fds.map(f=>{
+    const sd=f.start_date||f.start, md=f.maturity_date||f.maturity;
+    const rate=+f.rate||+f.interest_rate||0;
+    const mat=fdMat(+f.principal,rate,sd,md);
+    const int=mat-(+f.principal);
+    const days=daysUntil(md);
+    const totDays=(new Date(md)-new Date(sd))/864e5;
+    const elapsed=Math.max(0,totDays-Math.max(0,days));
+    const prog=Math.min(100,(elapsed/totDays*100));
+    return `<div class="gc itm">
+      <div class="ih">
+        <div><div class="inm">${esc(f.bank)}</div><div class="isub">${rate}% p.a.</div></div>
+        <span class="bdg">${days>0?days+'d left':'Matured'}</span>
+      </div>
+      <div class="iamt">${fmt(mat)}</div>
+      <div class="isub">Principal: ${fmt(+f.principal)} · Interest earned: <span class="pos">+${fmt(int)}</span></div>
+      <div class="pw">
+        <div class="plbls"><span>${sd}</span><span>${md}</span></div>
+        <div class="pb"><div class="pf" style="width:${prog.toFixed(1)}%"></div></div>
+      </div>
+      ${days>0&&days<=30?`<div class="fdcnt">⚠️ Matures in ${days} days!</div>`:''}
+      <button class="bdel" onclick="rmItem('fd','${f.id}')">Delete</button>
+    </div>`;}).join(''):'<div class="emp">No fixed deposits yet. Click "+ Add FD".</div>';
+}
+
+// ── FUNDS ─────────────────────────────────────────────────────────────
+function renderFunds(){
+  const funds=S.data.funds;
+  $('funds-list').innerHTML=funds.length?funds.map(f=>{
+    const cv=+f.current_value||0, inv=+f.invested_amount||0;
+    const g=cv-inv, gp=inv?(g/inv*100):0;
+    return `<div class="gc itm">
+      <div class="ih">
+        <div class="inm">${esc(f.fund_name)}</div>
+        <span class="bdg ${g>=0?'pos':'neg'}">${fmtP(gp)}</span>
+      </div>
+      <div class="iamt">${fmt(cv)}</div>
+      <div class="isub">Invested: ${fmt(inv)} · Gain: <span class="${g>=0?'pos':'neg'}">${fmt(g)}</span></div>
+      <div class="isub">Since ${esc(f.purchase_date)}</div>
+      <button class="bdel" onclick="rmItem('funds','${f.id}')">Delete</button>
+    </div>`;}).join(''):'<div class="emp">No funds yet. Click "+ Add Fund".</div>';
+}
+
+// ── EXPENSES ──────────────────────────────────────────────────────────
+function renderExpenses(){
+  const exps=S.data.expenses;
+  const T=calcTotals();
+  setText('ex-m',fmt(T.mExp)); setText('ex-w',fmt(T.wExp)); setText('ex-d',fmt(T.dExp));
+
+  // Category donut (this month)
+  const now=new Date(), ms=new Date(now.getFullYear(),now.getMonth(),1);
+  const cm={};
+  exps.filter(e=>new Date(e.date)>=ms).forEach(e=>{ cm[e.category]=(cm[e.category]||0)+(+e.amount||0); });
+  const cats=Object.keys(cm);
+  $('ch-ecat').innerHTML=cats.length?svgDonut(cats,cats.map(c=>cm[c]),200):'<p style="color:var(--t2);padding:2rem;text-align:center;font-size:.82rem">No expenses this month</p>';
+
+  // Daily trend
+  const lbs14=[],vs14=[];
+  for(let i=13;i>=0;i--){
+    const d=new Date(now); d.setDate(now.getDate()-i);
+    const ds=d.toISOString().split('T')[0];
+    lbs14.push(ds.slice(5));
+    vs14.push(exps.filter(e=>e.date===ds).reduce((s,e)=>s+(+e.amount||0),0));
+  }
+  $('ch-etrnd').innerHTML=svgBars(lbs14,vs14,600,160);
+
+  // Table
+  $('ex-body').innerHTML=exps.length?exps.slice(0,60).map(e=>`
+    <tr>
+      <td>${e.date}</td>
+      <td><span class="bdg">${esc(e.category)}</span></td>
+      <td>${esc(e.description||'')}</td>
+      <td class="mono">${fmt(+e.amount)}</td>
+      <td><button class="bdel" onclick="rmItem('expenses','${e.id}')">✕</button></td>
+    </tr>`).join(''):'<tr><td colspan="5" class="ec">No expenses yet. Click "+ Log Expense".</td></tr>';
+}
+
+// ── BUDGETS ───────────────────────────────────────────────────────────
+function renderBudgets(){
+  const buds=S.data.budgets;
+  if(!buds.length){
+    $('bud-list').innerHTML='<div class="emp">No budgets set. Click "+ Set Budget" to add monthly limits.</div>';
+    return;
+  }
+  const now=new Date(), ms=new Date(now.getFullYear(),now.getMonth(),1);
+  $('bud-list').innerHTML=buds.map(b=>{
+    const lim=+b.budget_limit||+b.limit||0;
+    // Sum actual expenses for this category this month
+    const used=S.data.expenses
+      .filter(e=>e.category===b.category && new Date(e.date)>=ms)
+      .reduce((s,e)=>s+(+e.amount||0),0);
+    const pct=lim>0?Math.min(100,(used/lim)*100):0;
+    const rem=Math.max(0,lim-used);
+    let sc='bok',sl='On Track';
+    if(pct>=100){ sc='bovr'; sl='Over Budget!'; }
+    else if(pct>=70){ sc='bwrn'; sl=`${fmt(rem)} left`; }
+    else sl=`${fmt(rem)} remaining`;
+    return `<div class="gc bi">
+      <div class="bcat">${esc(b.category)}</div>
+      <div class="bamt">
+        <span class="bused${pct>=100?' neg':''}">${fmt(used)}</span>
+        <span class="bsep">/</span>
+        <span class="blim">${fmt(lim)}</span>
+      </div>
+      <div class="bbar">
+        <div class="pb"><div class="pf${pct>=70?' warn':''}" style="width:${pct.toFixed(1)}%"></div></div>
+      </div>
+      <span class="bst ${sc}">${sl}</span>
+      <button class="bdel" onclick="rmItem('budgets','${b.id}')">✕</button>
+    </div>`;}).join('');
+}
+
+// ── NET WORTH ─────────────────────────────────────────────────────────
+function renderNetWorth(){
+  const T=calcTotals();
+  setText('nw-val',fmt(T.nw));
+  $('nw-val').style.webkitTextFillColor=T.nw<0?'var(--red)':'';
+  setText('nw-atot',fmt(T.assets));
+  // total liabilities = cards + total expenses
+  const totalLiab = T.cards + T.totExp;
+  setText('nw-ltot',fmt(totalLiab));
+
+  // Assets rows
+  $('nw-assets').innerHTML=`
+    <div class="nwr"><span>Bank Accounts</span><span class="nwrv">${fmt(T.banks)}</span></div>
+    <div class="nwr"><span>Fixed Deposits</span><span class="nwrv">${fmt(T.fdv)}</span></div>
+    <div class="nwr"><span>Mutual Funds</span><span class="nwrv">${fmt(T.funds)}</span></div>
+    <div class="nwr"><span>Stock Portfolio</span><span class="nwrv">${fmt(T.stocks)}</span></div>`;
+
+  // Liabilities: card outstandings + expenses
+  const cardRows=S.data.cards.map(c=>{
+    const out=+c.outstanding||+c.outstanding_balance||0;
+    return `<div class="nwr"><span>${esc(c.card_name)} <small style="color:var(--t2)">${esc(c.bank)}</small></span><span class="nwrv neg">${fmt(out)}</span></div>`;
+  }).join('');
+  $('nw-liabs').innerHTML=(cardRows||'')
+    +`<div class="nwr"><span>Total Expenses (cumulative)</span><span class="nwrv neg">${fmt(T.totExp)}</span></div>`
+    +(S.data.cards.length===0&&T.totExp===0?'<div class="nwr"><span>No liabilities 🎉</span><span class="nwrv">—</span></div>':'');
+
+  // Horizontal bar chart
+  const lbls=['Banks','Fixed Deps.','Funds','Stocks','Card Debt','Expenses'];
+  const vals=[T.banks,T.fdv,T.funds,T.stocks,-T.cards,-T.totExp];
+  $('ch-nwcomp').innerHTML=svgHBars(lbls,vals,700,180);
+}
+
+// ── MODAL SYSTEM ─────────────────────────────────────────────────────
+const FORMS={
+  banks:{
+    title:'Add Bank Account',
+    table:'bank_accounts',
+    stateKey:'banks',
+    fields:[
+      {id:'bank_name',    lbl:'Bank Name',        type:'text',  ph:'e.g. Commercial Bank'},
+      {id:'account_name', lbl:'Account Name',     type:'text',  ph:'e.g. Savings Account'},
+      {id:'balance',      lbl:'Balance',           type:'number',ph:'0'},
+      {id:'currency',     lbl:'Currency',          type:'select',opts:['LKR','USD','EUR','GBP','AUD','SGD']},
+    ]
+  },
+  cards:{
+    title:'Add Card',
+    table:'cards',
+    stateKey:'cards',
+    fields:[
+      {id:'card_name',    lbl:'Card Name',        type:'text',  ph:'e.g. Visa Infinite'},
+      {id:'bank',         lbl:'Bank',             type:'text',  ph:'e.g. HNB'},
+      {id:'credit_limit', lbl:'Credit Limit (LKR)',type:'number',ph:'0'},
+      {id:'outstanding',  lbl:'Outstanding Balance',type:'number',ph:'0'},
+      {id:'due_date',     lbl:'Payment Due Date', type:'date'},
+    ]
+  },
+  fd:{
+    title:'Add Fixed Deposit',
+    table:'fixed_deposits',
+    stateKey:'fd',
+    fields:[
+      {id:'bank',         lbl:'Bank',             type:'text',  ph:'e.g. Sampath Bank'},
+      {id:'principal',    lbl:'Principal (LKR)',   type:'number',ph:'0'},
+      {id:'rate',         lbl:'Interest Rate (%)', type:'number',ph:'11.5'},
+      {id:'start_date',   lbl:'Start Date',        type:'date'},
+      {id:'maturity_date',lbl:'Maturity Date',     type:'date'},
+    ]
+  },
+  funds:{
+    title:'Add Fund',
+    table:'funds',
+    stateKey:'funds',
+    fields:[
+      {id:'fund_name',      lbl:'Fund Name',         type:'text',  ph:'e.g. Ceybank Unit Trust'},
+      {id:'invested_amount',lbl:'Invested Amount (LKR)',type:'number',ph:'0'},
+      {id:'current_value',  lbl:'Current Value (LKR)', type:'number',ph:'0'},
+      {id:'purchase_date',  lbl:'Purchase Date',      type:'date'},
+    ]
+  },
+  stocks:{
+    title:'Add Stock',
+    table:'stocks',
+    stateKey:'stocks',
+    fields:[
+      {id:'symbol',        lbl:'Symbol',              type:'text',  ph:'e.g. AAPL or COMB.N0000'},
+      {id:'company_name',  lbl:'Company Name',        type:'text',  ph:'e.g. Apple Inc.'},
+      {id:'shares',        lbl:'Shares',              type:'number',ph:'10'},
+      {id:'purchase_price',lbl:'Purchase Price / share',type:'number',ph:'0.00'},
+      {id:'current_price', lbl:'Current Price / share (CSE: enter manually)',type:'number',ph:'0.00'},
+      {id:'purchase_date', lbl:'Purchase Date',        type:'date'},
+    ]
+  },
+  expenses:{
+    title:'Log Expense',
+    table:'expenses',
+    stateKey:'expenses',
+    fields:[
+      {id:'date',        lbl:'Date',        type:'date'},
+      {id:'category',    lbl:'Category',    type:'select',opts:['Food','Transport','Utilities','Entertainment','Healthcare','Shopping','Education','Others']},
+      {id:'description', lbl:'Description', type:'text',  ph:'What was this for?'},
+      {id:'amount',      lbl:'Amount (LKR)',type:'number',ph:'0'},
+    ]
+  },
+  budgets:{
+    title:'Set Monthly Budget',
+    table:'budgets',
+    stateKey:'budgets',
+    fields:[
+      {id:'category',    lbl:'Category',     type:'select',opts:['Food','Transport','Utilities','Entertainment','Healthcare','Shopping','Education','Others']},
+      {id:'budget_limit',lbl:'Monthly Limit (LKR)',type:'number',ph:'0'},
+    ]
+  },
+};
+
+let curModal=null;
+
+function openModal(key){
+  curModal=key;
+  const F=FORMS[key];
+  setText('mtitle',F.title);
+  $('mbody').innerHTML=F.fields.map(f=>{
+    if(f.type==='select') return `<div class="mfg"><label>${f.lbl}</label>
+      <select id="mf-${f.id}">${f.opts.map(o=>`<option value="${o}">${o}</option>`).join('')}</select></div>`;
+    const def=f.type==='date'?` value="${today()}"`:f.type==='number'?' value="0"':'';
+    return `<div class="mfg"><label>${f.lbl}</label>
+      <input type="${f.type}" id="mf-${f.id}" placeholder="${f.ph||''}"${def}/></div>`;
+  }).join('');
+  $('mov').classList.remove('dn');
+  // auto-focus first text field
+  setTimeout(()=>$('mbody').querySelector('input[type=text]')?.focus(),40);
+}
+
+function closeModal(){ $('mov').classList.add('dn'); curModal=null; }
+$('mclose').addEventListener('click',closeModal);
+$('mcancel').addEventListener('click',closeModal);
+$('mov').addEventListener('click',e=>{ if(e.target===$('mov')) closeModal(); });
+
+$('msave').addEventListener('click',async()=>{
+  if(!curModal) return;
+  const F=FORMS[curModal];
+  const rec={};
+  let valid=true;
+  F.fields.forEach(f=>{
+    const inp=$(`mf-${f.id}`); if(!inp) return;
+    let v=inp.value.trim();
+    if(f.type==='number'){ v=parseFloat(v)||0; }
+    else if(!v){ valid=false; }
+    rec[f.id]=v;
+  });
+  if(!valid){ toast('Please fill in all required fields.','e'); return; }
+  if(curModal==='stocks'&&rec.symbol) rec.symbol=rec.symbol.toUpperCase();
+
+  const btn=$('msave');
+  btn.disabled=true; btn.textContent='Saving…';
+
+  const {data,error}=await dbInsert(F.table, {...rec});
+  if(error){ toast('Error: '+error.message,'e'); btn.disabled=false; btn.textContent='Save'; return; }
+  const saved=data||{...rec,id:genId()};
+  S.data[F.stateKey]=[saved,...S.data[F.stateKey]];
+  toast('Saved!','s');
+  // Fetch live price immediately for new stock
+  if(curModal==='stocks'&&rec.symbol){
+    fetchPrice(rec.symbol).then(p=>{
+      if(p!==null){
+        const idx=S.data.stocks.findIndex(s=>s.id===saved.id);
+        if(idx!==-1){
+          S.data.stocks[idx].current_price=p;
+          if(sb) sb.from('stocks').update({current_price:p}).eq('id',saved.id);
+          renderStocks(); renderDash(); renderNetWorth();
+        }
+      }
+    });
+  }
+
+  btn.disabled=false; btn.textContent='Save';
+  closeModal();
+  renderAll();
+});
+
+// ── DELETE ────────────────────────────────────────────────────────────
+async function rmItem(key,id){
+  if(!confirm('Delete this item?')) return;
+  const {error}=await dbDelete(TBL[key],id);
+  if(error){ toast('Delete failed: '+error.message,'e'); return; }
+  S.data[key]=S.data[key].filter(x=>x.id!=id);
+  toast('Deleted.','i');
+  renderAll();
+}
+window.rmItem=rmItem;
+
+// ── BUTTON → MODAL WIRING ─────────────────────────────────────────────
+const BTN_MAP={
+  'badd':'banks','cadd':'cards','sadd':'stocks',
+  'fdadd':'fd','funadd':'funds','exadd':'expenses','budadd':'budgets'
+};
+Object.entries(BTN_MAP).forEach(([bid,key])=>{
+  const b=$(bid); if(b) b.addEventListener('click',()=>openModal(key));
+});
+
+// ── XSS ESCAPE ───────────────────────────────────────────────────────
+function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+
+} // end init()
+})();
+</script>
+
+<!-- ══════════════════════ SUPABASE SCHEMA (reference) ══════════════════════
+Run this SQL in your Supabase SQL Editor (Dashboard → SQL Editor → New Query):
+
+create table bank_accounts (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  bank_name text not null, account_name text not null,
+  balance numeric(15,2) not null default 0, currency text default 'LKR',
+  created_at timestamptz default now()
+);
+alter table bank_accounts enable row level security;
+create policy "own" on bank_accounts for all using (auth.uid()=user_id);
+
+create table cards (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  card_name text not null, bank text not null,
+  credit_limit numeric(15,2) default 0, outstanding numeric(15,2) default 0,
+  due_date date, created_at timestamptz default now()
+);
+alter table cards enable row level security;
+create policy "own" on cards for all using (auth.uid()=user_id);
+
+create table fixed_deposits (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  bank text not null, principal numeric(15,2) not null,
+  rate numeric(6,3) not null, start_date date not null, maturity_date date not null,
+  created_at timestamptz default now()
+);
+alter table fixed_deposits enable row level security;
+create policy "own" on fixed_deposits for all using (auth.uid()=user_id);
+
+create table funds (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  fund_name text not null, invested_amount numeric(15,2) not null,
+  current_value numeric(15,2) not null, purchase_date date not null,
+  created_at timestamptz default now()
+);
+alter table funds enable row level security;
+create policy "own" on funds for all using (auth.uid()=user_id);
+
+create table stocks (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  symbol text not null, company_name text not null,
+  shares numeric(14,4) not null, purchase_price numeric(14,4) not null,
+  current_price numeric(14,4), purchase_date date not null,
+  created_at timestamptz default now()
+);
+alter table stocks enable row level security;
+create policy "own" on stocks for all using (auth.uid()=user_id);
+
+create table expenses (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  date date not null default current_date, category text not null,
+  description text, amount numeric(12,2) not null,
+  created_at timestamptz default now()
+);
+alter table expenses enable row level security;
+create policy "own" on expenses for all using (auth.uid()=user_id);
+create index on expenses(user_id, date);
+
+create table budgets (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  category text not null, budget_limit numeric(12,2) not null,
+  created_at timestamptz default now()
+);
+alter table budgets enable row level security;
+create policy "own" on budgets for all using (auth.uid()=user_id);
+
+═══════════════════════════════════════════════════════════════════════════ -->
 </body>
 </html>
