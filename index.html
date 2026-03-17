@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finova — Personal Finance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- ─── AUTH OVERLAY ─────────────────────────────────────────────────────── -->
+<div id="auth-overlay" class="auth-overlay">
+  <div class="auth-bg">
+    <div class="auth-orb auth-orb-1"></div>
+    <div class="auth-orb auth-orb-2"></div>
+    <div class="auth-orb auth-orb-3"></div>
+  </div>
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">◈</div>
+      <span class="auth-logo-text">Finova</span>
+    </div>
+    <p class="auth-tagline">Your wealth. Unified.</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Sign In</button>
+      <button class="auth-tab" data-tab="signup">Create Account</button>
+    </div>
+
+    <div id="auth-login" class="auth-form active">
+      <div class="field-group">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="you@example.com" />
+      </div>
+      <div class="field-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" />
+      </div>
+      <button class="btn-primary btn-full" id="btn-login">Sign In</button>
+      <button class="btn-ghost btn-full" id="btn-demo">Continue with Demo Data</button>
+    </div>
+
+    <div id="auth-signup" class="auth-form">
+      <div class="field-group">
+        <label>Full Name</label>
+        <input type="text" id="signup-name" placeholder="Alex Johnson" />
+      </div>
+      <div class="field-group">
+        <label>Email</label>
+        <input type="email" id="signup-email" placeholder="you@example.com" />
+      </div>
+      <div class="field-group">
+        <label>Password</label>
+        <input type="password" id="signup-password" placeholder="Min. 8 characters" />
+      </div>
+      <button class="btn-primary btn-full" id="btn-signup">Create Account</button>
+    </div>
+
+    <p class="auth-notice" id="auth-message"></p>
+  </div>
+</div>
+
+<!-- ─── APP SHELL ────────────────────────────────────────────────────────── -->
+<div id="app" class="app hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">Finova</span>
+      </div>
+      <button class="sidebar-close" id="sidebar-close">✕</button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-section="dashboard">
+        <span class="nav-icon">⬡</span> Overview
+      </a>
+      <a class="nav-item" data-section="banks">
+        <span class="nav-icon">⬡</span> Bank Accounts
+      </a>
+      <a class="nav-item" data-section="cards">
+        <span class="nav-icon">⬡</span> Cards
+      </a>
+      <a class="nav-item" data-section="stocks">
+        <span class="nav-icon">⬡</span> Stocks
+      </a>
+      <a class="nav-item" data-section="fixed-deposits">
+        <span class="nav-icon">⬡</span> Fixed Deposits
+      </a>
+      <a class="nav-item" data-section="funds">
+        <span class="nav-icon">⬡</span> Funds
+      </a>
+      <a class="nav-item" data-section="expenses">
+        <span class="nav-icon">⬡</span> Expenses
+      </a>
+      <a class="nav-item" data-section="budgets">
+        <span class="nav-icon">⬡</span> Budgets
+      </a>
+      <a class="nav-item" data-section="networth">
+        <span class="nav-icon">⬡</span> Net Worth
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-badge" id="user-badge">
+        <div class="user-avatar" id="user-avatar">A</div>
+        <div class="user-info">
+          <span class="user-name" id="user-name">Alex Johnson</span>
+          <span class="user-role">Personal Account</span>
+        </div>
+      </div>
+      <div class="sidebar-actions">
+        <button class="icon-btn" id="theme-toggle" title="Toggle theme">☽</button>
+        <button class="icon-btn" id="btn-logout" title="Sign out">↪</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <header class="topbar">
+      <button class="hamburger" id="hamburger">☰</button>
+      <div class="topbar-title" id="topbar-title">Overview</div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="theme-toggle-mobile" title="Toggle theme">☽</button>
+        <div class="refresh-indicator" id="refresh-indicator">
+          <span class="refresh-dot"></span> Live
+        </div>
+      </div>
+    </header>
+
+    <div class="content" id="content">
+
+      <!-- ══ DASHBOARD ══════════════════════════════════════════════════════ -->
+      <section id="section-dashboard" class="section active">
+        <div class="section-header">
+          <h1>Good morning, <span id="greeting-name">Alex</span> 👋</h1>
+          <p class="section-sub">Here's your financial overview for today.</p>
+        </div>
+
+        <!-- NET WORTH HERO -->
+        <div class="hero-card glass-card">
+          <div class="hero-left">
+            <label class="hero-label">Total Net Worth</label>
+            <div class="hero-value" id="dash-networth">LKR 0</div>
+            <div class="hero-change positive" id="dash-change">
+              <span>↑</span> <span id="dash-change-val">0%</span> this month
+            </div>
+          </div>
+          <div class="hero-chart-wrap">
+            <canvas id="chart-networth-mini" height="80"></canvas>
+          </div>
+        </div>
+
+        <!-- QUICK STATS -->
+        <div class="stats-grid">
+          <div class="stat-card glass-card">
+            <div class="stat-icon bank-icon">🏦</div>
+            <div class="stat-body">
+              <label>Bank Balance</label>
+              <div class="stat-value" id="dash-banks">LKR 0</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stock-icon">📈</div>
+            <div class="stat-body">
+              <label>Portfolio Value</label>
+              <div class="stat-value" id="dash-stocks">LKR 0</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon fd-icon">🏛️</div>
+            <div class="stat-body">
+              <label>Fixed Deposits</label>
+              <div class="stat-value" id="dash-fds">LKR 0</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon expense-icon">💳</div>
+            <div class="stat-body">
+              <label>This Month Spent</label>
+              <div class="stat-value" id="dash-expenses">LKR 0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW -->
+        <div class="charts-grid">
+          <div class="chart-card glass-card">
+            <div class="chart-header">
+              <h3>Asset Allocation</h3>
+            </div>
+            <div class="chart-wrap doughnut-wrap">
+              <canvas id="chart-allocation"></canvas>
+            </div>
+          </div>
+          <div class="chart-card glass-card">
+            <div class="chart-header">
+              <h3>Monthly Expenses</h3>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chart-expenses-bar"></canvas>
+            </div>
+          </div>
+          <div class="chart-card glass-card wide-card">
+            <div class="chart-header">
+              <h3>Net Worth Trend</h3>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chart-networth-trend"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI INSIGHTS -->
+        <div class="insights-section glass-card">
+          <h3>🤖 AI Insights</h3>
+          <div class="insights-list" id="insights-list">
+            <div class="insight-item">
+              <span class="insight-icon">💡</span>
+              <p>Loading insights...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ BANK ACCOUNTS ══════════════════════════════════════════════════ -->
+      <section id="section-banks" class="section">
+        <div class="section-header">
+          <div>
+            <h1>Bank Accounts</h1>
+            <p class="section-sub">Track all your bank balances in one place.</p>
+          </div>
+          <button class="btn-primary" id="btn-add-bank">+ Add Account</button>
+        </div>
+        <div class="total-banner glass-card">
+          <label>Total Bank Balance</label>
+          <div class="banner-value" id="banks-total">LKR 0</div>
+        </div>
+        <div class="cards-grid" id="banks-list">
+          <div class="empty-state">No bank accounts added yet.</div>
+        </div>
+      </section>
+
+      <!-- ══ CARDS ══════════════════════════════════════════════════════════ -->
+      <section id="section-cards" class="section">
+        <div class="section-header">
+          <div>
+            <h1>Cards</h1>
+            <p class="section-sub">Credit & debit card management.</p>
+          </div>
+          <button class="btn-primary" id="btn-add-card">+ Add Card</button>
+        </div>
+        <div class="cards-grid" id="cards-list">
+          <div class="empty-state">No cards added yet.</div>
+        </div>
+      </section>
+
+      <!-- ══ STOCKS ══════════════════════════════════════════════════════════ -->
+      <section id="section-stocks" class="section">
+        <div class="section-header">
+          <div>
+            <h1>Stock Portfolio</h1>
+            <p class="section-sub">Real-time tracking including CSE stocks.</p>
+          </div>
+          <button class="btn-primary" id="btn-add-stock">+ Add Stock</button>
+        </div>
+        <div class="portfolio-hero glass-card">
+          <div class="portfolio-stats">
+            <div class="port-stat">
+              <label>Portfolio Value</label>
+              <div class="port-value" id="stocks-total">LKR 0</div>
+            </div>
+            <div class="port-stat">
+              <label>Total Invested</label>
+              <div class="port-value" id="stocks-invested">LKR 0</div>
+            </div>
+            <div class="port-stat">
+              <label>Total P&L</label>
+              <div class="port-value" id="stocks-pnl">LKR 0</div>
+            </div>
+          </div>
+        </div>
+        <div class="table-card glass-card">
+          <table class="data-table" id="stocks-table">
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Company</th>
+                <th>Shares</th>
+                <th>Avg Price</th>
+                <th>Current</th>
+                <th>Value</th>
+                <th>P&L</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="stocks-tbody">
+              <tr><td colspan="8" class="empty-cell">No stocks added yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ══ FIXED DEPOSITS ══════════════════════════════════════════════════ -->
+      <section id="section-fixed-deposits" class="section">
+        <div class="section-header">
+          <div>
+            <h1>Fixed Deposits</h1>
+            <p class="section-sub">Monitor maturity dates and interest earned.</p>
+          </div>
+          <button class="btn-primary" id="btn-add-fd">+ Add FD</button>
+        </div>
+        <div class="total-banner glass-card">
+          <label>Total FD Value</label>
+          <div class="banner-value" id="fd-total">LKR 0</div>
+        </div>
+        <div class="cards-grid" id="fd-list">
+          <div class="empty-state">No fixed deposits added yet.</div>
+        </div>
+      </section>
+
+      <!-- ══ FUNDS ══════════════════════════════════════════════════════════ -->
+      <section id="section-funds" class="section">
+        <div class="section-header">
+          <div>
+            <h1>Funds</h1>
+            <p class="section-sub">Mutual funds & money market accounts.</p>
+          </div>
+          <button class="btn-primary" id="btn-add-fund">+ Add Fund</button>
+        </div>
+        <div class="cards-grid" id="funds-list">
+          <div class="empty-state">No funds added yet.</div>
+        </div>
+      </section>
+
+      <!-- ══ EXPENSES ══════════════════════════════════════════════════════ -->
+      <section id="section-expenses" class="section">
+        <div class="section-header">
+          <div>
+            <h1>Expenses</h1>
+            <p class="section-sub">Track your daily spending.</p>
+          </div>
+          <button class="btn-primary" id="btn-add-expense">+ Add Expense</button>
+        </div>
+        <div class="expense-summary glass-card">
+          <div class="port-stat">
+            <label>This Month</label>
+            <div class="port-value" id="exp-month-total">LKR 0</div>
+          </div>
+          <div class="port-stat">
+            <label>This Week</label>
+            <div class="port-value" id="exp-week-total">LKR 0</div>
+          </div>
+          <div class="port-stat">
+            <label>Today</label>
+            <div class="port-value" id="exp-today-total">LKR 0</div>
+          </div>
+        </div>
+        <div class="charts-grid">
+          <div class="chart-card glass-card">
+            <h3>By Category</h3>
+            <div class="chart-wrap doughnut-wrap">
+              <canvas id="chart-exp-cat"></canvas>
+            </div>
+          </div>
+          <div class="chart-card glass-card">
+            <h3>Daily Trend</h3>
+            <div class="chart-wrap">
+              <canvas id="chart-exp-trend"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="table-card glass-card">
+          <table class="data-table">
+            <thead>
+              <tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr>
+            </thead>
+            <tbody id="expenses-tbody">
+              <tr><td colspan="5" class="empty-cell">No expenses logged yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ══ BUDGETS ══════════════════════════════════════════════════════ -->
+      <section id="section-budgets" class="section">
+        <div class="section-header">
+          <div>
+            <h1>Budgets</h1>
+            <p class="section-sub">Monthly spending limits per category.</p>
+          </div>
+          <button class="btn-primary" id="btn-add-budget">+ Set Budget</button>
+        </div>
+        <div class="budgets-list" id="budgets-list">
+          <div class="empty-state">No budgets set yet.</div>
+        </div>
+      </section>
+
+      <!-- ══ NET WORTH ══════════════════════════════════════════════════════ -->
+      <section id="section-networth" class="section">
+        <div class="section-header">
+          <h1>Net Worth</h1>
+          <p class="section-sub">Assets minus liabilities — your true financial position.</p>
+        </div>
+        <div class="networth-hero glass-card">
+          <label class="hero-label">Net Worth</label>
+          <div class="hero-value" id="nw-total">LKR 0</div>
+        </div>
+        <div class="nw-breakdown">
+          <div class="nw-col glass-card">
+            <h3 class="nw-col-title assets">Assets</h3>
+            <div id="nw-assets-list"></div>
+            <div class="nw-total-row"><label>Total Assets</label><span id="nw-assets-total">LKR 0</span></div>
+          </div>
+          <div class="nw-col glass-card">
+            <h3 class="nw-col-title liabilities">Liabilities</h3>
+            <div id="nw-liabilities-list"></div>
+            <div class="nw-total-row"><label>Total Liabilities</label><span id="nw-liabilities-total">LKR 0</span></div>
+          </div>
+        </div>
+        <div class="chart-card glass-card" style="margin-top:1.5rem">
+          <h3>Net Worth Composition</h3>
+          <canvas id="chart-nw-composition" height="300"></canvas>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </main>
+</div><!-- /app -->
+
+<!-- ─── MODAL ────────────────────────────────────────────────────────────── -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div class="modal glass-card" id="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Add Item</h2>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn-ghost" id="modal-cancel">Cancel</button>
+      <button class="btn-primary" id="modal-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toast-container"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
