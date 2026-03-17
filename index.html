@@ -405,8 +405,22 @@ img{max-width:100%}
 .coin-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;
   justify-content:center;font-size:1.1rem;flex-shrink:0;background:var(--gl)}
 
-/* ── PAID FROM BADGE ── */
-.pf-bdg{font-size:.7rem;color:var(--t2);display:inline-flex;align-items:center;gap:.25rem}
+/* ── PAY/TRANSFER MODAL EXTRAS ── */
+.pay-opt{display:flex;gap:.6rem;margin:.2rem 0}
+.pay-opt label{display:flex;align-items:center;gap:.4rem;font-size:.85rem;cursor:pointer;
+  padding:.5rem .9rem;border-radius:var(--r10);border:1.5px solid var(--bd);flex:1;
+  transition:all var(--tr)}
+.pay-opt input[type=radio]{accent-color:var(--blue)}
+.pay-opt label:has(input:checked){border-color:var(--blue);background:rgba(59,130,246,.1)}
+.cash-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;
+  background:rgba(251,191,36,.12);color:var(--amber);border-radius:99px;
+  padding:.18rem .55rem;font-weight:600}
+.transfer-btn{background:rgba(45,212,191,.1);color:var(--teal);border:1px solid rgba(45,212,191,.25);
+  padding:.32rem .7rem;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;transition:all var(--tr)}
+.transfer-btn:hover{background:rgba(45,212,191,.22)}
+.mature-btn{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.25);
+  padding:.32rem .7rem;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;transition:all var(--tr)}
+.mature-btn:hover{background:rgba(74,222,128,.22)}
 
 /* ════════════════════ RESPONSIVE ════════════════════ */
 @media(max-width:1100px){
@@ -575,7 +589,10 @@ img{max-width:100%}
       <section id="sec-banks" class="sec">
         <div class="sh">
           <div><h1>Bank Accounts</h1><p class="ssub">Track all your balances in one place.</p></div>
-          <button class="btn bp" id="badd">+ Add Account</button>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+            <button class="btn bg" id="cash-edit-btn" style="font-size:.83rem;padding:.55rem 1rem">💵 Cash in Hand: <span id="cash-display">LKR 0</span></button>
+            <button class="btn bp" id="badd">+ Add Account</button>
+          </div>
         </div>
         <div class="bnr gc"><label>Total Bank Balance</label><div class="bnrv" id="b-tot">LKR 0</div></div>
         <div class="ig" id="banks-list"><div class="emp">No accounts yet.</div></div>
@@ -939,6 +956,8 @@ function launch(){
   const name=S.user?.user_metadata?.full_name||S.user?.email?.split('@')[0]||'User';
   setText('uname',name); setText('gname',name.split(' ')[0]);
   $('uav').textContent=name[0].toUpperCase();
+  // init cash display
+  const cd=$('cash-display'); if(cd) cd.textContent=fmt(getCash());
   renderAll();
   if(SB_READY){
     S.stockRefreshTimer=setInterval(refreshStockPrices,CFG.REFRESH_MS);
@@ -1023,12 +1042,13 @@ $('rf-btn').addEventListener('click',refreshStockPrices);
 // ── TOTALS HELPER ─────────────────────────────────────────────────────
 function calcTotals(){
   const banks  = S.data.banks.reduce((s,b)=>s+(+b.balance||0),0);
+  const cash   = getCash();
   const fdv    = S.data.fd.reduce((s,f)=>s+fdMat(+f.principal,+f.rate||+f.interest_rate,f.start_date||f.start,f.maturity_date||f.maturity),0);
   const funds  = S.data.funds.reduce((s,f)=>s+(+f.current_value||0),0);
   const stocks = S.data.stocks.reduce((s,st)=>s+((+st.current_price||+st.purchase_price||0)*(+st.shares||0)),0);
   const crypto = S.data.crypto.reduce((s,c)=>s+(+c.value_lkr||0),0);
   const cards  = S.data.cards.reduce((s,c)=>s+(+c.outstanding||+c.outstanding_balance||0),0);
-  const assets = banks+fdv+funds+stocks+crypto;
+  const assets = banks+cash+fdv+funds+stocks+crypto;
   const now=new Date(), ms=new Date(now.getFullYear(),now.getMonth(),1);
   const ws=new Date(now); ws.setDate(now.getDate()-7);
   const td=today();
@@ -1038,7 +1058,7 @@ function calcTotals(){
   const totExp= S.data.expenses.reduce((s,e)=>s+(+e.amount||0),0);
   // Net worth = assets − card liabilities − total cumulative expenses
   const nw = assets - cards - totExp;
-  return {banks,fdv,funds,stocks,crypto,cards,assets,nw,mExp,wExp,dExp,totExp};
+  return {banks,cash,fdv,funds,stocks,crypto,cards,assets,nw,mExp,wExp,dExp,totExp};
 }
 
 // ══════════════════════════════════════════════════════
@@ -1284,7 +1304,10 @@ function renderCards(){
         <div class="pb"><div class="pf${ut>50?' warn':''}" style="width:${Math.min(ut,100)}%"></div></div>
       </div>
       <div class="fdcnt">📅 Due ${days>0?'in '+days+' days':'OVERDUE'} — ${c.due_date}</div>
-      <button class="bdel" onclick="rmItem('cards','${c.id}')">Delete</button>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        ${out>0?`<button class="mature-btn" onclick="payCard('${c.id}')">💳 Pay Card</button>`:'<span style="font-size:.78rem;color:var(--green)">✓ Fully Paid</span>'}
+        <button class="bdel" onclick="rmItem('cards','${c.id}')">Delete</button>
+      </div>
     </div>`;}).join(''):'<div class="emp">No cards yet. Click "+ Add Card".</div>';
 }
 
@@ -1311,7 +1334,7 @@ function renderStocks(){
       <td class="mono">${fmtD(cur)}</td>
       <td class="mono">${fmt(val)}</td>
       <td class="${pnl>=0?'pos':'neg'}">${fmt(pnl)} <small>(${fmtP(pct)})</small></td>
-      <td><button class="bdel" onclick="rmItem('stocks','${st.id}')">✕</button></td>
+      <td><button class="transfer-btn" onclick="transferStock('${st.id}')">↗ Sell</button> <button class="bdel" onclick="rmItem('stocks','${st.id}')">✕</button></td>
     </tr>`;}).join(''):'<tr><td colspan="8" class="ec">No stocks yet. Click "+ Add Stock".</td></tr>';
 }
 
@@ -1340,8 +1363,15 @@ function renderFDs(){
         <div class="plbls"><span>${sd}</span><span>${md}</span></div>
         <div class="pb"><div class="pf" style="width:${prog.toFixed(1)}%"></div></div>
       </div>
-      ${days>0&&days<=30?`<div class="fdcnt">⚠️ Matures in ${days} days!</div>`:''}
-      <button class="bdel" onclick="rmItem('fd','${f.id}')">Delete</button>
+      ${days<=0
+        ? `<div class="fdcnt" style="color:var(--green)">✓ Matured! Transfer funds to your account.</div>
+           <button class="mature-btn" onclick="transferFD('${f.id}')">💰 Transfer ${fmt(mat)} to Account</button>`
+        : (days<=30?`<div class="fdcnt">⚠️ Matures in ${days} days!</div>`:'')
+      }
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.2rem">
+        <button class="transfer-btn" onclick="transferFD('${f.id}')">↗ Transfer to Account</button>
+        <button class="bdel" onclick="rmItem('fd','${f.id}')">Delete</button>
+      </div>
     </div>`;}).join(''):'<div class="emp">No fixed deposits yet. Click "+ Add FD".</div>';
 }
 
@@ -1359,7 +1389,10 @@ function renderFunds(){
       <div class="iamt">${fmt(cv)}</div>
       <div class="isub">Invested: ${fmt(inv)} · Gain: <span class="${g>=0?'pos':'neg'}">${fmt(g)}</span></div>
       <div class="isub">Since ${esc(f.purchase_date)}</div>
-      <button class="bdel" onclick="rmItem('funds','${f.id}')">Delete</button>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="transfer-btn" onclick="transferFund('${f.id}')">↗ Redeem to Account</button>
+        <button class="bdel" onclick="rmItem('funds','${f.id}')">Delete</button>
+      </div>
     </div>`;}).join(''):'<div class="emp">No funds yet. Click "+ Add Fund".</div>';
 }
 
@@ -1470,6 +1503,7 @@ function renderNetWorth(){
   // Assets rows
   $('nw-assets').innerHTML=`
     <div class="nwr"><span>Bank Accounts</span><span class="nwrv">${fmt(T.banks)}</span></div>
+    <div class="nwr"><span>Cash in Hand</span><span class="nwrv">${fmt(T.cash)}</span></div>
     <div class="nwr"><span>Fixed Deposits</span><span class="nwrv">${fmt(T.fdv)}</span></div>
     <div class="nwr"><span>Mutual Funds</span><span class="nwrv">${fmt(T.funds)}</span></div>
     <div class="nwr"><span>Stock Portfolio</span><span class="nwrv">${fmt(T.stocks)}</span></div>
@@ -1485,8 +1519,8 @@ function renderNetWorth(){
     +(S.data.cards.length===0&&T.totExp===0?'<div class="nwr"><span>No liabilities 🎉</span><span class="nwrv">—</span></div>':'');
 
   // Horizontal bar chart
-  const lbls=['Banks','Fixed Deps.','Funds','Stocks','Crypto','Card Debt','Expenses'];
-  const vals=[T.banks,T.fdv,T.funds,T.stocks,T.crypto,-T.cards,-T.totExp];
+  const lbls=['Banks','Cash','Fixed Deps.','Funds','Stocks','Crypto','Card Debt','Expenses'];
+  const vals=[T.banks,T.cash,T.fdv,T.funds,T.stocks,T.crypto,-T.cards,-T.totExp];
   $('ch-nwcomp').innerHTML=svgHBars(lbls,vals,700,180);
 }
 
@@ -1577,14 +1611,10 @@ const FORMS={
     table:'crypto_wallets',
     stateKey:'crypto',
     fields:[
-      {id:'wallet_name',      lbl:'Wallet Name',          type:'text',  ph:'e.g. My Bitcoin Wallet'},
-      {id:'coin_symbol',      lbl:'Coin Symbol',          type:'select',opts:['BTC','ETH','USDT','BNB','SOL','ADA','XRP','DOT','DOGE','MATIC','LTC','AVAX','OTHER']},
-      {id:'amount',           lbl:'Amount (coins held)',  type:'number',ph:'0'},
-      {id:'buy_price_usd',    lbl:'Buy Price (USD)',      type:'number',ph:'0'},
-      {id:'current_price_usd',lbl:'Current Price (USD)',  type:'number',ph:'0'},
-      {id:'value_usd',        lbl:'Total Value (USD)',    type:'number',ph:'0'},
-      {id:'value_lkr',        lbl:'Total Value (LKR)',    type:'number',ph:'0'},
-      {id:'wallet_address',   lbl:'Wallet Address (optional)',type:'text',ph:'0x...'},
+      {id:'wallet_name',  lbl:'Wallet Name',         type:'text',  ph:'e.g. My Bitcoin Wallet'},
+      {id:'coin_symbol',  lbl:'Coin',                type:'select',opts:['BTC','ETH','USDT','BNB','SOL','ADA','XRP','DOT','DOGE','MATIC','LTC','AVAX','OTHER']},
+      {id:'amount',       lbl:'Amount (coins held)',  type:'number',ph:'0'},
+      {id:'buy_price_usd',lbl:'Buy Price per coin (USD)', type:'number',ph:'0'},
     ]
   },
   income:{
@@ -1671,7 +1701,8 @@ $('msave').addEventListener('click',async()=>{
     const inp=$(`mf-${f.id}`); if(!inp) return;
     let v=inp.value.trim();
     if(f.type==='number'){ v=parseFloat(v)||0; }
-    else if(!v){ valid=false; }
+    else if(f.type==='select'){ /* selects always have a value */ }
+    else if(!v && f.id!=='wallet_address' && f.id!=='description'){ valid=false; }
     rec[f.id]=v;
   });
   if(!valid){ toast('Please fill in all required fields.','e'); return; }
@@ -1680,12 +1711,44 @@ $('msave').addEventListener('click',async()=>{
   const btn=$('msave');
   btn.disabled=true; btn.textContent='Saving…';
 
+  // ── CRYPTO: auto-fetch price before saving ──────────────────────────
+  if(curModal==='crypto'){
+    const coinId=COINGECKO_IDS[rec.coin_symbol?.toUpperCase()]||rec.coin_symbol?.toLowerCase();
+    try{
+      const r=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`);
+      const d=await r.json();
+      const price=d[coinId]?.usd||0;
+      rec.current_price_usd=price;
+      rec.value_usd=price*(+rec.amount||0);
+      // Use a default USD→LKR rate of 320 if no live rate available
+      rec.value_lkr=rec.value_usd*320;
+    }catch(_){
+      rec.current_price_usd=rec.buy_price_usd;
+      rec.value_usd=rec.buy_price_usd*(+rec.amount||0);
+      rec.value_lkr=rec.value_usd*320;
+    }
+  }
+
   const {data,error}=await dbInsert(F.table, {...rec});
   if(error){ toast('Error: '+error.message,'e'); btn.disabled=false; btn.textContent='Save'; return; }
   const saved=data||{...rec,id:genId()};
   S.data[F.stateKey]=[saved,...S.data[F.stateKey]];
   toast('Saved!','s');
-  // Fetch live price immediately for new stock
+
+  // ── INCOME: increase bank balance ───────────────────────────────────
+  if(curModal==='income'){
+    const bankIdx=S.data.banks.findIndex(b=>b.id==rec.account_id);
+    if(bankIdx!==-1){
+      const newBal=(+S.data.banks[bankIdx].balance||0)+(+rec.amount||0);
+      S.data.banks[bankIdx].balance=newBal;
+      if(sb) await sb.from('bank_accounts').update({balance:newBal}).eq('id',S.data.banks[bankIdx].id);
+      toast('Bank balance updated!','s');
+      // Refresh statement panel if open
+      if(S.stmtBankId==rec.account_id) renderStatement(S.stmtBankId);
+    }
+  }
+
+  // ── STOCK: fetch live price ─────────────────────────────────────────
   if(curModal==='stocks'&&rec.symbol){
     fetchPrice(rec.symbol).then(p=>{
       if(p!==null){
@@ -1905,6 +1968,232 @@ function renderStatement(bankId){
     }).join(''):'<div class="stmt-empty">No transactions yet.<br>Add income or log expenses paid from this account.</div>'}`;
 }
 
+// ── COINGECKO IDs ─────────────────────────────────────────────────────
+const COINGECKO_IDS={
+  BTC:'bitcoin',ETH:'ethereum',USDT:'tether',BNB:'binancecoin',
+  SOL:'solana',ADA:'cardano',XRP:'ripple',DOT:'polkadot',
+  DOGE:'dogecoin',MATIC:'matic-network',LTC:'litecoin',AVAX:'avalanche-2',
+};
+
+// ── CASH IN HAND ──────────────────────────────────────────────────────
+function getCash(){ return +localStorage.getItem('fv_cash_'+S.user.id)||0; }
+function setCash(v){
+  localStorage.setItem('fv_cash_'+S.user.id, v);
+  const d=$('cash-display'); if(d) d.textContent=fmt(v);
+}
+
+$('cash-edit-btn').addEventListener('click',()=>{
+  const cur=getCash();
+  const val=prompt(`Update Cash in Hand (LKR):\nCurrent: ${fmt(cur)}`, cur);
+  if(val===null) return;
+  const num=parseFloat(val)||0;
+  setCash(num);
+  renderDash(); renderNetWorth();
+  toast('Cash updated!','s');
+});
+
+// ── GET PAYMENT SOURCES ───────────────────────────────────────────────
+function getPaySources(){
+  const src=[];
+  S.data.banks.forEach(b=>src.push({id:'bank_'+b.id,label:b.account_name+' · '+b.bank_name,balance:+b.balance||0,type:'bank',ref:b}));
+  S.data.crypto.forEach(c=>src.push({id:'crypto_'+c.id,label:c.coin_symbol+' — '+c.wallet_name,balance:+c.value_lkr||0,type:'crypto',ref:c}));
+  src.push({id:'cash',label:'Cash in Hand',balance:getCash(),type:'cash'});
+  src.push({id:'other',label:'Other / External',balance:0,type:'other'});
+  return src;
+}
+
+// ── GENERIC TRANSFER DIALOG ───────────────────────────────────────────
+// Shows a modal to deduct `amount` from a source account (or a subset)
+// and optionally credit a destination bank/cash
+function openTransferModal({title, amount, fromLabel, onConfirm}){
+  const sources=getPaySources();
+  setText('mtitle', title||'Transfer / Withdraw');
+  $('mbody').innerHTML=`
+    <div class="mfg"><label>Transfer To</label>
+      <select id="tf-dest">
+        ${S.data.banks.map(b=>`<option value="bank_${b.id}">${esc(b.account_name)} · ${esc(b.bank_name)}</option>`).join('')}
+        <option value="cash">Cash in Hand</option>
+        <option value="other">External / Other</option>
+      </select>
+    </div>
+    <div class="mfg"><label>Amount (LKR)</label>
+      <input type="number" id="tf-amount" value="${amount.toFixed(2)}"/>
+    </div>
+    ${fromLabel?`<p style="font-size:.8rem;color:var(--t2);margin-top:.3rem">From: ${esc(fromLabel)}</p>`:''}`;
+  $('mov').classList.remove('dn');
+
+  const origSave=$('msave').onclick;
+  $('msave').onclick=async()=>{
+    const dest=$('tf-dest').value;
+    const amt=parseFloat($('tf-amount').value)||0;
+    if(amt<=0){ toast('Enter a valid amount.','e'); return; }
+    await onConfirm(dest, amt);
+    $('msave').onclick=origSave;
+    closeModal();
+    renderAll();
+  };
+}
+
+// Credit a destination with an amount
+async function creditDest(dest, amt){
+  if(dest.startsWith('bank_')){
+    const bid=dest.replace('bank_','');
+    const idx=S.data.banks.findIndex(b=>b.id==bid);
+    if(idx!==-1){
+      S.data.banks[idx].balance=(+S.data.banks[idx].balance||0)+amt;
+      if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id);
+      toast(`+${fmt(amt)} added to ${S.data.banks[idx].account_name}`,'s');
+    }
+  } else if(dest==='cash'){
+    setCash(getCash()+amt);
+    toast(`+${fmt(amt)} added to Cash in Hand`,'s');
+  }
+}
+
+// ── PAY CARD ──────────────────────────────────────────────────────────
+window.payCard=function(cardId){
+  const card=S.data.cards.find(c=>c.id==cardId);
+  if(!card) return;
+  const outstanding=+card.outstanding||+card.outstanding_balance||0;
+  const sources=getPaySources();
+
+  setText('mtitle','Pay Card — '+card.card_name);
+  $('mbody').innerHTML=`
+    <div style="font-size:.85rem;color:var(--t2);margin-bottom:.5rem">
+      Outstanding: <strong style="color:var(--red)">${fmt(outstanding)}</strong>
+    </div>
+    <div class="mfg"><label>Pay Amount</label>
+      <div class="pay-opt">
+        <label><input type="radio" name="pay-type" value="full" checked/> Pay Full (${fmt(outstanding)})</label>
+        <label><input type="radio" name="pay-type" value="custom"/> Custom Amount</label>
+      </div>
+      <input type="number" id="pay-amount" value="${outstanding.toFixed(2)}" style="margin-top:.5rem"/>
+    </div>
+    <div class="mfg"><label>Pay From</label>
+      <select id="pay-src">
+        ${sources.map(s=>`<option value="${esc(s.id)}">${esc(s.label)} — ${fmt(s.balance)}</option>`).join('')}
+      </select>
+    </div>
+    <p id="pay-err" style="color:var(--red);font-size:.8rem;min-height:1rem;margin-top:.3rem"></p>`;
+
+  // Toggle amount input
+  $('mbody').querySelectorAll('input[name=pay-type]').forEach(r=>r.addEventListener('change',()=>{
+    const isFull=document.querySelector('input[name=pay-type]:checked')?.value==='full';
+    $('pay-amount').value=isFull?outstanding.toFixed(2):'0';
+    $('pay-amount').readOnly=isFull;
+  }));
+  $('pay-amount').readOnly=true;
+
+  $('mov').classList.remove('dn');
+
+  const origSave=$('msave').onclick;
+  $('msave').onclick=async()=>{
+    const amt=parseFloat($('pay-amount').value)||0;
+    const srcId=$('pay-src').value;
+    const src=sources.find(s=>s.id===srcId);
+    $('pay-err').textContent='';
+
+    if(amt<=0){ $('pay-err').textContent='Enter a valid amount.'; return; }
+    if(src && src.type!=='other' && src.balance<amt){
+      $('pay-err').textContent=`Insufficient balance in ${src.label} (${fmt(src.balance)}).`; return;
+    }
+
+    // Deduct from source
+    if(srcId.startsWith('bank_')){
+      const bid=srcId.replace('bank_','');
+      const idx=S.data.banks.findIndex(b=>b.id==bid);
+      if(idx!==-1){
+        S.data.banks[idx].balance=Math.max(0,(+S.data.banks[idx].balance||0)-amt);
+        if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id);
+      }
+    } else if(srcId==='cash'){
+      setCash(Math.max(0,getCash()-amt));
+    } else if(srcId.startsWith('crypto_')){
+      const cid=srcId.replace('crypto_','');
+      const idx=S.data.crypto.findIndex(c=>c.id==cid);
+      if(idx!==-1){
+        const lkrVal=Math.max(0,(+S.data.crypto[idx].value_lkr||0)-amt);
+        S.data.crypto[idx].value_lkr=lkrVal;
+        if(sb) await sb.from('crypto_wallets').update({value_lkr:lkrVal}).eq('id',S.data.crypto[idx].id);
+      }
+    }
+
+    // Reduce card outstanding
+    const newOut=Math.max(0,outstanding-amt);
+    const cidx=S.data.cards.findIndex(c=>c.id==cardId);
+    if(cidx!==-1){
+      S.data.cards[cidx].outstanding=newOut;
+      S.data.cards[cidx].outstanding_balance=newOut;
+      if(sb) await sb.from('cards').update({outstanding:newOut}).eq('id',cardId);
+    }
+
+    // Log as expense
+    const expRec={date:today(),category:'Card Payment',description:'Payment — '+card.card_name,paid_from:src?.label||'Other',amount:amt};
+    await dbInsert('expenses',{...expRec});
+    S.data.expenses=[{...expRec,id:genId()},...S.data.expenses];
+
+    toast(`Paid ${fmt(amt)} to ${card.card_name}`,'s');
+    $('msave').onclick=origSave;
+    closeModal();
+    renderAll();
+  };
+};
+
+// ── TRANSFER FROM STOCK ───────────────────────────────────────────────
+window.transferStock=function(stockId){
+  const st=S.data.stocks.find(s=>s.id==stockId);
+  if(!st) return;
+  const cur=+st.current_price||+st.purchase_price||0;
+  const totalVal=cur*(+st.shares||0);
+  openTransferModal({
+    title:'Sell / Transfer — '+st.symbol,
+    amount:totalVal,
+    fromLabel:st.symbol+' ('+st.shares+' shares @ '+fmtD(cur)+')',
+    onConfirm:async(dest,amt)=>{
+      await creditDest(dest,amt);
+      // Remove stock from portfolio
+      await dbDelete('stocks',stockId);
+      S.data.stocks=S.data.stocks.filter(s=>s.id!=stockId);
+      toast('Stock sold & transferred!','s');
+    }
+  });
+};
+
+// ── TRANSFER FROM FUND ────────────────────────────────────────────────
+window.transferFund=function(fundId){
+  const fund=S.data.funds.find(f=>f.id==fundId);
+  if(!fund) return;
+  openTransferModal({
+    title:'Redeem — '+fund.fund_name,
+    amount:+fund.current_value||0,
+    fromLabel:fund.fund_name,
+    onConfirm:async(dest,amt)=>{
+      await creditDest(dest,amt);
+      await dbDelete('funds',fundId);
+      S.data.funds=S.data.funds.filter(f=>f.id!=fundId);
+      toast('Fund redeemed & transferred!','s');
+    }
+  });
+};
+
+// ── TRANSFER FROM FD (maturity) ───────────────────────────────────────
+window.transferFD=function(fdId){
+  const fd=S.data.fd.find(f=>f.id==fdId);
+  if(!fd) return;
+  const mat=fdMat(+fd.principal,+fd.rate||+fd.interest_rate,fd.start_date||fd.start,fd.maturity_date||fd.maturity);
+  openTransferModal({
+    title:'Transfer Matured FD — '+fd.bank,
+    amount:mat,
+    fromLabel:fd.bank+' FD (Principal '+fmt(+fd.principal)+')',
+    onConfirm:async(dest,amt)=>{
+      await creditDest(dest,amt);
+      await dbDelete('fixed_deposits',fdId);
+      S.data.fd=S.data.fd.filter(f=>f.id!=fdId);
+      toast('FD maturity transferred!','s');
+    }
+  });
+};
+
 // ── BUTTON → MODAL WIRING ─────────────────────────────────────────────
 const BTN_MAP={
   'badd':'banks','cadd':'cards','sadd':'stocks',
@@ -1980,12 +2269,15 @@ create table expenses (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
   date date not null default current_date, category text not null,
-  description text, amount numeric(12,2) not null,
+  description text, paid_from text, amount numeric(12,2) not null,
   created_at timestamptz default now()
 );
 alter table expenses enable row level security;
 create policy "own" on expenses for all using (auth.uid()=user_id);
 create index on expenses(user_id, date);
+
+-- If your expenses table already exists without paid_from, run this:
+-- alter table expenses add column if not exists paid_from text;
 
 create table budgets (
   id uuid primary key default gen_random_uuid(),
