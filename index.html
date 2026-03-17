@@ -340,6 +340,56 @@ img{max-width:100%}
 .tout{animation:tout .25s ease both}
 @keyframes tout{to{opacity:0;transform:translateX(14px)}}
 
+/* ── LOANS ── */
+.loan-card{padding:1.3rem;display:flex;flex-direction:column;gap:.7rem;transition:all var(--tr)}
+.loan-card:hover{transform:translateY(-2px);border-color:var(--bd2)}
+.loan-type-badge{padding:.22rem .6rem;border-radius:99px;font-size:.68rem;font-weight:700}
+.lt-personal{background:rgba(59,130,246,.12);color:var(--blue)}
+.lt-vehicle{background:rgba(251,191,36,.12);color:var(--amber)}
+.lt-home{background:rgba(74,222,128,.12);color:var(--green)}
+.lt-credit{background:rgba(248,113,113,.12);color:var(--red)}
+.lt-other{background:rgba(167,139,250,.12);color:var(--purple)}
+.loan-progress{height:6px;background:var(--ele);border-radius:99px;overflow:hidden;margin:.2rem 0}
+.loan-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--amber));transition:width .7s cubic-bezier(.4,0,.2,1)}
+.repay-schedule{display:flex;flex-direction:column;gap:.4rem;max-height:200px;overflow-y:auto}
+.repay-row{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;padding:.38rem .5rem;border-radius:6px;background:var(--gl)}
+.repay-row.due-soon{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2)}
+.repay-row.overdue{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2)}
+/* ── CALENDAR ── */
+.cal-header-row{display:contents}
+.cal-day-hdr{text-align:center;font-size:.68rem;font-weight:700;color:var(--t2);padding:.4rem 0;text-transform:uppercase}
+.cal-cell{min-height:70px;border:1.5px solid var(--bd);border-radius:var(--r10);padding:.35rem .4rem;cursor:pointer;transition:all var(--tr);position:relative;font-size:.75rem}
+.cal-cell:hover{background:var(--gl2);border-color:var(--bd2)}
+.cal-cell.today{border-color:var(--blue);background:rgba(59,130,246,.07)}
+.cal-cell.other-month{opacity:.35;cursor:default}
+.cal-cell.selected{border-color:var(--blue);background:rgba(59,130,246,.13)}
+.cal-date{font-weight:700;font-size:.82rem;margin-bottom:.18rem}
+.cal-dot{display:inline-block;width:5px;height:5px;border-radius:50%;margin:.5px;vertical-align:middle}
+.cal-dot-inc{background:var(--green)}.cal-dot-exp{background:var(--red)}.cal-dot-loan{background:var(--amber)}
+.cal-total-pos{font-size:.62rem;color:var(--green);font-weight:600;margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-total-neg{font-size:.62rem;color:var(--red);font-weight:600;margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* ── CASH PAGE ── */
+.cash-txn-row{display:flex;align-items:center;gap:.7rem;padding:.65rem 1rem;border-bottom:1px solid var(--bd);font-size:.84rem}
+.cash-txn-row:last-child{border-bottom:none}
+.cash-txn-in .cash-txn-amt{color:var(--green);font-weight:700;font-variant-numeric:tabular-nums}
+.cash-txn-out .cash-txn-amt{color:var(--red);font-weight:700;font-variant-numeric:tabular-nums}
+.cash-txn-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.cash-txn-in .cash-txn-icon{background:rgba(74,222,128,.12);color:var(--green)}
+.cash-txn-out .cash-txn-icon{background:rgba(248,113,113,.12);color:var(--red)}
+/* ── ACCOUNT MGMT ── */
+.acct-danger{background:rgba(248,113,113,.07);border:1.5px solid rgba(248,113,113,.2);border-radius:var(--r10);padding:1rem;margin-top:.5rem}
+.acct-danger h4{color:var(--red);font-size:.82rem;font-weight:700;margin-bottom:.5rem}
+
+/* ── GOOGLE OAUTH ── */
+.auth-divider{display:flex;align-items:center;gap:.75rem;margin:.85rem 0;color:var(--t3);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--bd)}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:.65rem;width:100%;padding:.72rem 1rem;border-radius:var(--r10);background:var(--gl);border:1.5px solid var(--bd);font-size:.875rem;font-weight:600;color:var(--t1);cursor:pointer;transition:all var(--tr)}
+.btn-google:hover{background:var(--gl2);border-color:var(--bd2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.22)}
+.btn-google:active{transform:translateY(0)}
+.btn-google:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.btn-google svg{width:18px;height:18px;flex-shrink:0}
+[data-theme=light] .btn-google{background:#fff;border-color:rgba(0,0,0,.12)}
+
 /* spinning loader */
 .spin{display:inline-block;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -422,12 +472,67 @@ img{max-width:100%}
   padding:.32rem .7rem;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;transition:all var(--tr)}
 .mature-btn:hover{background:rgba(74,222,128,.22)}
 
+/* ── LIQUID BREAKDOWN ── */
+.lq-row{display:flex;justify-content:space-between;align-items:center;
+  font-size:.78rem;padding:.18rem 0;color:var(--t2);gap:1rem}
+.lq-row strong{color:var(--t1);font-variant-numeric:tabular-nums}
+/* ── HERO SPLIT ── */
+@media(max-width:640px){
+  .hero-split{flex-direction:column!important}
+  .hero-split .hero-half+.hero-half{border-left:none!important;border-top:1.5px solid var(--bd)!important}
+}
+/* ── LAST UPDATED ── */
+.last-upd{font-size:.7rem;color:var(--t3);font-weight:500;letter-spacing:.02em;margin-top:.18rem}
+/* ── TOPBAR MOBILE ACTIONS ── */
+.tb-actions{display:none;align-items:center;gap:.35rem;margin-left:.25rem}
+@media(max-width:860px){
+  .tb-actions{display:flex}
+  .tb-actions .iBtn{width:34px;height:34px;font-size:.95rem;flex-shrink:0}
+  /* Hide duplicate sidebar theme+logout on mobile — they're in the topbar */
+  .sbacts{display:none}
+}
+
 /* ════════════════════ RESPONSIVE ════════════════════ */
 @media(max-width:1100px){
   .sgrid{grid-template-columns:repeat(2,1fr)}
   .cgrid{grid-template-columns:1fr}.wide{grid-column:1}
 }
-/* ── MOBILE BOTTOM NAV ── */
+/* ── FAB (central + button) ── */
+.fab{
+  position:fixed;bottom:80px;right:1.4rem;
+  width:54px;height:54px;border-radius:50%;
+  background:var(--blue);color:#fff;font-size:1.8rem;line-height:1;
+  display:none;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(59,130,246,.55);
+  z-index:300;border:none;cursor:pointer;
+  transition:transform .18s cubic-bezier(.4,0,.2,1),box-shadow .18s;
+}
+.fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(59,130,246,.7)}
+.fab:active{transform:scale(.95)}
+@media(max-width:860px){.fab{display:flex}}
+.fab-menu{
+  position:fixed;bottom:148px;right:1.4rem;
+  display:flex;flex-direction:column;gap:.5rem;
+  z-index:300;align-items:flex-end;
+  animation:sIn .18s ease both;
+}
+.fab-item{
+  background:var(--ele);color:var(--t1);
+  border:1.5px solid var(--bd);border-radius:var(--r10);
+  padding:.6rem 1.1rem;font-size:.85rem;font-weight:600;
+  cursor:pointer;box-shadow:var(--sh);white-space:nowrap;
+  transition:all var(--tr);
+}
+.fab-item:hover{background:var(--gl2);border-color:var(--bd2)}
+/* ── CASH STATEMENT ── */
+.cstmt-row{display:flex;align-items:center;gap:.7rem;padding:.6rem 0;
+  border-bottom:1px solid var(--bd);font-size:.84rem}
+.cstmt-row:last-child{border-bottom:none}
+.cstmt-in .cstmt-amt{color:var(--green);font-weight:700;font-variant-numeric:tabular-nums}
+.cstmt-out .cstmt-amt{color:var(--red);font-weight:700;font-variant-numeric:tabular-nums}
+.cstmt-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.cstmt-in .cstmt-icon{background:rgba(74,222,128,.12)}
+.cstmt-out .cstmt-icon{background:rgba(248,113,113,.12)}
 .mobile-nav{
   display:none;
   position:fixed;bottom:0;left:0;right:0;
@@ -511,8 +616,20 @@ img{max-width:100%}
       <div class="fg"><label>Email</label>
         <input id="li-em" type="email" placeholder="you@example.com" autocomplete="email"/></div>
       <div class="fg"><label>Password</label>
-        <input id="li-pw" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
+        <input id="li-pw" type="password" placeholder="••••••••" autocomplete="current-password"/>
+        <button type="button" id="btn-forgot" style="align-self:flex-end;font-size:.75rem;color:var(--blue);background:none;border:none;cursor:pointer;margin-top:.2rem;text-decoration:underline">Forgot password?</button>
+      </div>
       <button id="btn-signin" class="btn bp bfull">Sign In</button>
+      <div class="auth-divider">or</div>
+      <button type="button" id="btn-google-signin" class="btn-google">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
     </div>
     <!-- signup -->
     <div id="af-signup" class="aform">
@@ -523,6 +640,16 @@ img{max-width:100%}
       <div class="fg"><label>Password <span style="font-weight:400;text-transform:none">(min 6 chars)</span></label>
         <input id="su-pw" type="password" placeholder="••••••••" autocomplete="new-password"/></div>
       <button id="btn-signup" class="btn bp bfull">Create Account</button>
+      <div class="auth-divider">or</div>
+      <button type="button" id="btn-google-signup" class="btn-google">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
     </div>
     <p id="amsg"></p>
   </div>
@@ -549,14 +676,18 @@ img{max-width:100%}
     <nav class="sbnav">
       <a class="ni on"  data-s="dash">    <span class="ni-dot">◉</span> Overview</a>
       <a class="ni" data-s="banks">   <span class="ni-dot">◉</span> Bank Accounts</a>
-      <a class="ni" data-s="cards">   <span class="ni-dot">◉</span> Cards</a>
+      <a class="ni" data-s="cards">   <span class="ni-dot">◉</span> Credit Cards</a>
       <a class="ni" data-s="stocks">  <span class="ni-dot">◉</span> Stocks</a>
       <a class="ni" data-s="fd">      <span class="ni-dot">◉</span> Fixed Deposits</a>
       <a class="ni" data-s="funds">   <span class="ni-dot">◉</span> Funds</a>
       <a class="ni" data-s="crypto">  <span class="ni-dot">◉</span> Crypto Wallets</a>
+      <a class="ni" data-s="assets">  <span class="ni-dot">◉</span> Physical Assets</a>
+      <a class="ni" data-s="cash">    <span class="ni-dot">◉</span> Cash</a>
+      <a class="ni" data-s="loans">   <span class="ni-dot">◉</span> Loans</a>
       <a class="ni" data-s="expenses"><span class="ni-dot">◉</span> Expenses</a>
       <a class="ni" data-s="budgets"> <span class="ni-dot">◉</span> Budgets</a>
       <a class="ni" data-s="networth"><span class="ni-dot">◉</span> Net Worth</a>
+      <a class="ni" data-s="calendar"><span class="ni-dot">◉</span> Calendar</a>
     </nav>
     <div class="sbf">
       <div class="ubadge">
@@ -566,6 +697,7 @@ img{max-width:100%}
       <div class="sbacts">
         <button class="iBtn" id="thtog"  title="Theme">☽</button>
         <button class="iBtn" id="tmtog"  title="Theme">☽</button>
+        <button class="iBtn" id="btn-acct" title="Account Settings">⚙</button>
         <button class="iBtn" id="btn-out" title="Sign out">⏻</button>
       </div>
     </div>
@@ -578,6 +710,12 @@ img{max-width:100%}
       <div class="tbr">
         <div class="live"><div class="ldot"></div>Live</div>
         <button class="iBtn" id="rf-btn" title="Refresh prices">↻</button>
+        <button class="btn bp" id="tb-qadd" style="font-size:.78rem;padding:.42rem .85rem;gap:.3rem" title="Quick add transaction">＋ Add</button>
+      </div>
+      <div class="tb-actions">
+        <button class="iBtn" id="tb-qadd-m" title="Quick add">＋</button>
+        <button class="iBtn" id="tb-theme" title="Toggle theme">☽</button>
+        <button class="iBtn" id="tb-logout" title="Sign out" style="font-size:.85rem">⏻</button>
       </div>
     </header>
 
@@ -586,22 +724,35 @@ img{max-width:100%}
       <!-- DASHBOARD -->
       <section id="sec-dash" class="sec on">
         <div class="sh">
-          <div><h1>Good morning, <span id="gname">there</span> 👋</h1>
-          <p class="ssub">Here's your complete financial picture.</p></div>
+          <div><h1>Good <span id="gtime">morning</span>, <span id="gname">there</span> 👋</h1>
+          <p class="ssub">Here's your complete financial picture.</p>
+          <div id="d-rt-stats" style="font-size:.78rem;margin-top:.25rem;display:flex;gap:.5rem;align-items:center"></div>
+          </div>
+          <div class="last-upd" id="lu-dash">—</div>
         </div>
-        <div class="hero gc">
-          <div>
+        <div class="hero gc hero-split" style="display:flex;padding:0;gap:0;overflow:hidden">
+          <!-- Left: Net Worth -->
+          <div class="hero-half" style="flex:1;padding:1.8rem 2rem;display:flex;flex-direction:column">
             <span class="hlbl">Total Net Worth</span>
             <div class="hval" id="d-nw">LKR 0</div>
             <div class="hchg pos" id="d-chg">↑ loading…</div>
+            <div id="spark" style="margin-top:.6rem;width:100%;max-width:180px"></div>
           </div>
-          <div id="spark" style="flex-shrink:0;width:200px"></div>
+          <!-- Right: Liquidity -->
+          <div class="hero-half" style="flex:1;padding:1.8rem 2rem;display:flex;flex-direction:column;border-left:1.5px solid var(--bd);background:rgba(45,212,191,.04)">
+            <span class="hlbl">Liquidity — Readily Available</span>
+            <div class="hval" id="d-liquid" style="font-size:2rem;background:linear-gradient(135deg,var(--t1),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">LKR 0</div>
+            <div style="margin-top:.7rem;display:flex;flex-direction:column;gap:.1rem" id="d-liquid-breakdown">
+              <div class="lq-row" style="color:var(--t3);font-size:.75rem">Add bank accounts, cash or crypto</div>
+            </div>
+          </div>
         </div>
         <div class="sgrid">
           <div class="sc gc"><div class="sicon">🏦</div><div class="sv"><label>Bank Balance</label><div class="sval" id="d-banks">LKR 0</div></div></div>
           <div class="sc gc"><div class="sicon">📈</div><div class="sv"><label>Portfolio Value</label><div class="sval" id="d-stocks">LKR 0</div></div></div>
           <div class="sc gc"><div class="sicon">🏛️</div><div class="sv"><label>Fixed Deposits</label><div class="sval" id="d-fds">LKR 0</div></div></div>
           <div class="sc gc"><div class="sicon">💸</div><div class="sv"><label>This Month Spent</label><div class="sval" id="d-exp">LKR 0</div></div></div>
+          <div class="sc gc" style="grid-column:1/-1;background:rgba(248,113,113,.04);border-color:rgba(248,113,113,.18)"><div class="sicon">🏦</div><div class="sv"><label>Total Loan Debt</label><div class="sval neg" id="d-loans">LKR 0</div></div></div>
         </div>
         <div class="cgrid">
           <div class="cc gc"><h3>Asset Allocation</h3><div id="ch-alloc"></div></div>
@@ -617,8 +768,8 @@ img{max-width:100%}
       <section id="sec-banks" class="sec">
         <div class="sh">
           <div><h1>Bank Accounts</h1><p class="ssub">Track all your balances in one place.</p></div>
-          <div style="display:flex;gap:.6rem;flex-wrap:wrap">
-            <button class="btn bg" id="cash-edit-btn" style="font-size:.83rem;padding:.55rem 1rem">💵 Cash in Hand: <span id="cash-display">LKR 0</span></button>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.4rem">
+            <div class="last-upd" id="lu-banks">—</div>
             <button class="btn bp" id="badd">+ Add Account</button>
           </div>
         </div>
@@ -629,8 +780,11 @@ img{max-width:100%}
       <!-- CARDS -->
       <section id="sec-cards" class="sec">
         <div class="sh">
-          <div><h1>Cards</h1><p class="ssub">Credit & debit card management.</p></div>
-          <button class="btn bp" id="cadd">+ Add Card</button>
+          <div><h1>Credit Cards</h1><p class="ssub">Credit card management.</p></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.4rem">
+            <div class="last-upd" id="lu-cards">—</div>
+            <button class="btn bp" id="cadd">+ Add Card</button>
+          </div>
         </div>
         <div class="ig" id="cards-list"><div class="emp">No cards yet.</div></div>
       </section>
@@ -638,7 +792,8 @@ img{max-width:100%}
       <!-- STOCKS -->
       <section id="sec-stocks" class="sec">
         <div class="sh">
-          <div><h1>Stock Portfolio</h1><p class="ssub">Real-time tracking · CSE &amp; international.</p></div>
+          <div><h1>Stock Portfolio</h1><p class="ssub">Track your investments across all exchanges.</p>
+          <div class="last-upd" id="lu-stocks">—</div></div>
           <button class="btn bp" id="sadd">+ Add Stock</button>
         </div>
         <div class="ph gc">
@@ -659,7 +814,8 @@ img{max-width:100%}
       <!-- FIXED DEPOSITS -->
       <section id="sec-fd" class="sec">
         <div class="sh">
-          <div><h1>Fixed Deposits</h1><p class="ssub">Maturity tracking &amp; interest calculator.</p></div>
+          <div><h1>Fixed Deposits</h1><p class="ssub">Maturity tracking &amp; interest calculator.</p>
+          <div class="last-upd" id="lu-fd">—</div></div>
           <button class="btn bp" id="fdadd">+ Add FD</button>
         </div>
         <div class="bnr gc"><label>Total FD Value (at maturity)</label><div class="bnrv" id="fd-tot">LKR 0</div></div>
@@ -669,7 +825,8 @@ img{max-width:100%}
       <!-- FUNDS -->
       <section id="sec-funds" class="sec">
         <div class="sh">
-          <div><h1>Funds</h1><p class="ssub">Mutual funds &amp; money market accounts.</p></div>
+          <div><h1>Funds</h1><p class="ssub">Mutual funds &amp; money market accounts.</p>
+          <div class="last-upd" id="lu-funds">—</div></div>
           <button class="btn bp" id="funadd">+ Add Fund</button>
         </div>
         <div class="ig" id="funds-list"><div class="emp">No funds yet.</div></div>
@@ -678,17 +835,30 @@ img{max-width:100%}
       <!-- CRYPTO -->
       <section id="sec-crypto" class="sec">
         <div class="sh">
-          <div><h1>Crypto Wallets</h1><p class="ssub">Track all your cryptocurrency holdings.</p></div>
+          <div><h1>Crypto Wallets</h1><p class="ssub">Track all your cryptocurrency holdings.</p>
+          <div class="last-upd" id="lu-crypto">—</div></div>
           <button class="btn bp" id="cryptoadd">+ Add Wallet</button>
         </div>
-        <div class="bnr gc"><label>Total Crypto Value (USD)</label><div class="bnrv" id="cry-tot">$0</div></div>
-        <div class="ig" id="crypto-list"><div class="emp">No crypto wallets yet. Click "+ Add Wallet".</div></div>
+        <div class="bnr gc"><label>Total Crypto Value (LKR)</label><div class="bnrv" id="cry-tot">LKR 0</div></div>
+        <div class="ig" id="crypto-list"><div class="emp">No crypto wallets yet.</div></div>
+      </section>
+
+      <!-- PHYSICAL ASSETS -->
+      <section id="sec-assets" class="sec">
+        <div class="sh">
+          <div><h1>Physical Assets</h1><p class="ssub">Homes, vehicles, electronics &amp; valuables.</p>
+          <div class="last-upd" id="lu-assets">—</div></div>
+          <button class="btn bp" id="assetadd">+ Add Asset</button>
+        </div>
+        <div class="bnr gc"><label>Total Physical Asset Value</label><div class="bnrv" id="asset-tot">LKR 0</div></div>
+        <div class="ig" id="assets-list"><div class="emp">No physical assets yet.</div></div>
       </section>
 
       <!-- EXPENSES -->
       <section id="sec-expenses" class="sec">
         <div class="sh">
-          <div><h1>Expenses</h1><p class="ssub">Daily spending tracker.</p></div>
+          <div><h1>Expenses</h1><p class="ssub">Daily spending tracker.</p>
+          <div class="last-upd" id="lu-expenses">—</div></div>
           <button class="btn bp" id="exadd">+ Log Expense</button>
         </div>
         <div class="esum gc">
@@ -708,10 +878,81 @@ img{max-width:100%}
         </div>
       </section>
 
+      <!-- CASH -->
+      <section id="sec-cash" class="sec">
+        <div class="sh">
+          <div><h1>Cash in Hand</h1><p class="ssub">Track all your physical cash flows.</p></div>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+            <button class="btn bp" id="cash-add-in-btn">+ Add Cash In</button>
+            <button class="btn bg" id="cash-add-out-btn">− Log Cash Out</button>
+          </div>
+        </div>
+        <div class="bnr gc" id="cash-banner"><label>Cash Balance</label><div class="bnrv" id="cash-page-bal">LKR 0</div></div>
+        <div class="cgrid" style="margin-bottom:1.4rem">
+          <div class="gc cc"><h3>Cash Flow (14 days)</h3><div id="ch-cashflow"></div></div>
+          <div class="gc cc"><h3>Summary</h3>
+            <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.2rem" id="cash-summary"></div>
+          </div>
+        </div>
+        <div class="tcrd gc">
+          <div style="padding:.85rem 1rem;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:.875rem;font-weight:600">Cash Transactions</span>
+            <button class="bdel" onclick="clearCashLog()" style="font-size:.72rem">Clear History</button>
+          </div>
+          <div id="cash-txns-body" style="max-height:420px;overflow-y:auto"></div>
+        </div>
+      </section>
+
+      <!-- LOANS -->
+      <section id="sec-loans" class="sec">
+        <div class="sh">
+          <div><h1>Loans</h1><p class="ssub">Track all your loans and repayment schedules.</p>
+          <div class="last-upd" id="lu-loans">—</div></div>
+          <button class="btn bp" id="loanadd">+ Add Loan</button>
+        </div>
+        <!-- Loan summary banner -->
+        <div class="gc hero-split" style="display:flex;padding:0;gap:0;overflow:hidden;margin-bottom:1.4rem">
+          <div style="flex:1;padding:1.6rem 2rem">
+            <span class="hlbl">Total Debt Outstanding</span>
+            <div class="hval" style="font-size:2rem;background:linear-gradient(135deg,var(--t1),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="loan-tot">LKR 0</div>
+          </div>
+          <div style="flex:1;padding:1.6rem 2rem;border-left:1.5px solid var(--bd)">
+            <span class="hlbl">This Month Repayments</span>
+            <div class="hval" style="font-size:2rem" id="loan-month-pay">LKR 0</div>
+          </div>
+          <div style="flex:1;padding:1.6rem 2rem;border-left:1.5px solid var(--bd)">
+            <span class="hlbl">Next Payment Due</span>
+            <div style="font-size:1.2rem;font-weight:700;margin-top:.3rem" id="loan-next-due">—</div>
+          </div>
+        </div>
+        <div class="ig" id="loans-list"><div class="emp">No loans yet. Click "+ Add Loan".</div></div>
+      </section>
+
+      <!-- CALENDAR -->
+      <section id="sec-calendar" class="sec">
+        <div class="sh">
+          <div><h1>Calendar</h1><p class="ssub">All transactions, income, and payments by date.</p></div>
+          <div style="display:flex;gap:.5rem">
+            <button class="btn bg" id="cal-prev">‹ Prev</button>
+            <button class="btn bg" id="cal-today">Today</button>
+            <button class="btn bg" id="cal-next">Next ›</button>
+          </div>
+        </div>
+        <div class="gc" style="padding:1.4rem;margin-bottom:1.2rem">
+          <div style="text-align:center;font-size:1.15rem;font-weight:700;margin-bottom:1.2rem" id="cal-month-label">—</div>
+          <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div>
+        </div>
+        <div class="gc" style="padding:1.3rem" id="cal-day-detail" style="display:none">
+          <h3 id="cal-detail-title" style="font-size:.9rem;font-weight:700;margin-bottom:.9rem">Select a date</h3>
+          <div id="cal-detail-body"></div>
+        </div>
+      </section>
+
       <!-- BUDGETS -->
       <section id="sec-budgets" class="sec">
         <div class="sh">
-          <div><h1>Budgets</h1><p class="ssub">Monthly spending limits per category.</p></div>
+          <div><h1>Budgets</h1><p class="ssub">Monthly spending limits per category.</p>
+          <div class="last-upd" id="lu-budgets">—</div></div>
           <button class="btn bp" id="budadd">+ Set Budget</button>
         </div>
         <div class="bl" id="bud-list"><div class="emp">No budgets set yet.</div></div>
@@ -719,7 +960,10 @@ img{max-width:100%}
 
       <!-- NET WORTH -->
       <section id="sec-networth" class="sec">
-        <div class="sh"><h1>Net Worth</h1><p class="ssub">Total assets minus total liabilities.</p></div>
+        <div class="sh">
+          <div><h1>Net Worth</h1><p class="ssub">Total assets minus total liabilities.</p>
+          <div class="last-upd" id="lu-networth">—</div></div>
+        </div>
         <div class="nwh gc">
           <span class="hlbl">Net Worth</span>
           <div class="hval" id="nw-val">LKR 0</div>
@@ -752,6 +996,39 @@ img{max-width:100%}
   <a class="mni" data-s="networth">  <span class="mni-icon">◈</span><span>Net Worth</span></a>
   <a class="mni mni-more" id="mni-more-btn"><span class="mni-icon">☰</span><span>More</span></a>
 </nav>
+
+<!-- CENTRAL FAB (quick add) -->
+<button class="fab" id="fab-btn" title="Quick add">＋</button>
+<div class="fab-menu dn" id="fab-menu">
+  <button class="fab-item" id="fab-income">💰 Add Income</button>
+  <button class="fab-item" id="fab-expense">💸 Log Expense</button>
+  <button class="fab-item" id="fab-transfer">🔀 Transfer Funds</button>
+</div>
+<div class="sbbd dn" id="fab-bd"></div>
+
+<!-- PASSWORD RESET OVERLAY (shown when URL has #type=recovery) -->
+<div class="auth-ov dn" id="reset-ov" style="z-index:10000">
+  <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div></div>
+  <div class="acard">
+    <div class="alogo">
+      <svg class="alogo-svg" viewBox="0 0 44 44" fill="none">
+        <rect width="44" height="44" rx="12" fill="#3b82f6"/>
+        <rect width="44" height="44" rx="12" fill="white" fill-opacity="0.08"/>
+        <rect x="10" y="10" width="7" height="24" rx="2" fill="white"/>
+        <rect x="10" y="10" width="23" height="7" rx="2" fill="white"/>
+        <rect x="10" y="21" width="18" height="7" rx="2" fill="white"/>
+      </svg>
+      <span class="alogo-t">Finova</span>
+    </div>
+    <p class="atag" style="margin-bottom:1.4rem">Set a new password for your account.</p>
+    <div class="fg" style="margin-bottom:.9rem"><label>New Password</label>
+      <input id="rp-pw1" type="password" placeholder="Min. 6 characters" autocomplete="new-password"/></div>
+    <div class="fg" style="margin-bottom:.9rem"><label>Confirm Password</label>
+      <input id="rp-pw2" type="password" placeholder="Repeat password" autocomplete="new-password"/></div>
+    <button id="btn-reset-pw" class="btn bp bfull">Set New Password</button>
+    <p id="rp-msg" style="min-height:1rem;font-size:.8rem;text-align:center;margin-top:.6rem"></p>
+  </div>
+</div>
 
 <!-- STATEMENT PANEL -->
 <div class="stmt-panel" id="stmt-panel">
@@ -839,9 +1116,10 @@ function toast(msg,t='i'){
 const S = {
   user: null,
   theme: localStorage.getItem('fv_theme')||'dark',
-  data: { banks:[], cards:[], fd:[], funds:[], stocks:[], expenses:[], budgets:[], crypto:[], income:[] },
+  data: { banks:[], cards:[], fd:[], funds:[], stocks:[], expenses:[], budgets:[], crypto:[], income:[], assets:[], loans:[], ledger:[] },
   stockRefreshTimer: null,
   stmtBankId: null,
+  realtimeChannel: null,
 };
 
 // ── THEME ─────────────────────────────────────────────────────────────
@@ -849,11 +1127,25 @@ function applyTheme(t){
   S.theme = t;
   document.documentElement.setAttribute('data-theme',t);
   localStorage.setItem('fv_theme',t);
-  const ic = t==='dark'?'☀':'☽';
-  [$('thtog'),$('tmtog')].forEach(b=>{ if(b) b.textContent=ic; });
+  syncThemeIcons();
 }
 applyTheme(S.theme);
 [$('thtog'),$('tmtog')].forEach(b=>b&&b.addEventListener('click',()=>applyTheme(S.theme==='dark'?'light':'dark')));
+
+// Mobile topbar theme + logout (tb-logout already wired at bottom — skip dupe)
+$('tb-theme')?.addEventListener('click',()=>applyTheme(S.theme==='dark'?'light':'dark'));
+
+// Sync tb-theme icon
+function syncThemeIcons(){
+  const ic=S.theme==='dark'?'☀':'☽';
+  [$('thtog'),$('tmtog'),$('tb-theme')].forEach(b=>{ if(b) b.textContent=ic; });
+}
+function fmtTs(){ return new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+function setLU(id){ const e=$(id); if(e){ e.textContent='Updated: '+fmtTs(); } }
+// Global last updated for overview
+function touchGlobal(){ localStorage.setItem('fv_lu_global_'+S.user?.id, fmtTs()); const e=$('lu-dash'); if(e) e.textContent='Updated: '+(localStorage.getItem('fv_lu_global_'+S.user?.id)||'—'); }
+function loadLU(id,key){ const e=$(id); if(e) e.textContent='Updated: '+(localStorage.getItem('fv_lu_'+key+'_'+S.user?.id)||'—'); }
+function saveLU(key){ const v=fmtTs(); localStorage.setItem('fv_lu_'+key+'_'+S.user?.id,v); touchGlobal(); return v; }
 
 // ── AUTH MESSAGE ──────────────────────────────────────────────────────
 function amsg(msg,ok){ const e=$('amsg'); e.textContent=msg; e.style.color=ok?'var(--green)':'var(--red)'; }
@@ -888,6 +1180,145 @@ $('btn-signin').addEventListener('click', async()=>{
   finally{ btnLoad('btn-signin',false,'Sign In'); }
 });
 
+// ── FORGOT PASSWORD ───────────────────────────────────────────────────
+$('btn-forgot')?.addEventListener('click',async()=>{
+  const email=($('li-em').value||'').trim();
+  if(!email||!email.includes('@')){ amsg('Enter your email address first, then click Forgot password.'); return; }
+  if(!sb){ amsg('Supabase not configured.'); return; }
+  btnLoad('btn-forgot',true,'Sending…');
+  try{
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://finovasmart.netlify.app'});
+    if(error){ amsg(error.message); }
+    else { amsg('✅ Password reset email sent! Check your inbox.',true); }
+  }catch(e){ amsg('Error: '+e.message); }
+  finally{ btnLoad('btn-forgot',false,'Forgot password?'); }
+});
+
+// ── GOOGLE OAUTH ──────────────────────────────────────────────────────
+async function signInWithGoogle(){
+  if(!sb){ amsg('Supabase not configured.'); return; }
+  const btn=document.activeElement;
+  if(btn) { btn.disabled=true; btn.textContent='Redirecting to Google…'; }
+  amsg('');
+  try{
+    // Detect current origin for redirect — works for both local dev and production
+    const redirectTo=window.location.origin+window.location.pathname;
+    const {error}=await sb.auth.signInWithOAuth({
+      provider:'google',
+      options:{
+        redirectTo,
+        queryParams:{ access_type:'offline', prompt:'consent' },
+      }
+    });
+    if(error){ amsg(error.message); if(btn){ btn.disabled=false; btn.innerHTML=googleBtnHTML; } }
+    // On success Supabase redirects the page — no further JS needed
+  }catch(e){
+    amsg('Google sign-in error: '+e.message);
+    if(btn){ btn.disabled=false; btn.innerHTML=googleBtnHTML; }
+  }
+}
+
+const googleBtnHTML=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google`;
+
+$('btn-google-signin')?.addEventListener('click', signInWithGoogle);
+$('btn-google-signup')?.addEventListener('click', signInWithGoogle);
+
+// ── PASSWORD RESET PAGE (fires when email link redirects here) ─────────
+(function checkPasswordReset(){
+  const hash=window.location.hash||'';
+  const params=new URLSearchParams(hash.replace('#',''));
+  const isReset=params.get('type')==='recovery'||hash.includes('type=recovery');
+  if(!isReset) return;
+  // Show reset overlay, hide normal auth
+  const ro=$('reset-ov'); if(ro) ro.classList.remove('dn');
+  const ao=$('auth-ov'); if(ao) ao.classList.add('dn');
+  // Supabase sets the session from the URL hash automatically
+  $('btn-reset-pw')?.addEventListener('click',async()=>{
+    const pw1=($('rp-pw1').value||'');
+    const pw2=($('rp-pw2').value||'');
+    const msg=$('rp-msg');
+    msg.textContent=''; msg.style.color='var(--red)';
+    if(pw1.length<6){ msg.textContent='Password must be at least 6 characters.'; return; }
+    if(pw1!==pw2){ msg.textContent='Passwords do not match.'; return; }
+    if(!sb){ msg.textContent='Supabase not configured.'; return; }
+    const {error}=await sb.auth.updateUser({password:pw1});
+    if(error){ msg.textContent=error.message; }
+    else{
+      msg.style.color='var(--green)';
+      msg.textContent='✅ Password updated! Signing you in…';
+      setTimeout(()=>{
+        const ro=$('reset-ov'); if(ro) ro.classList.add('dn');
+        window.location.hash='';
+      },1800);
+    }
+  });
+  [$('rp-pw1'),$('rp-pw2')].forEach(i=>i?.addEventListener('keydown',e=>{ if(e.key==='Enter') $('btn-reset-pw')?.click(); }));
+})();
+
+// ── CENTRAL FAB (quick add / transfer) ────────────────────────────────
+$('fab-btn')?.addEventListener('click',()=>{
+  const m=$('fab-menu'), bd=$('fab-bd');
+  const open=!m.classList.contains('dn');
+  m.classList.toggle('dn',open);
+  bd.classList.toggle('dn',open);
+});
+$('fab-bd')?.addEventListener('click',()=>{
+  $('fab-menu')?.classList.add('dn');
+  $('fab-bd')?.classList.add('dn');
+});
+function closeFab(){ $('fab-menu')?.classList.add('dn'); $('fab-bd')?.classList.add('dn'); }
+$('fab-income')?.addEventListener('click',()=>{ closeFab(); openModal('income'); });
+$('fab-expense')?.addEventListener('click',()=>{ closeFab(); openModal('expenses'); });
+$('fab-transfer')?.addEventListener('click',()=>{
+  closeFab();
+  // Generic wallet-to-wallet transfer
+  const sources=getPaySources();
+  setText('mtitle','🔀 Transfer Funds');
+  $('mbody').innerHTML=`
+    <div class="mfg"><label>From</label>
+      <select id="tr-from">${sources.map(s=>`<option value="${esc(s.id)}">${esc(s.label)} — ${fmt(s.balance)}</option>`).join('')}</select>
+    </div>
+    <div class="mfg"><label>To</label>
+      <select id="tr-to">
+        ${S.data.banks.map(b=>`<option value="bank_${b.id}">${esc(b.account_name)} · ${esc(b.bank_name)}</option>`).join('')}
+        ${S.data.crypto.map(c=>`<option value="crypto_${c.id}">${esc(c.coin_symbol)} — ${esc(c.wallet_name)}</option>`).join('')}
+        <option value="cash">Cash in Hand</option>
+        <option value="other">Other / External</option>
+      </select>
+    </div>
+    <div class="mfg"><label>Amount (LKR)</label>
+      <input type="number" id="tr-amt" value="0" min="0"/>
+    </div>
+    <p id="tr-err" style="color:var(--red);font-size:.78rem;min-height:1rem"></p>`;
+  $('mov').classList.remove('dn');
+  const origSave=$('msave').onclick;
+  $('msave').onclick=async()=>{
+    const fromId=$('tr-from').value;
+    const toId=$('tr-to').value;
+    const amt=parseFloat($('tr-amt').value)||0;
+    $('tr-err').textContent='';
+    if(amt<=0){ $('tr-err').textContent='Enter a valid amount.'; return; }
+    if(fromId===toId){ $('tr-err').textContent='From and To cannot be the same.'; return; }
+    const src=sources.find(s=>s.id===fromId);
+    if(src && src.type!=='other' && src.balance<amt){ $('tr-err').textContent=`Insufficient funds (${fmt(src.balance)} available).`; return; }
+    // Deduct from source
+    if(fromId.startsWith('bank_')){
+      const bid=fromId.replace('bank_',''), idx=S.data.banks.findIndex(b=>b.id==bid);
+      if(idx!==-1){ S.data.banks[idx].balance=Math.max(0,(+S.data.banks[idx].balance||0)-amt); if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id); }
+    } else if(fromId==='cash'){ setCash(Math.max(0,getCash()-amt)); }
+    else if(fromId.startsWith('crypto_')){
+      const cid=fromId.replace('crypto_',''), idx=S.data.crypto.findIndex(c=>c.id==cid);
+      if(idx!==-1){ S.data.crypto[idx].value_lkr=Math.max(0,(+S.data.crypto[idx].value_lkr||0)-amt); if(sb) await sb.from('crypto_wallets').update({value_lkr:S.data.crypto[idx].value_lkr}).eq('id',S.data.crypto[idx].id); }
+    }
+    // Credit destination
+    await creditDest(toId, amt);
+    $('msave').onclick=origSave;
+    closeModal();
+    renderAll();
+    toast(`Transferred ${fmt(amt)} successfully!`,'s');
+  };
+});
+
 // ── SIGN UP ───────────────────────────────────────────────────────────
 $('btn-signup').addEventListener('click', async()=>{
   const name =($('su-nm').value||'').trim();
@@ -908,7 +1339,23 @@ $('btn-signup').addEventListener('click', async()=>{
         emailRedirectTo:'https://finovasmart.netlify.app'
       }
     });
-    if(error){ amsg(error.message); return; }
+    if(error){
+      const msg = error.message || '';
+      if(msg.toLowerCase().includes('already registered')||msg.toLowerCase().includes('already been registered')||msg.toLowerCase().includes('user already exists')||error.status===422){
+        amsg('⚠️ This email is already registered. Please sign in instead.');
+        setTimeout(()=>document.querySelector('.atab[data-tab=login]')?.click(),2200);
+      } else {
+        amsg(msg||'Sign up failed. Please try again.');
+      }
+      return;
+    }
+    // When email confirmation is DISABLED, Supabase may return data.user with
+    // an empty identities array for already-registered emails (no error thrown)
+    if(data?.user && data.user.identities && data.user.identities.length===0){
+      amsg('⚠️ This email is already registered. Please sign in instead.');
+      setTimeout(()=>document.querySelector('.atab[data-tab=login]')?.click(),2200);
+      return;
+    }
     if(data.session){
       // Email confirm disabled → onAuthStateChange fires → launch() called automatically
       amsg('✅ Account created! Loading your dashboard…', true);
@@ -927,17 +1374,32 @@ $('btn-signup').addEventListener('click', async()=>{
 // ── LOGOUT ────────────────────────────────────────────────────────────
 $('btn-out').addEventListener('click',async()=>{
   clearInterval(S.stockRefreshTimer);
+  if(S.realtimeChannel&&sb) sb.removeChannel(S.realtimeChannel);
   if(sb) await sb.auth.signOut();
   S.user=null;
   location.reload();
 });
 
 // ── AUTH STATE CHANGE — single launch point ───────────────────────────
-// This fires for: sign-in, sign-up (if confirm disabled), token refresh, page reload with active session
+// Fires for: email/password sign-in, Google OAuth callback, token refresh, page reload
 if(sb){
   sb.auth.onAuthStateChange(async(event,session)=>{
     if((event==='SIGNED_IN' || event==='INITIAL_SESSION') && session?.user && !S.user){
       S.user = session.user;
+
+      // ── Google OAuth first-time onboarding ────────────────────────
+      // If the user signed in via Google and has no data rows yet,
+      // we treat it as a clean new account (Net Worth = 0, no pre-load noise).
+      // The provider check ensures we only do this for OAuth users.
+      const isOAuth=session.user?.app_metadata?.provider==='google'||
+                    (session.user?.identities||[]).some(id=>id.provider==='google');
+      const isNewOAuth=isOAuth && event==='SIGNED_IN' &&
+                       !session.user?.user_metadata?.finova_initialized;
+      if(isNewOAuth&&sb){
+        // Mark as initialized so we don't repeat this on subsequent logins
+        await sb.auth.updateUser({data:{finova_initialized:true}}).catch(()=>{});
+      }
+
       await loadAll();
       launch();
     }
@@ -961,6 +1423,9 @@ async function loadAll(){
     {key:'budgets', tbl:'budgets'},
     {key:'crypto',  tbl:'crypto_wallets'},
     {key:'income',  tbl:'income'},
+    {key:'assets',  tbl:'physical_assets'},
+    {key:'loans',   tbl:'loans'},
+    {key:'ledger',  tbl:'unified_ledger'},
   ];
   await Promise.all(tbls.map(async({key,tbl})=>{
     const {data,error}=await sb.from(tbl).select('*').eq('user_id',uid).order('created_at',{ascending:false});
@@ -969,10 +1434,34 @@ async function loadAll(){
 }
 
 // ── SUPABASE INSERT ───────────────────────────────────────────────────
+// Allowed columns per table — prevents "column not found in schema cache" errors
+const ALLOWED_COLS={
+  bank_accounts:   ['bank_name','account_name','balance','currency','account_number','funding_source','source_account_id','user_id'],
+  cards:           ['card_name','bank','credit_limit','outstanding','due_date','card_number','user_id'],
+  fixed_deposits:  ['bank','principal','rate','start_date','maturity_date','paid_from','user_id'],
+  funds:           ['fund_name','invested_amount','current_value','purchase_date','paid_from','user_id'],
+  stocks:          ['symbol','company_name','exchange','shares','purchase_price','current_price','purchase_date','paid_from','user_id'],
+  expenses:        ['date','category','description','paid_from','amount','user_id'],
+  budgets:         ['category','budget_limit','user_id'],
+  crypto_wallets:  ['wallet_name','coin_symbol','amount','buy_price_usd','current_price_usd','value_usd','value_lkr','wallet_address','funded_from','user_id'],
+  income:          ['account_id','date','source','description','amount','user_id'],
+  physical_assets: ['asset_name','category','purchase_value','current_value','purchase_date','description','paid_from','ai_valuation_history','user_id'],
+  loans:           ['loan_name','loan_type','lender','principal_amount','remaining_balance','interest_rate','monthly_payment','start_date','end_date','next_payment_date','paid_from','linked_account_id','user_id'],
+  unified_ledger:  ['type','amount','source_account_id','target_account_id','category','description','date','user_id'],
+};
+function sanitiseRecord(tbl, rec){
+  const allowed=ALLOWED_COLS[tbl];
+  if(!allowed) return rec; // unknown table — pass through
+  const out={};
+  allowed.forEach(col=>{ if(col in rec) out[col]=rec[col]; });
+  return out;
+}
+
 async function dbInsert(tbl,record){
   if(!sb) return {data:record,error:null};
   record.user_id=S.user.id;
-  const {data,error}=await sb.from(tbl).insert([record]).select().single();
+  const clean=sanitiseRecord(tbl,record);
+  const {data,error}=await sb.from(tbl).insert([clean]).select().single();
   return {data,error};
 }
 
@@ -982,10 +1471,141 @@ async function dbDelete(tbl,id){
   return sb.from(tbl).delete().eq('id',id).eq('user_id',S.user.id);
 }
 
+// ── UNIFIED LEDGER — write every financial event here ─────────────────
+// type: 'income' | 'expense' | 'transfer'
+// sourceAccountId: bank UUID | 'CASH' | 'EXTERNAL' | crypto UUID
+// targetAccountId: bank UUID | 'CASH' | null (for expenses)
+async function writeLedger(type, amount, sourceAccountId, targetAccountId, category, description, date){
+  if(!S.user) return null;
+  const rec={
+    user_id:    S.user.id,
+    type:       type,
+    amount:     +amount||0,
+    source_account_id: sourceAccountId||null,
+    target_account_id: targetAccountId||null,
+    category:   category||type,
+    description:description||'',
+    date:       date||today(),
+  };
+  const entry={...rec, id:genId(), created_at:new Date().toISOString()};
+  S.data.ledger.unshift(entry);          // optimistic local update
+
+  if(sb){
+    const {data,error}=await sb.from('unified_ledger').insert([rec]).select().single();
+    if(!error&&data){
+      // Replace optimistic entry with real one
+      const idx=S.data.ledger.findIndex(r=>r.id===entry.id);
+      if(idx!==-1) S.data.ledger[idx]=data;
+    }
+  }
+  return entry;
+}
+
+// ── LEDGER SUMMARY helpers ────────────────────────────────────────────
+function ledgerTotalFor(type, accountId, sinceDate){
+  return S.data.ledger
+    .filter(r=>r.type===type
+      && (!accountId || r.source_account_id===accountId || r.target_account_id===accountId)
+      && (!sinceDate  || r.date>=sinceDate))
+    .reduce((s,r)=>s+(+r.amount||0),0);
+}
+
+function ledgerForAccount(accountId){
+  return S.data.ledger.filter(r=>
+    r.source_account_id===accountId||r.target_account_id===accountId
+  ).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+}
+
+// ── SUPABASE REALTIME — subscribe to unified_ledger changes ──────────
+function subscribeRealtime(){
+  if(!sb||!S.user||!SB_READY) return;
+  // Tear down any old channel
+  if(S.realtimeChannel){ sb.removeChannel(S.realtimeChannel); }
+
+  S.realtimeChannel=sb.channel('ledger-'+S.user.id)
+    .on('postgres_changes',{
+      event:'*',
+      schema:'public',
+      table:'unified_ledger',
+      filter:`user_id=eq.${S.user.id}`
+    },payload=>{
+      const {eventType,new:newRow,old:oldRow}=payload;
+      if(eventType==='INSERT'){
+        // Avoid duplicates from our own optimistic inserts
+        if(!S.data.ledger.find(r=>r.id===newRow.id))
+          S.data.ledger.unshift(newRow);
+      } else if(eventType==='UPDATE'){
+        const idx=S.data.ledger.findIndex(r=>r.id===newRow.id);
+        if(idx!==-1) S.data.ledger[idx]=newRow; else S.data.ledger.unshift(newRow);
+      } else if(eventType==='DELETE'){
+        S.data.ledger=S.data.ledger.filter(r=>r.id!==oldRow.id);
+      }
+      // Instantly refresh the dashboard net worth — no page reload needed
+      renderDash();
+      renderNetWorth();
+    })
+    .subscribe();
+}
+
+// Also subscribe to bank_accounts changes for real-time balance updates
+function subscribeBalances(){
+  if(!sb||!S.user||!SB_READY) return;
+  sb.channel('balances-'+S.user.id)
+    .on('postgres_changes',{
+      event:'UPDATE',schema:'public',table:'bank_accounts',
+      filter:`user_id=eq.${S.user.id}`
+    },payload=>{
+      const idx=S.data.banks.findIndex(b=>b.id===payload.new.id);
+      if(idx!==-1){
+        S.data.banks[idx]={...S.data.banks[idx],...payload.new};
+        renderBanks(); renderDash(); renderNetWorth();
+      }
+    })
+    .subscribe();
+}
+
+// ── AI ASSET VALUATION ────────────────────────────────────────────────
+// estimateAssetValue: mock-AI with formula + optional LLM API fallback
+function estimateAssetValue(category, purchaseValue, purchaseYear, purchaseDate){
+  // Uses the built-in rate table (Phase 3 AI valuation hook)
+  const RATES={
+    'Real Estate (House/Apartment)':+0.08,'Real Estate (Land)':+0.10,
+    'Vehicle (Car)':-0.12,'Vehicle (Motorbike)':-0.15,'Vehicle (Van/SUV)':-0.10,
+    'Electronic (Computer/Laptop)':-0.35,'Electronic (Smartphone)':-0.40,
+    'Electronic (TV/Entertainment)':-0.25,'Electronic (Camera/Equipment)':-0.20,
+    'Jewellery':+0.07,'Furniture':-0.08,'Business Equipment':-0.15,
+    'Artwork/Collectibles':+0.06,'Other':0,
+  };
+  const pv=+purchaseValue||0;
+  if(!pv) return 0;
+  // Prefer purchase_date for precision; fall back to year
+  const fromDate=purchaseDate?new Date(purchaseDate):new Date(purchaseYear||new Date().getFullYear(),0,1);
+  const yearsHeld=(new Date()-fromDate)/(365.25*24*3600*1000);
+  if(yearsHeld<=0) return pv;
+  const rate=RATES[category]??0;
+  const factor=Math.max(0.05, Math.pow(1+rate,yearsHeld));
+  return Math.round(pv*factor);
+}
+
+// Save valuation snapshot to ai_valuation_history JSONB
+async function saveValuationHistory(assetId, estimatedValue){
+  if(!sb||!S.user) return;
+  const idx=S.data.assets.findIndex(a=>a.id==assetId);
+  if(idx===-1) return;
+  const existing=S.data.assets[idx].ai_valuation_history||[];
+  const snapshot={date:today(),value:estimatedValue,method:'formula'};
+  const updated=[...existing,snapshot].slice(-24); // keep last 24 snapshots
+  S.data.assets[idx].ai_valuation_history=updated;
+  await sb.from('physical_assets')
+    .update({current_value:estimatedValue,ai_valuation_history:JSON.stringify(updated)})
+    .eq('id',assetId).eq('user_id',S.user.id);
+}
+
 // Map from state key → Supabase table name
 const TBL={banks:'bank_accounts',cards:'cards',fd:'fixed_deposits',
   funds:'funds',stocks:'stocks',expenses:'expenses',budgets:'budgets',
-  crypto:'crypto_wallets',income:'income'};
+  crypto:'crypto_wallets',income:'income',assets:'physical_assets',loans:'loans',
+  ledger:'unified_ledger'};
 
 // ── LAUNCH APP ────────────────────────────────────────────────────────
 function launch(){
@@ -996,16 +1616,27 @@ function launch(){
   $('uav').textContent=name[0].toUpperCase();
   // init cash display
   const cd=$('cash-display'); if(cd) cd.textContent=fmt(getCash());
+  // sync theme icons including mobile topbar
+  syncThemeIcons();
+  // load per-section last-updated timestamps
+  ['banks','cards','stocks','fd','funds','crypto','assets','expenses','budgets','networth','loans'].forEach(k=>{
+    const e=$('lu-'+k); if(e) e.textContent=localStorage.getItem('fv_lu_'+k+'_'+S.user.id)?'Updated: '+localStorage.getItem('fv_lu_'+k+'_'+S.user.id):'—';
+  });
+  const ld=$('lu-dash'); if(ld) ld.textContent=localStorage.getItem('fv_lu_global_'+S.user.id)?'Updated: '+localStorage.getItem('fv_lu_global_'+S.user.id):'—';
   renderAll();
   if(SB_READY){
     S.stockRefreshTimer=setInterval(refreshStockPrices,CFG.REFRESH_MS);
     refreshStockPrices();
+    subscribeRealtime();
+    subscribeBalances();
   }
 }
 
 // ── NAVIGATION ────────────────────────────────────────────────────────
-const TITLES={dash:'Overview',banks:'Bank Accounts',cards:'Cards',stocks:'Stock Portfolio',
-  fd:'Fixed Deposits',funds:'Funds',crypto:'Crypto Wallets',expenses:'Expenses',budgets:'Budgets',networth:'Net Worth'};
+const TITLES={dash:'Overview',banks:'Bank Accounts',cards:'Credit Cards',stocks:'Stock Portfolio',
+  fd:'Fixed Deposits',funds:'Funds',crypto:'Crypto Wallets',assets:'Physical Assets',
+  expenses:'Expenses',budgets:'Budgets',networth:'Net Worth',
+  cash:'Cash in Hand',loans:'Loans',calendar:'Calendar'};
 
 function navTo(s){
   Q('.ni,.mni').forEach(n=>n.classList.remove('on'));
@@ -1015,6 +1646,10 @@ function navTo(s){
   setText('tbtitle',TITLES[s]||s);
   closeSB();
   window.scrollTo(0,0);
+  // Lazy render for heavy sections
+  if(s==='calendar') { if(typeof renderCalendar==='function') renderCalendar(); }
+  if(s==='cash')     { if(typeof renderCashPage==='function') renderCashPage(); }
+  if(s==='loans')    { if(typeof renderLoans==='function') renderLoans(); }
 }
 
 Q('.ni').forEach(item=>item.addEventListener('click',()=>{ navTo(item.dataset.s); }));
@@ -1096,8 +1731,13 @@ function calcTotals(){
   const funds  = S.data.funds.reduce((s,f)=>s+(+f.current_value||0),0);
   const stocks = S.data.stocks.reduce((s,st)=>s+((+st.current_price||+st.purchase_price||0)*(+st.shares||0)),0);
   const crypto = S.data.crypto.reduce((s,c)=>s+(+c.value_lkr||0),0);
+  const phyAssets = S.data.assets.reduce((s,a)=>{
+    const cv=calcAssetCurrentValue(a.category,+a.purchase_value||0,a.purchase_date);
+    return s+(cv>0?cv:(+a.current_value||+a.purchase_value||0));
+  },0);
   const cards  = S.data.cards.reduce((s,c)=>s+(+c.outstanding||+c.outstanding_balance||0),0);
-  const assets = banks+cash+fdv+funds+stocks+crypto;
+  const loans  = S.data.loans.reduce((s,l)=>s+(+l.remaining_balance||0),0);
+  const assets = banks+cash+fdv+funds+stocks+crypto+phyAssets;
   const now=new Date(), ms=new Date(now.getFullYear(),now.getMonth(),1);
   const ws=new Date(now); ws.setDate(now.getDate()-7);
   const td=today();
@@ -1105,9 +1745,9 @@ function calcTotals(){
   const wExp  = S.data.expenses.filter(e=>new Date(e.date)>=ws).reduce((s,e)=>s+(+e.amount||0),0);
   const dExp  = S.data.expenses.filter(e=>e.date===td).reduce((s,e)=>s+(+e.amount||0),0);
   const totExp= S.data.expenses.reduce((s,e)=>s+(+e.amount||0),0);
-  // Net worth = assets − card liabilities − total cumulative expenses
-  const nw = assets - cards - totExp;
-  return {banks,cash,fdv,funds,stocks,crypto,cards,assets,nw,mExp,wExp,dExp,totExp};
+  // Net worth = assets − card liabilities − loans − total cumulative expenses
+  const nw = assets - cards - loans - totExp;
+  return {banks,cash,fdv,funds,stocks,crypto,phyAssets,cards,loans,assets,nw,mExp,wExp,dExp,totExp};
 }
 
 // ══════════════════════════════════════════════════════
@@ -1283,6 +1923,7 @@ function last6MonthsExp(){
 
 // ── RENDER ALL ────────────────────────────────────────────────────────
 function renderAll(){
+  touchGlobal();
   renderDash();
   renderBanks();
   renderCards();
@@ -1290,9 +1931,20 @@ function renderAll(){
   renderFDs();
   renderFunds();
   renderCrypto();
+  renderAssets();
   renderExpenses();
   renderBudgets();
   renderNetWorth();
+  renderLoans();
+  renderCashPage();
+  // Calendar only re-renders if visible (lazy)
+  if($('sec-calendar')?.classList.contains('on')) renderCalendar();
+}
+
+// Call saveLU for a section and update its DOM badge
+function markUpdated(key){
+  const v=saveLU(key);
+  const e=$('lu-'+key); if(e) e.textContent='Updated: '+v;
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────
@@ -1303,22 +1955,42 @@ function renderDash(){
   setText('d-stocks',fmt(T.stocks));
   setText('d-fds',fmt(T.fdv));
   setText('d-exp',fmt(T.mExp));
+  setText('d-loans',fmt(T.loans));
 
-  // Month-over-month change: compare NW now vs NW at start of this month
-  // NW at start of month = T.nw + this month's expenses (they hadn't been spent yet)
+  // ── REALTIME ledger stats this month ──────────────────────────────────
+  const msStr=new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString().split('T')[0];
+  const ledgerIncMonth=S.data.ledger.filter(r=>r.type==='income'&&r.date>=msStr).reduce((s,r)=>s+(+r.amount||0),0);
+  const ledgerExpMonth=S.data.ledger.filter(r=>r.type==='expense'&&r.date>=msStr).reduce((s,r)=>s+(+r.amount||0),0);
+  const rtEl=$('d-rt-stats');
+  if(rtEl) rtEl.innerHTML=`<span class="pos">↑ ${fmt(ledgerIncMonth)}</span> <span style="color:var(--t3)">·</span> <span class="neg">↓ ${fmt(ledgerExpMonth)}</span> <span style="font-size:.65rem;color:var(--t3)">this month via ledger</span>`;
+
+  // ── LIQUIDITY PANEL (readily available funds) ─────────────────────────
+  const liquidity = T.banks + T.cash + T.crypto;
+  setText('d-liquid', fmt(liquidity));
+  const breakdown = [
+    {label:'Bank Balance', value:T.banks,  icon:'🏦'},
+    {label:'Cash in Hand',  value:T.cash,   icon:'💵'},
+    {label:'Crypto (LKR)',  value:T.crypto, icon:'🪙'},
+  ].filter(r=>r.value>0);
+  const lbEl=$('d-liquid-breakdown');
+  if(lbEl) lbEl.innerHTML = breakdown.length
+    ? breakdown.map(r=>`<div class="lq-row"><span>${r.icon} ${r.label}</span><strong>${fmt(r.value)}</strong></div>`).join('')
+    : `<div class="lq-row" style="color:var(--t3);font-size:.75rem">Add bank accounts, cash, or crypto wallets</div>`;
+
+  // Month-over-month change
   const nwStartOfMonth = T.nw + T.mExp;
-  const chgAmt = T.nw - nwStartOfMonth; // always = -mExp
+  const chgAmt = T.nw - nwStartOfMonth;
   const chgPct = nwStartOfMonth>0 ? (chgAmt/nwStartOfMonth*100) : 0;
   const chg=$('d-chg');
   chg.textContent=`${chgAmt>=0?'↑':'↓'} ${fmt(Math.abs(chgAmt))} (${Math.abs(chgPct).toFixed(1)}%) this month`;
   chg.className='hchg '+(chgAmt>=0?'pos':'neg');
 
-  // Sparkline (smooth curve for hero visual)
+  // Sparkline
   $('spark').innerHTML=svgSparkline(trendData(T.nw,12),200,80,'#3b82f6');
 
-  // Donut allocation — include cash
-  const rawAv=[T.banks,T.cash,T.stocks,T.fdv,T.funds,T.crypto];
-  const rawAl=['Banks','Cash','Stocks','FDs','Funds','Crypto'];
+  // Donut allocation
+  const rawAv=[T.banks,T.cash,T.stocks,T.fdv,T.funds,T.crypto,T.phyAssets];
+  const rawAl=['Banks','Cash','Stocks','FDs','Funds','Crypto','Physical'];
   const av=rawAv.filter(v=>v>0);
   const al=rawAl.filter((_,i)=>rawAv[i]>0);
   $('ch-alloc').innerHTML=av.length?svgDonut(al,av,200):'<p style="color:var(--t2);padding:2rem;text-align:center;font-size:.82rem">Add assets to see allocation</p>';
@@ -1327,7 +1999,7 @@ function renderDash(){
   const me=last6MonthsExp();
   $('ch-mexp').innerHTML=svgBars(me.lbs,me.vs,420,160);
 
-  // Net worth trend — line chart using real historical data
+  // Net worth trend
   const nwt=realNWTrend();
   $('ch-nwt').innerHTML=svgLineChart(nwt.labels,nwt.values,760,170);
 
@@ -1336,6 +2008,11 @@ function renderDash(){
 }
 
 function buildInsights(T){
+  // Dynamic greeting
+  const hr=new Date().getHours();
+  const greet=hr<12?'morning':hr<17?'afternoon':'evening';
+  setText('gtime',greet);
+
   const ins=[];
   const tot=T.banks+T.stocks+T.fdv+T.funds||1;
   const sp=((T.stocks/tot)*100).toFixed(0);
@@ -1347,6 +2024,15 @@ function buildInsights(T){
     const cl=S.data.cards.reduce((s,c)=>s+(+c.credit_limit||0),0)||1;
     const ut=((T.cards/cl)*100).toFixed(0);
     ins.push({i:+ut>30?'⚠️':'💳',t:`Credit utilization is ${ut}%. ${+ut>30?'Reduce outstanding balance to below 30% for healthy credit.':'Great job keeping utilization low!'}`});
+  }
+  // Loan insights
+  if(T.loans>0){
+    const dti=T.assets>0?((T.loans/T.assets)*100).toFixed(0):0;
+    const urgent=S.data.loans.filter(l=>l.next_payment_date&&daysUntil(l.next_payment_date)<=7&&daysUntil(l.next_payment_date)>=0);
+    const overdue=S.data.loans.filter(l=>l.next_payment_date&&daysUntil(l.next_payment_date)<0);
+    if(overdue.length) ins.push({i:'🚨',t:`${overdue.length} loan payment${overdue.length>1?'s are':' is'} overdue! Pay immediately to avoid penalties.`});
+    else if(urgent.length) ins.push({i:'⚠️',t:`${urgent.length} loan EMI${urgent.length>1?'s are':' is'} due within 7 days. Ensure sufficient balance.`});
+    else ins.push({i:'🏦',t:`Loan-to-asset ratio is ${dti}%. ${+dti>50?'High debt load — consider accelerating repayments.':'Debt level is manageable.'}`});
   }
   const soon=S.data.fd.filter(f=>{const d=daysUntil(f.maturity_date||f.maturity);return d>0&&d<=30;});
   if(soon.length) ins.push({i:'📅',t:`${soon.length} FD${soon.length>1?'s':''} mature within 30 days. Plan your reinvestment strategy now.`});
@@ -1365,9 +2051,8 @@ function renderBanks(){
   const tot=banks.reduce((s,b)=>s+(+b.balance||0),0);
   setText('b-tot',fmt(tot));
   $('banks-list').innerHTML=banks.length?banks.map(b=>{
-    // sum income and expenses for this account
-    const inc=S.data.income.filter(i=>i.account_id===b.id).reduce((s,i)=>s+(+i.amount||0),0);
-    const exp=S.data.expenses.filter(e=>e.paid_from===b.account_name).reduce((s,e)=>s+(+e.amount||0),0);
+    const inc=S.data.income.filter(i=>String(i.account_id)===String(b.id)).reduce((s,i)=>s+(+i.amount||0),0);
+    const exp=S.data.expenses.filter(e=>(e.paid_from||'').toLowerCase().includes((b.account_name||'').toLowerCase())).reduce((s,e)=>s+(+e.amount||0),0);
     return `<div class="gc itm">
       <div class="ih">
         <div><div class="inm">${esc(b.account_name)}</div><div class="isub">${esc(b.bank_name)}</div></div>
@@ -1396,7 +2081,7 @@ function renderCards(){
     return `<div class="gc itm">
       <div class="ccv">
         <div>💳</div>
-        <div class="ccnum">•••• •••• •••• 4242</div>
+        <div class="ccnum">${c.card_number?esc(c.card_number.replace(/(\d{4})/g,'$1 ').trim()):'•••• •••• •••• ••••'}</div>
         <div class="ccbot"><span class="ccnm">${esc(c.card_name)}</span><span class="cclm">Limit: ${fmt(lim)}</span></div>
       </div>
       <div class="isub">${esc(c.bank)}</div>
@@ -1522,10 +2207,107 @@ function renderCrypto(){
       </div>
       <div class="iamt">${fmt(val)}</div>
       <div class="isub">≈ $${fmtD(usd)} · Buy: $${fmtD(+c.buy_price_usd)} · Now: $${fmtD(+c.current_price_usd)}</div>
-      ${c.wallet_address?`<div class="crypto-addr">📍 ${esc(c.wallet_address)}</div>`:''}
-      <button class="bdel" onclick="rmItem('crypto','${c.id}')">Delete</button>
+      ${(c.wallet_address||c.account_number)?`<div class="crypto-addr">📍 ${esc(c.wallet_address||c.account_number)}</div>`:''}
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.25rem">
+        <button class="mature-btn" onclick="sellCrypto('${c.id}')">↗ Sell / Transfer</button>
+        <button class="bdel" onclick="rmItem('crypto','${c.id}')">Delete</button>
+      </div>
     </div>`;}).join(''):'<div class="emp">No crypto wallets yet. Click "+ Add Wallet".</div>';
 }
+
+// ── PHYSICAL ASSETS ───────────────────────────────────────────────────
+const ASSET_ICONS={'Real Estate (House/Apartment)':'🏠','Real Estate (Land)':'🌿',
+  'Vehicle (Car)':'🚗','Vehicle (Motorbike)':'🏍️','Vehicle (Van/SUV)':'🚙',
+  'Electronic (Computer/Laptop)':'💻','Electronic (Smartphone)':'📱','Electronic (TV/Entertainment)':'📺',
+  'Electronic (Camera/Equipment)':'📷','Jewellery':'💍','Furniture':'🪑',
+  'Business Equipment':'⚙️','Artwork/Collectibles':'🎨','Other':'📦'};
+
+// Annual appreciation / depreciation rates by category (compound)
+const ASSET_RATES={
+  'Real Estate (House/Apartment)': +0.08,   // +8% p.a. (Sri Lanka property appreciation)
+  'Real Estate (Land)':             +0.10,   // +10% p.a. (land appreciates faster)
+  'Vehicle (Car)':                  -0.12,   // -12% p.a. depreciation
+  'Vehicle (Motorbike)':            -0.15,   // -15% p.a.
+  'Vehicle (Van/SUV)':              -0.10,   // -10% p.a.
+  'Electronic (Computer/Laptop)':   -0.35,   // -35% p.a. (fast obsolescence)
+  'Electronic (Smartphone)':        -0.40,   // -40% p.a.
+  'Electronic (TV/Entertainment)':  -0.25,   // -25% p.a.
+  'Electronic (Camera/Equipment)':  -0.20,   // -20% p.a.
+  'Jewellery':                       +0.07,  // +7% p.a. (gold/gem appreciation)
+  'Furniture':                       -0.08,  // -8% p.a.
+  'Business Equipment':              -0.15,  // -15% p.a.
+  'Artwork/Collectibles':            +0.06,  // +6% p.a.
+  'Other':                           0.00,   // neutral
+};
+const ASSET_MIN_FACTOR=0.05; // never below 5% of purchase price
+
+// calcAssetCurrentValue: delegates to the global estimateAssetValue function
+function calcAssetCurrentValue(category, purchaseValue, purchaseDate){
+  return estimateAssetValue(category, purchaseValue, null, purchaseDate);
+}
+
+function renderAssets(){
+  const items=S.data.assets;
+  // Use formula-based value for display (does NOT overwrite DB — just display)
+  const tot=items.reduce((s,a)=>{
+    const cv=calcAssetCurrentValue(a.category,+a.purchase_value||0,a.purchase_date)||+a.current_value||0;
+    return s+cv;
+  },0);
+  setText('asset-tot',fmt(tot));
+  $('assets-list').innerHTML=items.length?items.map(a=>{
+    const buy=+a.purchase_value||0;
+    const storedCv=+a.current_value||0;
+    // Formula-calculated value
+    const formulaCv=calcAssetCurrentValue(a.category,buy,a.purchase_date);
+    // Use formula if > 0, otherwise fall back to stored
+    const cur=formulaCv>0?formulaCv:storedCv;
+    const gain=cur-buy, gainPct=buy?(gain/buy*100):0;
+    const rate=ASSET_RATES[a.category];
+    const rateLabel=rate!=null?(rate>=0?`+${(rate*100).toFixed(0)}% p.a.`:`${(rate*100).toFixed(0)}% p.a.`):'manual';
+    const yearsHeld=a.purchase_date?((new Date()-new Date(a.purchase_date))/(365.25*24*3600*1000)).toFixed(1):null;
+    const icon=ASSET_ICONS[a.category]||'📦';
+    return `<div class="gc itm">
+      <div class="ih">
+        <div style="display:flex;align-items:center;gap:.65rem">
+          <div class="coin-icon">${icon}</div>
+          <div>
+            <div class="inm">${esc(a.asset_name)}</div>
+            <div class="isub">${esc(a.category)}</div>
+          </div>
+        </div>
+        <span class="bdg ${gain>=0?'pos':'neg'}">${gain>=0?'+':''}${gainPct.toFixed(1)}%</span>
+      </div>
+      <div class="iamt">${fmt(cur)}</div>
+      <div class="isub">
+        Purchased: ${fmt(buy)} · ${esc(a.purchase_date||'')}
+        ${yearsHeld?`<span style="color:var(--t2)"> · ${yearsHeld}y held</span>`:''}
+        ${a.description?'· '+esc(a.description):''}
+      </div>
+      <div style="font-size:.72rem;color:var(--t2);display:flex;align-items:center;gap:.4rem">
+        <span style="background:var(--gl);padding:.15rem .45rem;border-radius:4px;border:1px solid var(--bd)">📐 Formula: ${rateLabel}</span>
+        ${gain>=0?`<span class="pos">+${fmt(gain)} appreciation</span>`:`<span class="neg">${fmt(gain)} depreciation</span>`}
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="transfer-btn" onclick="transferAsset('${a.id}')">↗ Sell / Transfer</button>
+        <button class="transfer-btn" onclick="refreshAssetValue('${a.id}')">🔄 Recalculate Value</button>
+        <button class="bdel" onclick="rmItem('assets','${a.id}')">Delete</button>
+      </div>
+    </div>`;}).join(''):'<div class="emp">No physical assets yet. Click "+ Add Asset".</div>';
+}
+
+// Recalculate and save the formula-based value back to DB with history
+window.refreshAssetValue=async function(assetId){
+  const idx=S.data.assets.findIndex(a=>a.id==assetId);
+  if(idx===-1) return;
+  const a=S.data.assets[idx];
+  const newVal=estimateAssetValue(a.category,+a.purchase_value||0,null,a.purchase_date);
+  if(!newVal){ toast('Cannot calculate — check purchase date.','e'); return; }
+  S.data.assets[idx].current_value=newVal;
+  await saveValuationHistory(assetId, newVal);
+  toast(`Value updated to ${fmt(newVal)} (formula + history saved).`,'s');
+  renderAssets(); renderNetWorth(); renderDash();
+};
+
 function renderExpenses(){
   const exps=S.data.expenses;
   const T=calcTotals();
@@ -1598,8 +2380,8 @@ function renderNetWorth(){
   setText('nw-val',fmt(T.nw));
   $('nw-val').style.webkitTextFillColor=T.nw<0?'var(--red)':'';
   setText('nw-atot',fmt(T.assets));
-  // total liabilities = cards + total expenses
-  const totalLiab = T.cards + T.totExp;
+  // total liabilities = cards + loans + total expenses
+  const totalLiab = T.cards + T.loans + T.totExp;
   setText('nw-ltot',fmt(totalLiab));
 
   // Assets rows
@@ -1609,22 +2391,120 @@ function renderNetWorth(){
     <div class="nwr"><span>Fixed Deposits</span><span class="nwrv">${fmt(T.fdv)}</span></div>
     <div class="nwr"><span>Mutual Funds</span><span class="nwrv">${fmt(T.funds)}</span></div>
     <div class="nwr"><span>Stock Portfolio</span><span class="nwrv">${fmt(T.stocks)}</span></div>
-    <div class="nwr"><span>Crypto Wallets</span><span class="nwrv">${fmt(T.crypto)}</span></div>`;
+    <div class="nwr"><span>Crypto Wallets</span><span class="nwrv">${fmt(T.crypto)}</span></div>
+    <div class="nwr"><span>Physical Assets</span><span class="nwrv">${fmt(T.phyAssets)}</span></div>`;
 
-  // Liabilities: card outstandings + expenses
+  // Liabilities: card outstandings + loans + expenses
   const cardRows=S.data.cards.map(c=>{
     const out=+c.outstanding||+c.outstanding_balance||0;
     return `<div class="nwr"><span>${esc(c.card_name)} <small style="color:var(--t2)">${esc(c.bank)}</small></span><span class="nwrv neg">${fmt(out)}</span></div>`;
   }).join('');
-  $('nw-liabs').innerHTML=(cardRows||'')
+  const loanRows=S.data.loans.map(l=>{
+    const rem=+l.remaining_balance||0;
+    const typeBadge=`<small style="color:var(--t2)">${esc(l.loan_type||'Loan')}</small>`;
+    return `<div class="nwr"><span>${esc(l.loan_name)} ${typeBadge}</span><span class="nwrv neg">${fmt(rem)}</span></div>`;
+  }).join('');
+  $('nw-liabs').innerHTML=(cardRows||'')+(loanRows||'')
     +`<div class="nwr"><span>Total Expenses (cumulative)</span><span class="nwrv neg">${fmt(T.totExp)}</span></div>`
-    +(S.data.cards.length===0&&T.totExp===0?'<div class="nwr"><span>No liabilities 🎉</span><span class="nwrv">—</span></div>':'');
+    +(S.data.cards.length===0&&S.data.loans.length===0&&T.totExp===0?'<div class="nwr"><span>No liabilities 🎉</span><span class="nwrv">—</span></div>':'');
 
   // Horizontal bar chart
-  const lbls=['Banks','Cash','Fixed Deps.','Funds','Stocks','Crypto','Card Debt','Expenses'];
-  const vals=[T.banks,T.cash,T.fdv,T.funds,T.stocks,T.crypto,-T.cards,-T.totExp];
-  $('ch-nwcomp').innerHTML=svgHBars(lbls,vals,700,180);
+  const lbls=['Banks','Cash','FDs','Funds','Stocks','Crypto','Physical','Cards','Loans','Expenses'];
+  const vals=[T.banks,T.cash,T.fdv,T.funds,T.stocks,T.crypto,T.phyAssets,-T.cards,-T.loans,-T.totExp];
+  $('ch-nwcomp').innerHTML=svgHBars(lbls,vals,700,200);
 }
+
+// ── MASTER DATA LISTS ────────────────────────────────────────────────
+
+const LK_BANKS=[
+  // Licensed Commercial Banks
+  'Bank of Ceylon','People\'s Bank','Commercial Bank of Ceylon','Hatton National Bank (HNB)',
+  'Sampath Bank','Seylan Bank','National Development Bank (NDB)','Pan Asia Banking Corporation',
+  'Union Bank of Colombo','Amana Bank','Cargills Bank','Nation Trust Bank',
+  'DFCC Bank','Sanasa Development Bank (SDB)','Regional Development Bank (RDB)',
+  'State Mortgage & Investment Bank','National Savings Bank (NSB)',
+  'Pradeshiya Sanwardhana Bank (Pasba)',
+  // Licensed Specialised Banks
+  'Housing Development Finance Corporation (HDFC)','Sri Lanka Savings Bank','Lankaputhra Development Bank',
+  // Finance Companies
+  'Lanka Orix Finance','Senkadagala Finance','Merchant Bank of Sri Lanka',
+  'Sinhaputhra Finance','Alliance Finance','Central Finance','LB Finance','HNB Finance',
+  'Commercial Leasing & Finance','People\'s Leasing & Finance','Softlogic Finance',
+  'Bimputh Finance','Kanrich Finance','Dialog Finance','Sarvodaya Development Finance',
+  'Richard Pieris Finance','Melsta Regal Finance','Asia Asset Finance','Prime Finance',
+  'Citizens Development Business Finance','Multi Finance','Capital Alliance Finance',
+  'LOLC Finance','MBSL Savings Bank','Arpico Finance',
+];
+
+const GLOBAL_BANKS=[
+  // USA
+  'JPMorgan Chase','Bank of America','Wells Fargo','Citibank','Goldman Sachs','Morgan Stanley',
+  'US Bank','PNC Bank','TD Bank USA','Capital One',
+  // UK
+  'HSBC','Barclays','Lloyds Bank','NatWest','Standard Chartered','Halifax',
+  // Europe
+  'Deutsche Bank','BNP Paribas','Société Générale','Santander','ING Bank','ABN AMRO',
+  'Rabobank','UniCredit','Intesa Sanpaolo','Credit Suisse','UBS','Zurich Cantonal Bank',
+  // Asia
+  'State Bank of India','HDFC Bank India','ICICI Bank','Axis Bank','Kotak Mahindra Bank',
+  'DBS Bank','OCBC Bank','UOB','Bank of China','Industrial and Commercial Bank of China (ICBC)',
+  'China Construction Bank','Agricultural Bank of China','Mizuho Bank','MUFG Bank',
+  'Sumitomo Mitsui Banking','Woori Bank','Kookmin Bank','Maybank','CIMB Bank',
+  // Australia
+  'Commonwealth Bank of Australia (CBA)','ANZ Bank','Westpac','NAB',
+  // Middle East
+  'Emirates NBD','Abu Dhabi Commercial Bank','Qatar National Bank','Al Rajhi Bank',
+  // Other
+  'International Finance Corporation (IFC)',
+];
+
+const ALL_BANKS=['-- Sri Lanka Banks & Finance --',...LK_BANKS,'-- Global Banks --',...GLOBAL_BANKS,'Other (enter manually)'];
+
+const ACCOUNT_TYPES=['Savings Account','Current Account','Fixed Deposit Account',
+  'Salary Account','Joint Account','Foreign Currency Account','Business Account',
+  'Student Account','Premium Account','Digital Account','Other'];
+
+const STOCK_EXCHANGES={
+  'CSE':'Colombo Stock Exchange',
+  'NYSE':'New York Stock Exchange',
+  'NASDAQ':'NASDAQ',
+  'LSE':'London Stock Exchange',
+  'BSE':'Bombay Stock Exchange (BSE)',
+  'NSE':'National Stock Exchange India (NSE)',
+  'TSX':'Toronto Stock Exchange',
+  'ASX':'Australian Securities Exchange',
+  'SGX':'Singapore Exchange',
+  'HKEX':'Hong Kong Exchanges',
+  'SSE':'Shanghai Stock Exchange',
+  'SZSE':'Shenzhen Stock Exchange',
+  'JPX':'Japan Exchange Group (JPX)',
+  'KRX':'Korea Exchange',
+  'Euronext':'Euronext',
+  'Deutsche Börse':'Deutsche Börse (XETRA)',
+  'SIX':'SIX Swiss Exchange',
+  'Other':'Other Exchange',
+};
+
+const LK_FUNDS=[
+  // Unit Trusts / Mutual Funds - Sri Lanka
+  'Ceybank Unit Trust','Eagle NDB Fund','NDB Wealth Management','First Capital Wealth Fund',
+  'Comtrust Asset Management','Union Assurance Unit Trust','AIA Investment Management',
+  'Akbar Brothers Asset Management','Namal Fund','Senfin Asset Management',
+  'Guardian Acuity Asset Management','Softlogic Finance Growth Fund',
+  'People\'s Merchant Finance Growth Fund','HNB Asset Management',
+  'Commercial Credit & Finance Money Market Fund','Sampath Bank Unit Trust',
+  // Global Funds
+  'Vanguard S&P 500 ETF (VOO)','Vanguard Total Market ETF (VTI)','iShares MSCI Emerging Markets (EEM)',
+  'SPDR S&P 500 ETF (SPY)','Fidelity Contrafund','Vanguard Growth ETF (VUG)',
+  'BlackRock World Funds','ARK Innovation ETF (ARKK)','iShares Core MSCI World ETF',
+  'Templeton Emerging Markets Fund',
+  'Other (enter manually)',
+];
+
+const ASSET_CATEGORIES=['Real Estate (House/Apartment)','Real Estate (Land)','Vehicle (Car)',
+  'Vehicle (Motorbike)','Vehicle (Van/SUV)','Electronic (Computer/Laptop)','Electronic (Smartphone)',
+  'Electronic (TV/Entertainment)','Electronic (Camera/Equipment)','Jewellery','Furniture',
+  'Business Equipment','Artwork/Collectibles','Other'];
 
 // ── MODAL SYSTEM ─────────────────────────────────────────────────────
 const FORMS={
@@ -1633,22 +2513,25 @@ const FORMS={
     table:'bank_accounts',
     stateKey:'banks',
     fields:[
-      {id:'bank_name',    lbl:'Bank Name',        type:'text',  ph:'e.g. Commercial Bank'},
-      {id:'account_name', lbl:'Account Name',     type:'text',  ph:'e.g. Savings Account'},
-      {id:'balance',      lbl:'Balance',           type:'number',ph:'0'},
-      {id:'currency',     lbl:'Currency',          type:'select',opts:['LKR','USD','EUR','GBP','AUD','SGD']},
+      {id:'bank_name',        lbl:'Bank / Finance Company', type:'bankSearch', ph:'Search or type bank name…'},
+      {id:'account_name',     lbl:'Account Type',           type:'acctSearch'},
+      {id:'balance',          lbl:'Opening Balance (LKR)',  type:'number', ph:'0'},
+      {id:'currency',         lbl:'Currency',               type:'select', opts:['LKR','USD','EUR','GBP','AUD','SGD','INR','JPY','CAD','AED']},
+      {id:'funding_source',   lbl:'Funding Source',         type:'select', opts:['__BANKSRC_NAMED__']},
+      {id:'account_number',   lbl:'Account Number',         type:'text',  ph:'e.g. 1234567890', optional:true},
     ]
   },
   cards:{
-    title:'Add Card',
+    title:'Add Credit Card',
     table:'cards',
     stateKey:'cards',
     fields:[
-      {id:'card_name',    lbl:'Card Name',        type:'text',  ph:'e.g. Visa Infinite'},
-      {id:'bank',         lbl:'Bank',             type:'text',  ph:'e.g. HNB'},
-      {id:'credit_limit', lbl:'Credit Limit (LKR)',type:'number',ph:'0'},
+      {id:'card_name',    lbl:'Card Name',          type:'text',  ph:'e.g. Visa Infinite'},
+      {id:'bank',         lbl:'Bank',               type:'bankSearch',ph:'Search bank…'},
+      {id:'credit_limit', lbl:'Credit Limit (LKR)', type:'number',ph:'0'},
       {id:'outstanding',  lbl:'Outstanding Balance',type:'number',ph:'0'},
-      {id:'due_date',     lbl:'Payment Due Date', type:'date'},
+      {id:'due_date',     lbl:'Payment Due Date',   type:'date'},
+      {id:'card_number',  lbl:'Card Number',        type:'text',ph:'e.g. 4111 1111 1111 1111',optional:true},
     ]
   },
   fd:{
@@ -1656,11 +2539,12 @@ const FORMS={
     table:'fixed_deposits',
     stateKey:'fd',
     fields:[
-      {id:'bank',         lbl:'Bank',             type:'text',  ph:'e.g. Sampath Bank'},
-      {id:'principal',    lbl:'Principal (LKR)',   type:'number',ph:'0'},
-      {id:'rate',         lbl:'Interest Rate (%)', type:'number',ph:'11.5'},
-      {id:'start_date',   lbl:'Start Date',        type:'date'},
-      {id:'maturity_date',lbl:'Maturity Date',     type:'date'},
+      {id:'bank',         lbl:'Bank',              type:'bankSearch',ph:'Search bank…'},
+      {id:'principal',    lbl:'Principal (LKR)',    type:'number',ph:'0'},
+      {id:'rate',         lbl:'Interest Rate (%)',  type:'number',ph:'11.5'},
+      {id:'start_date',   lbl:'Start Date',         type:'date'},
+      {id:'maturity_date',lbl:'Maturity Date',      type:'date'},
+      {id:'paid_from',    lbl:'Paid From',          type:'select',opts:['__DYNAMIC__']},
     ]
   },
   funds:{
@@ -1668,10 +2552,11 @@ const FORMS={
     table:'funds',
     stateKey:'funds',
     fields:[
-      {id:'fund_name',      lbl:'Fund Name',         type:'text',  ph:'e.g. Ceybank Unit Trust'},
-      {id:'invested_amount',lbl:'Invested Amount (LKR)',type:'number',ph:'0'},
-      {id:'current_value',  lbl:'Current Value (LKR)', type:'number',ph:'0'},
-      {id:'purchase_date',  lbl:'Purchase Date',      type:'date'},
+      {id:'fund_name',      lbl:'Fund Name',              type:'fundSearch',ph:'Search fund…'},
+      {id:'invested_amount',lbl:'Invested Amount (LKR)',   type:'number',ph:'0'},
+      {id:'current_value',  lbl:'Current Value (LKR)',     type:'number',ph:'0'},
+      {id:'purchase_date',  lbl:'Purchase Date',           type:'date'},
+      {id:'paid_from',      lbl:'Paid From',               type:'select',opts:['__DYNAMIC__']},
     ]
   },
   stocks:{
@@ -1679,12 +2564,28 @@ const FORMS={
     table:'stocks',
     stateKey:'stocks',
     fields:[
-      {id:'symbol',        lbl:'Symbol',              type:'text',  ph:'e.g. AAPL or COMB.N0000'},
-      {id:'company_name',  lbl:'Company Name',        type:'text',  ph:'e.g. Apple Inc.'},
-      {id:'shares',        lbl:'Shares',              type:'number',ph:'10'},
-      {id:'purchase_price',lbl:'Purchase Price / share',type:'number',ph:'0.00'},
-      {id:'current_price', lbl:'Current Price / share (CSE: enter manually)',type:'number',ph:'0.00'},
-      {id:'purchase_date', lbl:'Purchase Date',        type:'date'},
+      {id:'exchange',      lbl:'Stock Exchange',          type:'select',opts:Object.keys(STOCK_EXCHANGES)},
+      {id:'symbol',        lbl:'Symbol',                  type:'text',  ph:'e.g. COMB.N0000 or AAPL'},
+      {id:'company_name',  lbl:'Company Name',            type:'text',  ph:'e.g. Commercial Bank PLC'},
+      {id:'shares',        lbl:'Number of Shares',        type:'number',ph:'10'},
+      {id:'purchase_price',lbl:'Purchase Price / share',  type:'number',ph:'0.00'},
+      {id:'current_price', lbl:'Current Price / share',   type:'number',ph:'0.00'},
+      {id:'purchase_date', lbl:'Purchase Date',           type:'date'},
+      {id:'paid_from',     lbl:'Funded From',             type:'select',opts:['__DYNAMIC__']},
+    ]
+  },
+  assets:{
+    title:'Add Physical Asset',
+    table:'physical_assets',
+    stateKey:'assets',
+    fields:[
+      {id:'asset_name',     lbl:'Asset Name',            type:'text',   ph:'e.g. My House, Honda Civic'},
+      {id:'category',       lbl:'Category',              type:'select', opts:ASSET_CATEGORIES},
+      {id:'purchase_value', lbl:'Purchase Value (LKR)',  type:'number', ph:'0'},
+      {id:'current_value',  lbl:'Current Value (LKR)',   type:'number', ph:'0'},
+      {id:'purchase_date',  lbl:'Purchase Date',         type:'date'},
+      {id:'paid_from',      lbl:'Funded From',           type:'select', opts:['__DYNAMIC__']},
+      {id:'description',    lbl:'Description (optional)',type:'text',   ph:'e.g. 3 bed house in Colombo 7', optional:true},
     ]
   },
   expenses:{
@@ -1704,7 +2605,7 @@ const FORMS={
     table:'budgets',
     stateKey:'budgets',
     fields:[
-      {id:'category',    lbl:'Category',     type:'select',opts:['Food','Transport','Utilities','Entertainment','Healthcare','Shopping','Education','Others']},
+      {id:'category',    lbl:'Category',          type:'select',opts:['Food','Transport','Utilities','Entertainment','Healthcare','Shopping','Education','Others']},
       {id:'budget_limit',lbl:'Monthly Limit (LKR)',type:'number',ph:'0'},
     ]
   },
@@ -1713,10 +2614,12 @@ const FORMS={
     table:'crypto_wallets',
     stateKey:'crypto',
     fields:[
-      {id:'wallet_name',  lbl:'Wallet Name',         type:'text',  ph:'e.g. My Bitcoin Wallet'},
-      {id:'coin_symbol',  lbl:'Coin',                type:'select',opts:['BTC','ETH','USDT','BNB','SOL','ADA','XRP','DOT','DOGE','MATIC','LTC','AVAX','OTHER']},
-      {id:'amount',       lbl:'Amount (coins held)',  type:'number',ph:'0'},
-      {id:'buy_price_usd',lbl:'Buy Price per coin (USD)', type:'number',ph:'0'},
+      {id:'wallet_name',    lbl:'Wallet Name',             type:'text',  ph:'e.g. My Bitcoin Wallet'},
+      {id:'coin_symbol',    lbl:'Coin',                    type:'select',opts:['BTC','ETH','USDT','BNB','SOL','ADA','XRP','DOT','DOGE','MATIC','LTC','AVAX','OTHER']},
+      {id:'amount',         lbl:'Amount (coins held)',      type:'number',ph:'0'},
+      {id:'buy_price_usd',  lbl:'Buy Price per coin (USD)', type:'number',ph:'0'},
+      {id:'funded_from',    lbl:'Funded From',             type:'select',opts:['__BANKSRC__']},
+      {id:'account_number', lbl:'Wallet Address',          type:'text',  ph:'0x… (optional)',optional:true},
     ]
   },
   income:{
@@ -1726,30 +2629,71 @@ const FORMS={
     fields:[
       {id:'date',        lbl:'Date',          type:'date'},
       {id:'account_id',  lbl:'Account',       type:'select',opts:['__BANK__']},
-      {id:'source',      lbl:'Income Source', type:'select',opts:['Salary','Freelance','Business','Interest','Dividend','Rental','Gift','Refund','Other']},
+      {id:'source',      lbl:'Income Source', type:'select',opts:['Salary','Freelance','Business','Interest','Dividend','Rental','Gift','Refund','Stock Sale','FD Maturity','Fund Redemption','Crypto Sale','Other']},
       {id:'description', lbl:'Description',   type:'text',  ph:'e.g. Monthly salary'},
       {id:'amount',      lbl:'Amount (LKR)',  type:'number',ph:'0'},
+    ]
+  },
+  loans:{
+    title:'Add Loan',
+    table:'loans',
+    stateKey:'loans',
+    fields:[
+      {id:'loan_name',        lbl:'Loan Name',            type:'text',  ph:'e.g. Home Loan – HNB'},
+      {id:'loan_type',        lbl:'Loan Type',            type:'select',opts:['Home Loan','Vehicle Loan','Personal Loan','Business Loan','Education Loan','Credit Card Loan','Other']},
+      {id:'lender',           lbl:'Lender / Bank',        type:'bankSearch',ph:'Search bank…'},
+      {id:'principal_amount', lbl:'Principal Amount (LKR)',type:'number',ph:'0'},
+      {id:'remaining_balance',lbl:'Remaining Balance (LKR)',type:'number',ph:'0'},
+      {id:'interest_rate',    lbl:'Interest Rate (% p.a.)',type:'number',ph:'12'},
+      {id:'monthly_payment',  lbl:'Monthly Payment (LKR)', type:'number',ph:'0'},
+      {id:'start_date',       lbl:'Loan Start Date',       type:'date'},
+      {id:'end_date',         lbl:'Loan End Date',         type:'date'},
+      {id:'next_payment_date',lbl:'Next Payment Date',     type:'date'},
+      {id:'paid_from',        lbl:'Repayments Paid From',  type:'select',opts:['__DYNAMIC__']},
     ]
   },
 };
 
 let curModal=null;
 
-// Build dynamic "paid from" options from banks + cards + crypto wallets
+// Paid-from: banks + crypto + cash (clean, no duplicates)
 function getPaidFromOptions(){
   const opts=[];
-  S.data.banks.forEach(b=>opts.push(b.account_name+' ('+b.bank_name+')'));
-  S.data.cards.forEach(c=>opts.push(c.card_name+' ('+c.bank+')'));
+  S.data.banks.forEach(b=>opts.push(b.account_name+' – '+b.bank_name));
   S.data.crypto.forEach(c=>opts.push(c.coin_symbol+' Wallet — '+c.wallet_name));
-  if(!opts.length) opts.push('Cash');
-  opts.push('Cash','Other');
+  opts.push('Cash in Hand','Other');
   return [...new Set(opts)];
 }
 
-// Build bank account options for income form
+// Bank/cash/crypto source selector (for crypto funded_from, bank funded_from)
+function getBankSrcOptions(){
+  const opts=[];
+  S.data.banks.forEach(b=>opts.push(b.account_name+' – '+b.bank_name));
+  S.data.crypto.forEach(c=>opts.push(c.coin_symbol+' Wallet — '+c.wallet_name));
+  opts.push('Cash in Hand','Other');
+  return [...new Set(opts)];
+}
+
 function getBankOptions(){
   if(!S.data.banks.length) return [{v:'none',l:'— Add a bank account first —'}];
   return S.data.banks.map(b=>({v:b.id,l:b.account_name+' · '+b.bank_name}));
+}
+
+function bankSearchField(id,ph){
+  const listId='dl-'+id;
+  const allBanks=[...LK_BANKS,...GLOBAL_BANKS];
+  return `<div class="mfg"><label>Bank / Finance Company</label>
+    <input type="text" id="mf-${id}" placeholder="${ph||'Search bank…'}" list="${listId}" autocomplete="off"/>
+    <datalist id="${listId}">${allBanks.map(b=>`<option value="${esc(b)}">`).join('')}</datalist>
+  </div>`;
+}
+
+function fundSearchField(id,ph){
+  const listId='dl-'+id;
+  return `<div class="mfg"><label>Fund Name</label>
+    <input type="text" id="mf-${id}" placeholder="${ph||'Search fund…'}" list="${listId}" autocomplete="off"/>
+    <datalist id="${listId}">${LK_FUNDS.map(f=>`<option value="${esc(f)}">`).join('')}</datalist>
+  </div>`;
 }
 
 function openModal(key){
@@ -1758,35 +2702,83 @@ function openModal(key){
   setText('mtitle',F.title);
 
   $('mbody').innerHTML=F.fields.map(f=>{
+    // Clean single "(optional)" label — only shown when f.optional===true
+    const optLbl=f.optional?` <span style="font-weight:400;color:var(--t3);font-size:.7rem;text-transform:none;letter-spacing:0"> — optional</span>`:'';
+
+    if(f.type==='bankSearch') return bankSearchField(f.id,f.ph).replace('<label>Bank / Finance Company</label>',`<label>${f.lbl}${optLbl}</label>`);
+    if(f.type==='fundSearch') return fundSearchField(f.id,f.ph).replace('<label>Fund Name</label>',`<label>${f.lbl}${optLbl}</label>`);
+
+    // Account type with suggestions
+    if(f.type==='acctSearch'){
+      return `<div class="mfg"><label>${f.lbl}${optLbl}</label>
+        <input type="text" id="mf-${f.id}" placeholder="e.g. Savings Account" list="dl-acct" autocomplete="off"/>
+        <datalist id="dl-acct">${ACCOUNT_TYPES.map(t=>`<option value="${esc(t)}">`).join('')}</datalist>
+      </div>`;
+    }
+
     if(f.type==='select'){
       let opts=f.opts;
       if(opts[0]==='__DYNAMIC__') opts=getPaidFromOptions();
+      if(opts[0]==='__BANKSRC__') opts=getBankSrcOptions();
+      if(opts[0]==='__BANKSRC_NAMED__'){
+        // Named funding sources for bank account — labelled with balances
+        const named=[];
+        S.data.banks.forEach(b=>named.push(`Bank — ${b.account_name} · ${b.bank_name} (${fmt(+b.balance||0)})`));
+        S.data.crypto.forEach(c=>named.push(`Crypto — ${c.coin_symbol} · ${c.wallet_name}`));
+        named.push('Cash on Hand','External / New Money','Other');
+        opts=named;
+      }
       if(opts[0]==='__BANK__'){
         const bOpts=getBankOptions();
-        return `<div class="mfg"><label>${f.lbl}</label>
+        return `<div class="mfg"><label>${f.lbl}${optLbl}</label>
           <select id="mf-${f.id}">${bOpts.map(o=>`<option value="${esc(o.v)}">${esc(o.l)}</option>`).join('')}</select></div>`;
       }
-      return `<div class="mfg"><label>${f.lbl}</label>
-        <select id="mf-${f.id}">${opts.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join('')}</select></div>`;
+      return `<div class="mfg"><label>${f.lbl}${optLbl}</label>
+        <select id="mf-${f.id}">${opts.filter(o=>typeof o==='string').map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join('')}</select></div>`;
     }
+
     const def=f.type==='date'?` value="${today()}"`:f.type==='number'?' value="0"':'';
-    // Stock symbol gets autocomplete wrapper
+
     if(key==='stocks' && f.id==='symbol'){
-      return `<div class="mfg"><label>${f.lbl}</label>
+      return `<div class="mfg"><label>Symbol${optLbl}</label>
         <div class="ac-wrap">
           <input type="text" id="mf-symbol" placeholder="${f.ph||''}" autocomplete="off"/>
           <div class="ac-drop dn" id="ac-drop"></div>
         </div></div>`;
     }
-    return `<div class="mfg"><label>${f.lbl}</label>
+    if(key==='stocks' && f.id==='current_price'){
+      return `<div class="mfg" id="cp-field"><label id="cp-lbl">Current Price / share</label>
+        <input type="number" id="mf-current_price" value="0" placeholder="0.00"/></div>`;
+    }
+
+    return `<div class="mfg"><label>${f.lbl}${optLbl}</label>
       <input type="${f.type}" id="mf-${f.id}" placeholder="${f.ph||''}"${def}/></div>`;
   }).join('');
 
   $('mov').classList.remove('dn');
   setTimeout(()=>$('mbody').querySelector('input[type=text]')?.focus(),40);
 
-  // Wire up stock autocomplete after DOM is built
-  if(key==='stocks') wireStockAutocomplete();
+  if(key==='stocks') wireStockModal();
+  if(key==='assets') wireAssetEstimator();
+}
+
+// Wire stock exchange → autocomplete + price note
+function wireStockModal(){
+  wireStockAutocomplete();
+  const exchSel=$('mf-exchange');
+  if(!exchSel) return;
+  function updateExchangeNote(){
+    const exch=exchSel.value;
+    const lbl=$('cp-lbl');
+    if(!lbl) return;
+    if(exch==='CSE'){
+      lbl.innerHTML='Current Price / share <span style="font-size:.72rem;color:var(--amber)">(CSE — enter manually)</span>';
+    } else {
+      lbl.innerHTML='Current Price / share <span style="font-size:.72rem;color:var(--green)">(auto-filled after save)</span>';
+    }
+  }
+  exchSel.addEventListener('change', updateExchangeNote);
+  updateExchangeNote();
 }
 
 function closeModal(){ $('mov').classList.add('dn'); curModal=null; }
@@ -1803,12 +2795,75 @@ $('msave').addEventListener('click',async()=>{
     const inp=$(`mf-${f.id}`); if(!inp) return;
     let v=inp.value.trim();
     if(f.type==='number'){ v=parseFloat(v)||0; }
-    else if(f.type==='select'){ /* selects always have a value */ }
-    else if(!v && f.id!=='wallet_address' && f.id!=='description'){ valid=false; }
+    else if(f.type==='select'){ /* always has a value */ }
+    else if(f.optional){ /* skip validation for optional */ }
+    else if(!v){ valid=false; }
     rec[f.id]=v;
   });
   if(!valid){ toast('Please fill in all required fields.','e'); return; }
   if(curModal==='stocks'&&rec.symbol) rec.symbol=rec.symbol.toUpperCase();
+
+  // ══════════════════════════════════════════════════════════════════════
+  // PRE-FLIGHT BALANCE VALIDATION — must happen BEFORE any DB write
+  // Prevents the "Saved + Insufficient funds" double-message bug
+  // ══════════════════════════════════════════════════════════════════════
+  const sources=getPaySources();
+  function findSrc(paidFrom){
+    return sources.find(s=>
+      s.label===paidFrom||
+      (paidFrom||'').startsWith((s.label.split('·')[0]||'').trim())||
+      (paidFrom||'').startsWith((s.label.split('—')[0]||'').trim())
+    );
+  }
+
+  if(curModal==='expenses' && rec.paid_from && rec.paid_from!=='Other'){
+    const amt=+rec.amount||0;
+    const src=findSrc(rec.paid_from);
+    if(src && src.type!=='other' && src.balance<amt){
+      toast(`Insufficient funds in "${src.label}" — ${fmt(src.balance)} available, need ${fmt(amt)}.`,'e');
+      return; // Hard stop — no DB write, no success message
+    }
+  }
+  if((curModal==='fd'||curModal==='funds'||curModal==='stocks') && rec.paid_from && rec.paid_from!=='Other'){
+    const amt = curModal==='fd'    ? (+rec.principal||0)
+              : curModal==='funds' ? (+rec.invested_amount||0)
+              :                      (+rec.purchase_price||0)*(+rec.shares||0);
+    const src=findSrc(rec.paid_from);
+    if(src && src.type!=='other' && src.balance<amt){
+      toast(`Insufficient funds in "${src.label}" — ${fmt(src.balance)} available, need ${fmt(amt)}.`,'e');
+      return; // Hard stop — no DB write, no success message
+    }
+  }
+  // ── Pre-flight: bank account opening balance vs funding source ────────
+  if(curModal==='banks' && rec.funding_source && +rec.balance>0){
+    const fs=rec.funding_source||'';
+    const srcBank=S.data.banks.find(b=>fs.includes(b.account_name)&&fs.includes(b.bank_name));
+    if(srcBank && (+srcBank.balance||0)<(+rec.balance||0)){
+      toast(`Insufficient funds in "${srcBank.account_name}" — ${fmt(+srcBank.balance||0)} available, need ${fmt(+rec.balance||0)}.`,'e');
+      return;
+    }
+    if(fs==='Cash on Hand' && getCash()<(+rec.balance||0)){
+      toast(`Insufficient cash — ${fmt(getCash())} available, need ${fmt(+rec.balance||0)}.`,'e');
+      return;
+    }
+    const srcCrypto=fs.startsWith('Crypto')?S.data.crypto.find(c=>fs.includes(c.coin_symbol)||fs.includes(c.wallet_name)):null;
+    if(srcCrypto && (+srcCrypto.value_lkr||0)<(+rec.balance||0)){
+      toast(`Insufficient crypto balance — ${fmt(+srcCrypto.value_lkr||0)} available, need ${fmt(+rec.balance||0)}.`,'e');
+      return;
+    }
+  }
+  // ── Pre-flight: physical asset purchase vs funding source ─────────────
+  if(curModal==='assets' && rec.paid_from && rec.paid_from!=='Other' && rec.paid_from!=='Others'){
+    const cost=+rec.purchase_value||0;
+    if(cost>0){
+      const src=findSrc(rec.paid_from);
+      if(src && src.type!=='other' && src.balance<cost){
+        toast(`Insufficient funds in "${src.label}" — ${fmt(src.balance)} available, need ${fmt(cost)}.`,'e');
+        return;
+      }
+    }
+  }
+  // ══════════════════════════════════════════════════════════════════════
 
   const btn=$('msave');
   btn.disabled=true; btn.textContent='Saving…';
@@ -1835,19 +2890,39 @@ $('msave').addEventListener('click',async()=>{
   if(error){ toast('Error: '+error.message,'e'); btn.disabled=false; btn.textContent='Save'; return; }
   const saved=data||{...rec,id:genId()};
   S.data[F.stateKey]=[saved,...S.data[F.stateKey]];
+  markUpdated(F.stateKey);
   toast('Saved!','s');
 
-  // ── EXPENSE: check balance & deduct from source ──────────────────────
+  // ── EXPENSE: deduct from source (pre-flight validated above) ────────
   if(curModal==='expenses' && rec.paid_from && rec.paid_from!=='Other'){
     const amt=+rec.amount||0;
-    // Find source by label matching
-    const sources=getPaySources();
-    const src=sources.find(s=>s.label===rec.paid_from||rec.paid_from.startsWith(s.label.split('·')[0].trim())||rec.paid_from.startsWith(s.label.split('—')[0].trim()));
-    if(src && src.type!=='other' && src.balance<amt){
-      toast(`Insufficient funds in "${src.label}" (${fmt(src.balance)} available, need ${fmt(amt)}).`,'e');
-      btn.disabled=false; btn.textContent='Save'; return;
+    const src=findSrc(rec.paid_from);
+    if(src){
+      if(src.type==='bank'){
+        const bid=src.id.replace('bank_','');
+        const idx=S.data.banks.findIndex(b=>b.id==bid);
+        if(idx!==-1){
+          S.data.banks[idx].balance=Math.max(0,(+S.data.banks[idx].balance||0)-amt);
+          if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id);
+        }
+      } else if(src.type==='cash'){
+        setCash(Math.max(0,getCash()-amt));
+      } else if(src.type==='crypto'){
+        const cid=src.id.replace('crypto_','');
+        const idx=S.data.crypto.findIndex(c=>c.id==cid);
+        if(idx!==-1){
+          S.data.crypto[idx].value_lkr=Math.max(0,(+S.data.crypto[idx].value_lkr||0)-amt);
+          if(sb) await sb.from('crypto_wallets').update({value_lkr:S.data.crypto[idx].value_lkr}).eq('id',S.data.crypto[idx].id);
+        }
+      }
     }
-    // Deduct
+  }
+  // ── FD / FUNDS / STOCKS: deduct from paid_from source (pre-flight validated above) ─
+  if((curModal==='fd'||curModal==='funds'||curModal==='stocks') && rec.paid_from && rec.paid_from!=='Other'){
+    const amt = curModal==='fd' ? (+rec.principal||0)
+              : curModal==='funds' ? (+rec.invested_amount||0)
+              : (+rec.purchase_price||0)*(+rec.shares||0);
+    const src=findSrc(rec.paid_from);
     if(src){
       if(src.type==='bank'){
         const bid=src.id.replace('bank_','');
@@ -1875,8 +2950,82 @@ $('msave').addEventListener('click',async()=>{
       S.data.banks[bankIdx].balance=newBal;
       if(sb) await sb.from('bank_accounts').update({balance:newBal}).eq('id',S.data.banks[bankIdx].id);
       toast('Bank balance updated!','s');
-      // Refresh statement panel if open
       if(S.stmtBankId==rec.account_id) renderStatement(S.stmtBankId);
+    }
+    // Write to unified ledger
+    await writeLedger('income',+rec.amount||0,null,rec.account_id,rec.source,rec.description||rec.source,rec.date);
+  }
+  // ── Write ledger entry for expenses ────────────────────────────────
+  if(curModal==='expenses'){
+    const sources=getPaySources();
+    const src=sources.find(s=>s.label===rec.paid_from||rec.paid_from?.startsWith(s.label.split('·')[0].trim())||rec.paid_from?.startsWith(s.label.split('—')[0].trim()));
+    const srcId=src?src.id:rec.paid_from==='Cash in Hand'?'CASH':'EXTERNAL';
+    await writeLedger('expense',+rec.amount||0,srcId,null,rec.category,rec.description||rec.category,rec.date);
+  }
+  // ── Write ledger for investments (treated as transfers/reallocations) ─
+  if(curModal==='fd'||curModal==='funds'||curModal==='stocks'){
+    const amt=curModal==='fd'?(+rec.principal||0):curModal==='funds'?(+rec.invested_amount||0):(+rec.purchase_price||0)*(+rec.shares||0);
+    const sources=getPaySources();
+    const src=sources.find(s=>rec.paid_from?.startsWith(s.label.split('·')[0].trim())||rec.paid_from?.startsWith(s.label.split('—')[0].trim())||s.label===rec.paid_from);
+    const srcId=src?src.id:rec.paid_from==='Cash in Hand'?'CASH':'EXTERNAL';
+    const desc=curModal==='fd'?`FD Investment — ${rec.bank}`:curModal==='funds'?`Fund Investment — ${rec.fund_name}`:`Stock Purchase — ${rec.symbol}`;
+    await writeLedger('transfer',amt,srcId,'INVESTMENT',`Investment`,desc,rec.purchase_date||rec.start_date||today());
+  }
+
+  // ── BANK ACCOUNT FUNDING: deduct from funding source (transfer, not income) ─
+  if(curModal==='banks' && rec.funding_source && +rec.balance>0){
+    const openBal=+rec.balance||0;
+    const fs=rec.funding_source||'';
+    // Extract the source bank if funded from another bank
+    const srcBank=S.data.banks.find(b=>fs.includes(b.account_name)&&fs.includes(b.bank_name));
+    if(srcBank){
+      // Pre-flight already checked — now deduct atomically
+      const idx=S.data.banks.findIndex(b=>b.id===srcBank.id);
+      if(idx!==-1&&idx!==S.data.banks.length-1){ // don't deduct the just-added bank
+        S.data.banks[idx].balance=Math.max(0,(+S.data.banks[idx].balance||0)-openBal);
+        if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',srcBank.id);
+      }
+      // Store source_account_id on the new account
+      if(sb&&saved.id) await sb.from('bank_accounts').update({source_account_id:srcBank.id}).eq('id',saved.id);
+      // Write as transfer — NOT income (avoids double-counting net worth)
+      await writeLedger('transfer',openBal,'bank_'+srcBank.id,saved.id,'Account Funding',`Account Opened — ${rec.account_name} at ${rec.bank_name}`,today());
+    } else if(fs.startsWith('Crypto')){
+      const srcCrypto=S.data.crypto.find(c=>fs.includes(c.coin_symbol)||fs.includes(c.wallet_name));
+      if(srcCrypto){
+        const idx=S.data.crypto.findIndex(c=>c.id===srcCrypto.id);
+        if(idx!==-1){ S.data.crypto[idx].value_lkr=Math.max(0,(+S.data.crypto[idx].value_lkr||0)-openBal); if(sb) await sb.from('crypto_wallets').update({value_lkr:S.data.crypto[idx].value_lkr}).eq('id',srcCrypto.id); }
+        await writeLedger('transfer',openBal,'crypto_'+srcCrypto.id,saved.id,'Account Funding',`Account Opened — ${rec.account_name}`,today());
+      }
+    } else if(fs==='Cash on Hand'){
+      if(getCash()<openBal){ toast(`Insufficient cash (${fmt(getCash())} available).`,'e'); }
+      else{
+        setCash(Math.max(0,getCash()-openBal));
+        addCashLog('out',openBal,`Funded new account: ${rec.account_name}`);
+        await writeLedger('transfer',openBal,'CASH',saved.id,'Account Funding',`Account Opened — ${rec.account_name}`,today());
+      }
+    }
+    // External / New Money → no source deduction needed, not a transfer
+  }
+
+  // ── PHYSICAL ASSET FUNDING: deduct from paid_from (transfer, not expense) ─
+  if(curModal==='assets' && rec.paid_from && rec.paid_from!=='Other' && rec.paid_from!=='Others'){
+    const cost=+rec.purchase_value||0;
+    if(cost>0){
+      const sources=getPaySources();
+      const src=sources.find(s=>rec.paid_from?.startsWith(s.label.split('·')[0].trim())||rec.paid_from?.startsWith(s.label.split('—')[0].trim())||s.label===rec.paid_from);
+      if(src&&src.type==='bank'){
+        const bid=src.id.replace('bank_',''), idx=S.data.banks.findIndex(b=>b.id==bid);
+        if(idx!==-1){ S.data.banks[idx].balance=Math.max(0,(+S.data.banks[idx].balance||0)-cost); if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id); }
+        await writeLedger('transfer',cost,src.id,'ASSET','Asset Purchase',`Asset Purchase — ${rec.asset_name}`,rec.purchase_date||today());
+      } else if(src?.type==='cash'){
+        setCash(Math.max(0,getCash()-cost));
+        addCashLog('out',cost,`Asset Purchase — ${rec.asset_name}`);
+        await writeLedger('transfer',cost,'CASH','ASSET','Asset Purchase',`Asset Purchase — ${rec.asset_name}`,rec.purchase_date||today());
+      } else if(src?.type==='crypto'){
+        const cid=src.id.replace('crypto_',''), idx=S.data.crypto.findIndex(c=>c.id==cid);
+        if(idx!==-1){ S.data.crypto[idx].value_lkr=Math.max(0,(+S.data.crypto[idx].value_lkr||0)-cost); if(sb) await sb.from('crypto_wallets').update({value_lkr:S.data.crypto[idx].value_lkr}).eq('id',S.data.crypto[idx].id); }
+        await writeLedger('transfer',cost,src.id,'ASSET','Asset Purchase',`Asset Purchase — ${rec.asset_name}`,rec.purchase_date||today());
+      }
     }
   }
 
@@ -2080,51 +3229,94 @@ function closeStmt(){
 function renderStatement(bankId){
   const bank=S.data.banks.find(b=>b.id==bankId);
   if(!bank) return;
+  const acctName=(bank.account_name||'').toLowerCase();
+  const acctLabel=(bank.account_name+' – '+bank.bank_name).toLowerCase();
+  const matchesBank=(pf)=>{ if(!pf) return false; const l=(pf||'').toLowerCase(); return l.includes(acctName)||l.includes(acctLabel); };
 
-  const incomeEntries=S.data.income.filter(i=>i.account_id==bankId);
-  const expenseEntries=S.data.expenses.filter(e=>e.paid_from&&e.paid_from.startsWith(bank.account_name));
+  // ── ALL INCOME entries linked to this bank account ────────────────────
+  // This includes: salary, FD maturity transfers, stock sales, asset sales,
+  // fund redemptions, crypto sales — anything logged via dbInsert('income') 
+  // with this account_id, including auto-logged transfers
+  const incomeRows=S.data.income
+    .filter(i=>String(i.account_id)===String(bankId))
+    .map(i=>({
+      _type:'inc',
+      _date:i.date||today(),
+      _label:(i.source||'Income')+(i.description?' — '+i.description:''),
+      _sub: i.source==='FD Maturity'?'FD Transfer'
+           :i.source==='Stock Sale'?'Stock Sale'
+           :i.source==='Fund Redemption'?'Fund Redemption'
+           :i.source==='Physical Asset Sale'?'Asset Sale'
+           :i.source==='Crypto Sale'?'Crypto Sale'
+           :'Income',
+      amount:+i.amount||0
+    }));
 
-  const totalInc=incomeEntries.reduce((s,i)=>s+(+i.amount||0),0);
-  const totalExp=expenseEntries.reduce((s,e)=>s+(+e.amount||0),0);
+  // ── OUTFLOWS: expenses + investments funded from this account ─────────
+  const outRows=[
+    ...S.data.expenses
+      .filter(e=>matchesBank(e.paid_from)&&e.category!=='Internal Transfer')
+      .map(e=>({_type:'exp',_date:e.date,_label:(e.category||'Expense')+(e.description?' — '+e.description:''),_sub:'Expense',amount:+e.amount||0})),
+    ...S.data.fd.filter(f=>matchesBank(f.paid_from))
+      .map(f=>({_type:'exp',_date:f.start_date||today(),_label:'Fixed Deposit Opened — '+f.bank,_sub:'FD Investment',amount:+f.principal||0})),
+    ...S.data.funds.filter(f=>matchesBank(f.paid_from))
+      .map(f=>({_type:'exp',_date:f.purchase_date||today(),_label:'Fund Investment — '+f.fund_name,_sub:'Fund Investment',amount:+f.invested_amount||0})),
+    ...S.data.stocks.filter(s=>matchesBank(s.paid_from))
+      .map(s=>({_type:'exp',_date:s.purchase_date||today(),_label:'Stock Purchase — '+s.symbol+' ('+s.company_name+')',_sub:'Stock Purchase',amount:(+s.purchase_price||0)*(+s.shares||0)})),
+    ...S.data.crypto.filter(c=>matchesBank(c.funded_from))
+      .map(c=>({_type:'exp',_date:c.created_at?.slice(0,10)||today(),_label:'Crypto — '+c.coin_symbol+' ('+c.wallet_name+')',_sub:'Crypto Purchase',amount:+c.value_lkr||0})),
+    // Loan repayments paid from this account
+    ...S.data.expenses
+      .filter(e=>matchesBank(e.paid_from)&&e.category==='Loan Repayment')
+      .map(e=>({_type:'exp',_date:e.date,_label:e.description||'Loan Repayment',_sub:'Loan Repayment',amount:+e.amount||0})),
+  ];
+
+  // ── INTERNAL TRANSFERS (shown separately, don't affect net) ──────────
+  const xfrRows=S.data.expenses
+    .filter(e=>e.category==='Internal Transfer'&&matchesBank(e.paid_from))
+    .map(e=>({_type:'xfr',_date:e.date,_label:e.description||'Internal Transfer',_sub:'Transfer',amount:+e.amount||0}));
+
+  // Dedup: remove expense rows that are also covered by income rows (avoid double-count)
+  const totalInc=incomeRows.reduce((s,i)=>s+i.amount,0);
+  const totalExp=outRows.reduce((s,t)=>s+t.amount,0);
   const net=totalInc-totalExp;
 
-  // Merge and sort all transactions by date desc
-  const all=[
-    ...incomeEntries.map(i=>({...i,_type:'inc',_date:i.date,_label:i.source+(i.description?' — '+i.description:'')})),
-    ...expenseEntries.map(e=>({...e,_type:'exp',_date:e.date,_label:e.category+(e.description?' — '+e.description:'')})),
-  ].sort((a,b)=>b._date.localeCompare(a._date));
+  const all=[...incomeRows,...outRows,...xfrRows]
+    .filter(t=>t._date&&t._date.length>=7)
+    .sort((a,b)=>(b._date||'').localeCompare(a._date||''));
 
-  // Group by month
   const byMonth={};
-  all.forEach(t=>{
-    const mk=t._date.slice(0,7); // YYYY-MM
-    if(!byMonth[mk]) byMonth[mk]=[];
-    byMonth[mk].push(t);
-  });
+  all.forEach(t=>{ const mk=t._date.slice(0,7); if(!byMonth[mk]) byMonth[mk]=[]; byMonth[mk].push(t); });
   const months=Object.keys(byMonth).sort((a,b)=>b.localeCompare(a));
-
   const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
   $('stmt-body').innerHTML=`
+    <div class="stmt-summary" style="grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.8rem">
+      <div class="stmt-stat" style="grid-column:1/-1">
+        <label>Current Balance</label>
+        <div class="sv" style="font-size:1.3rem;font-variant-numeric:tabular-nums">${fmt(+bank.balance||0)}</div>
+        ${bank.account_number?`<div style="font-size:.7rem;color:var(--t2);margin-top:.2rem">Account No: ${esc(bank.account_number)}</div>`:''}
+      </div>
+    </div>
     <div class="stmt-summary">
       <div class="stmt-stat"><label>Total Income</label><div class="sv pos">${fmt(totalInc)}</div></div>
-      <div class="stmt-stat"><label>Total Expenses</label><div class="sv neg">${fmt(totalExp)}</div></div>
-      <div class="stmt-stat"><label>Net Cash Flow</label><div class="sv ${net>=0?'pos':'neg'}">${fmt(net)}</div></div>
+      <div class="stmt-stat"><label>Total Outflows</label><div class="sv neg">${fmt(totalExp)}</div></div>
+      <div class="stmt-stat"><label>Net Flow</label><div class="sv ${net>=0?'pos':'neg'}">${fmt(net)}</div></div>
     </div>
     ${months.length?months.map(mk=>{
       const [y,m]=mk.split('-');
-      const mLabel=mn[+m-1]+' '+y;
+      const mLabel=(mn[+m-1]||'?')+' '+(y||'');
       const rows=byMonth[mk].map(t=>`
-        <div class="stmt-row stmt-${t._type}">
-          <div class="stmt-icon">${t._type==='inc'?'↑':'↓'}</div>
+        <div class="stmt-row ${t._type==='inc'?'stmt-inc':t._type==='exp'?'stmt-exp':''}">
+          <div class="stmt-icon" style="${t._type==='xfr'?'background:rgba(59,130,246,.1);color:var(--blue)':''}">${t._type==='inc'?'↑':t._type==='xfr'?'⇄':'↓'}</div>
           <div class="stmt-info">
             <div class="stmt-desc">${esc(t._label)}</div>
-            <div class="stmt-meta">${t._date}</div>
+            <div class="stmt-meta">${t._date} · <span class="bdg" style="font-size:.65rem;padding:.1rem .4rem">${t._sub}</span></div>
           </div>
-          <div class="stmt-amt">${t._type==='inc'?'+':'−'}${fmt(+t.amount)}</div>
+          <div class="stmt-amt ${t._type==='inc'?'pos':t._type==='xfr'?'':'neg'}">${t._type==='inc'?'+':t._type==='xfr'?'⇄':'−'}${fmt(+t.amount||0)}</div>
         </div>`).join('');
       return `<div class="stmt-month-lbl">${mLabel}</div>${rows}`;
-    }).join(''):'<div class="stmt-empty">No transactions yet.<br>Add income or log expenses paid from this account.</div>'}`;
+    }).join(''):`<div class="stmt-empty">No transactions yet.<br><small>Add income or log payments from this account.</small></div>`}`;
 }
 
 // ── COINGECKO IDs ─────────────────────────────────────────────────────
@@ -2136,31 +3328,52 @@ const COINGECKO_IDS={
 
 // ── CASH IN HAND ──────────────────────────────────────────────────────
 function getCash(){ return +localStorage.getItem('fv_cash_'+S.user.id)||0; }
-function setCash(v){
+function getCashLog(){ try{ return JSON.parse(localStorage.getItem('fv_cashlog_'+S.user.id)||'[]'); }catch(_){ return []; } }
+function addCashLog(type,amt,note){ // type: 'in'|'out'
+  const log=getCashLog();
+  log.unshift({type,amt,note,ts:new Date().toISOString()});
+  if(log.length>200) log.length=200; // keep last 200 entries
+  localStorage.setItem('fv_cashlog_'+S.user.id,JSON.stringify(log));
+}
+function setCash(v,logEntry){
   localStorage.setItem('fv_cash_'+S.user.id, v);
   const d=$('cash-display'); if(d) d.textContent=fmt(v);
+  const d3=$('cash-page-bal'); if(d3) d3.textContent=fmt(v);
 }
 
-$('cash-edit-btn').addEventListener('click',()=>{
+window.showCashStatement=function(){
   const cur=getCash();
-  setText('mtitle','💵 Cash in Hand');
-  $('mbody').innerHTML=`
-    <p style="font-size:.85rem;color:var(--t2);margin-bottom:.5rem">Current cash: <strong style="color:var(--t1)">${fmt(cur)}</strong></p>
-    <div class="mfg"><label>Cash Amount (LKR)</label>
-      <input type="number" id="cash-input" value="${cur}" min="0" step="100"/>
+  const log=getCashLog();
+  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  setText('mtitle','💵 Cash Statement');
+  const rows=log.length?log.map(e=>{
+    const d=new Date(e.ts);
+    const ds=d.getDate()+' '+mn[d.getMonth()]+' '+d.getFullYear()+' '+d.toTimeString().slice(0,5);
+    return `<div class="cstmt-row cstmt-${e.type==='in'?'in':'out'}">
+      <div class="cstmt-icon">${e.type==='in'?'↑':'↓'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(e.note||'—')}</div>
+        <div style="font-size:.72rem;color:var(--t2)">${ds}</div>
+      </div>
+      <div class="cstmt-amt">${e.type==='in'?'+':'−'}${fmt(e.amt)}</div>
     </div>`;
+  }).join(''):'<div style="text-align:center;color:var(--t2);padding:2rem;font-size:.85rem">No cash transactions yet.</div>';
+
+  $('mbody').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding:.75rem 1rem;background:var(--gl);border:1.5px solid var(--bd);border-radius:var(--r10)">
+      <span style="font-size:.78rem;color:var(--t2)">Current Cash</span>
+      <strong style="font-size:1.1rem;font-variant-numeric:tabular-nums">${fmt(cur)}</strong>
+    </div>
+    <div style="max-height:340px;overflow-y:auto">${rows}</div>`;
+
+  // Hide save button, just show close
+  $('msave').style.display='none';
   $('mov').classList.remove('dn');
-  setTimeout(()=>$('cash-input')?.select(),50);
-  const origSave=$('msave').onclick;
-  $('msave').onclick=()=>{
-    const num=parseFloat($('cash-input').value)||0;
-    setCash(num);
-    renderDash(); renderNetWorth();
-    toast('Cash in hand updated!','s');
-    $('msave').onclick=origSave;
-    closeModal();
-  };
-});
+  // Restore save button when closed
+  const origClose=$('mclose').onclick;
+  $('mclose').onclick=()=>{ $('msave').style.display=''; closeModal(); };
+  $('mcancel').onclick=()=>{ $('msave').style.display=''; closeModal(); };
+};
 
 // ── GET PAYMENT SOURCES ───────────────────────────────────────────────
 function getPaySources(){
@@ -2205,7 +3418,7 @@ function openTransferModal({title, amount, fromLabel, onConfirm}){
 }
 
 // Credit a destination with an amount
-async function creditDest(dest, amt){
+async function creditDest(dest, amt, note){
   if(dest.startsWith('bank_')){
     const bid=dest.replace('bank_','');
     const idx=S.data.banks.findIndex(b=>b.id==bid);
@@ -2216,6 +3429,7 @@ async function creditDest(dest, amt){
     }
   } else if(dest==='cash'){
     setCash(getCash()+amt);
+    addCashLog('in',amt,note||`+${fmt(amt)} received`);
     toast(`+${fmt(amt)} added to Cash in Hand`,'s');
   }
 }
@@ -2313,14 +3527,10 @@ window.payCard=function(cardId){
       }
     } else if(srcId==='cash'){
       setCash(Math.max(0,getCash()-amt));
+      addCashLog('out',amt,'Card Payment — '+card.card_name);
     } else if(srcId.startsWith('crypto_')){
-      const cid=srcId.replace('crypto_','');
-      const idx=S.data.crypto.findIndex(c=>c.id==cid);
-      if(idx!==-1){
-        const lkrVal=Math.max(0,(+S.data.crypto[idx].value_lkr||0)-amt);
-        S.data.crypto[idx].value_lkr=lkrVal;
-        if(sb) await sb.from('crypto_wallets').update({value_lkr:lkrVal}).eq('id',S.data.crypto[idx].id);
-      }
+      const cid=srcId.replace('crypto_',''), idx=S.data.crypto.findIndex(c=>c.id==cid);
+      if(idx!==-1){ S.data.crypto[idx].value_lkr=Math.max(0,(+S.data.crypto[idx].value_lkr||0)-amt); if(sb) await sb.from('crypto_wallets').update({value_lkr:S.data.crypto[idx].value_lkr}).eq('id',S.data.crypto[idx].id); }
     }
 
     // Reduce card outstanding
@@ -2350,16 +3560,23 @@ window.transferStock=function(stockId){
   if(!st) return;
   const cur=+st.current_price||+st.purchase_price||0;
   const totalVal=cur*(+st.shares||0);
+  const autoNote=`Stock Sale – ${st.symbol} (${st.company_name})`;
   openTransferModal({
-    title:'Sell / Transfer — '+st.symbol,
-    amount:totalVal,
+    title:'Sell / Transfer — '+st.symbol, amount:totalVal,
     fromLabel:st.symbol+' ('+st.shares+' shares @ '+fmtD(cur)+')',
     onConfirm:async(dest,amt)=>{
-      await creditDest(dest,amt);
-      // Remove stock from portfolio
-      await dbDelete('stocks',stockId);
-      S.data.stocks=S.data.stocks.filter(s=>s.id!=stockId);
-      toast('Stock sold & transferred!','s');
+      await creditDest(dest,amt,autoNote);
+      if(dest.startsWith('bank_')){
+        const bid=dest.replace('bank_','');
+        const rec={date:today(),account_id:bid,source:'Stock Sale',description:autoNote,amount:amt};
+        const {data}=await dbInsert('income',{...rec}); S.data.income=[data||{...rec,id:genId()},...S.data.income];
+        await writeLedger('income',amt,'INVESTMENT',bid,'Stock Sale',autoNote,today());
+      } else if(dest==='cash'){
+        addCashLog('in',amt,autoNote);
+        await writeLedger('income',amt,'INVESTMENT','CASH','Stock Sale',autoNote,today());
+      }
+      await dbDelete('stocks',stockId); S.data.stocks=S.data.stocks.filter(s=>s.id!=stockId);
+      renderAll(); toast('Stock sold & transferred!','s');
     }
   });
 };
@@ -2368,15 +3585,22 @@ window.transferStock=function(stockId){
 window.transferFund=function(fundId){
   const fund=S.data.funds.find(f=>f.id==fundId);
   if(!fund) return;
+  const autoNote=`Fund Redemption – ${fund.fund_name}`;
   openTransferModal({
-    title:'Redeem — '+fund.fund_name,
-    amount:+fund.current_value||0,
-    fromLabel:fund.fund_name,
+    title:'Redeem — '+fund.fund_name, amount:+fund.current_value||0, fromLabel:fund.fund_name,
     onConfirm:async(dest,amt)=>{
-      await creditDest(dest,amt);
-      await dbDelete('funds',fundId);
-      S.data.funds=S.data.funds.filter(f=>f.id!=fundId);
-      toast('Fund redeemed & transferred!','s');
+      await creditDest(dest,amt,autoNote);
+      if(dest.startsWith('bank_')){
+        const bid=dest.replace('bank_','');
+        const rec={date:today(),account_id:bid,source:'Fund Redemption',description:autoNote,amount:amt};
+        const {data}=await dbInsert('income',{...rec}); S.data.income=[data||{...rec,id:genId()},...S.data.income];
+        await writeLedger('income',amt,'INVESTMENT',bid,'Fund Redemption',autoNote,today());
+      } else if(dest==='cash'){
+        addCashLog('in',amt,autoNote);
+        await writeLedger('income',amt,'INVESTMENT','CASH','Fund Redemption',autoNote,today());
+      }
+      await dbDelete('funds',fundId); S.data.funds=S.data.funds.filter(f=>f.id!=fundId);
+      renderAll(); toast('Fund redeemed & transferred!','s');
     }
   });
 };
@@ -2386,24 +3610,181 @@ window.transferFD=function(fdId){
   const fd=S.data.fd.find(f=>f.id==fdId);
   if(!fd) return;
   const mat=fdMat(+fd.principal,+fd.rate||+fd.interest_rate,fd.start_date||fd.start,fd.maturity_date||fd.maturity);
+  const autoNote=`Fixed Deposit Withdrawal – ${fd.bank}`;
   openTransferModal({
-    title:'Transfer Matured FD — '+fd.bank,
-    amount:mat,
+    title:'Transfer Matured FD — '+fd.bank, amount:mat,
     fromLabel:fd.bank+' FD (Principal '+fmt(+fd.principal)+')',
     onConfirm:async(dest,amt)=>{
-      await creditDest(dest,amt);
-      await dbDelete('fixed_deposits',fdId);
-      S.data.fd=S.data.fd.filter(f=>f.id!=fdId);
-      toast('FD maturity transferred!','s');
+      await creditDest(dest,amt,autoNote);
+      if(dest.startsWith('bank_')){
+        const bid=dest.replace('bank_','');
+        const interest=mat-(+fd.principal||0);
+        const desc=autoNote+(interest>0?` (incl. ${fmt(interest)} interest)`:'');
+        const rec={date:today(),account_id:bid,source:'FD Maturity',description:desc,amount:amt};
+        const {data}=await dbInsert('income',{...rec}); S.data.income=[data||{...rec,id:genId()},...S.data.income];
+        await writeLedger('income',amt,'INVESTMENT',bid,'FD Maturity',desc,today());
+      } else if(dest==='cash'){
+        addCashLog('in',amt,autoNote);
+        await writeLedger('income',amt,'INVESTMENT','CASH','FD Maturity',autoNote,today());
+      }
+      await dbDelete('fixed_deposits',fdId); S.data.fd=S.data.fd.filter(f=>f.id!=fdId);
+      renderAll(); toast('FD maturity transferred!','s');
     }
   });
+};
+
+// ── ASSET VALUE ESTIMATOR (Claude API) ───────────────────────────────
+function wireAssetEstimator(){
+  let estTimer=null;
+  function tryEstimate(){
+    clearTimeout(estTimer);
+    estTimer=setTimeout(async()=>{
+      const cat=($('mf-category')?.value||'').trim();
+      const pv=parseFloat($('mf-purchase_value')?.value||0);
+      const pd=($('mf-purchase_date')?.value||'');
+      if(!cat||!pv||pv<=0||!pd) return;
+      const cvField=$('mf-current_value');
+      if(!cvField||parseFloat(cvField.value)>0) return;
+
+      // Use global estimateAssetValue (Phase 3 AI hook)
+      const estimated=estimateAssetValue(cat,pv,null,pd);
+      if(estimated>0){
+        cvField.value=estimated;
+        cvField.style.borderColor='var(--teal)';
+        const RATES={'Real Estate (House/Apartment)':+0.08,'Real Estate (Land)':+0.10,'Vehicle (Car)':-0.12,'Vehicle (Motorbike)':-0.15,'Vehicle (Van/SUV)':-0.10,'Electronic (Computer/Laptop)':-0.35,'Electronic (Smartphone)':-0.40,'Electronic (TV/Entertainment)':-0.25,'Electronic (Camera/Equipment)':-0.20,'Jewellery':+0.07,'Furniture':-0.08,'Business Equipment':-0.15,'Artwork/Collectibles':+0.06,'Other':0};
+        const rate=RATES[cat]??0;
+        cvField.title=`AI Formula: ${rate>=0?'+':''}${(rate*100).toFixed(0)}% p.a. compound over ${((new Date()-new Date(pd))/(365.25*24*3600*1000)).toFixed(1)} years`;
+        return;
+      }
+      // LLM API fallback for unknown categories
+      if(CFG.ANTHROPIC_KEY){
+        cvField.placeholder='Estimating via AI…';
+        try{
+          const yearsHeld=((new Date()-new Date(pd))/3.156e10).toFixed(1);
+          const name=($('mf-asset_name')?.value||'').trim();
+          const prompt=`You are a financial asset valuation assistant. Estimate the current market value in LKR. Reply ONLY with a single number.\n\nAsset: ${name||cat}\nCategory: ${cat}\nPurchase Value: LKR ${pv.toLocaleString()}\nPurchase Date: ${pd} (${yearsHeld} years ago)\nCountry: Sri Lanka`;
+          const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':CFG.ANTHROPIC_KEY,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:64,messages:[{role:'user',content:prompt}]})});
+          const d=await res.json();
+          const est=parseFloat((d.content?.[0]?.text||'').replace(/[^0-9.]/g,''));
+          if(est>0){ cvField.value=Math.round(est); cvField.style.borderColor='var(--green)'; cvField.placeholder='0'; }
+        }catch(_){ cvField.placeholder='0'; }
+      }
+    },600);
+  }
+  ['mf-category','mf-purchase_value','mf-purchase_date','mf-asset_name'].forEach(id=>{
+    const el=$(id); if(el) el.addEventListener('change',tryEstimate);
+  });
+  $('mf-purchase_value')?.addEventListener('input',tryEstimate);
+  tryEstimate();
+}
+
+// ── TRANSFER FROM PHYSICAL ASSET ──────────────────────────────────────
+window.transferAsset=function(assetId){
+  const asset=S.data.assets.find(a=>a.id==assetId);
+  if(!asset) return;
+  const formulaVal=estimateAssetValue(asset.category,+asset.purchase_value||0,null,asset.purchase_date);
+  const val=formulaVal>0?formulaVal:(+asset.current_value||+asset.purchase_value||0);
+  const autoNote=`Physical Assets Transfer – ${asset.asset_name}`;
+  openTransferModal({
+    title:'Sell Asset — '+asset.asset_name, amount:val,
+    fromLabel:asset.asset_name+' ('+asset.category+')',
+    onConfirm:async(dest,amt)=>{
+      await creditDest(dest,amt,autoNote);
+      if(dest.startsWith('bank_')){
+        const bid=dest.replace('bank_','');
+        const rec={date:today(),account_id:bid,source:'Physical Asset Sale',description:autoNote,amount:amt};
+        const {data}=await dbInsert('income',{...rec}); S.data.income=[data||{...rec,id:genId()},...S.data.income];
+        await writeLedger('income',amt,'ASSET',bid,'Physical Asset Sale',autoNote,today());
+      } else if(dest==='cash'){
+        addCashLog('in',amt,autoNote);
+        await writeLedger('income',amt,'ASSET','CASH','Physical Asset Sale',autoNote,today());
+      }
+      await dbDelete('physical_assets',assetId); S.data.assets=S.data.assets.filter(a=>a.id!=assetId);
+      renderAll(); toast('Asset sold & funds transferred!','s');
+    }
+  });
+};
+
+// ── SELL CRYPTO ───────────────────────────────────────────────────────
+window.sellCrypto=function(cryptoId){
+  const wallet=S.data.crypto.find(c=>c.id==cryptoId);
+  if(!wallet) return;
+  const valLkr=+wallet.value_lkr||0;
+  const valUsd=+wallet.value_usd||0;
+  const autoNote=`Crypto Sale – ${wallet.coin_symbol} (${wallet.wallet_name})`;
+
+  setText('mtitle',`↗ Sell ${wallet.coin_symbol} — ${wallet.wallet_name}`);
+  $('mbody').innerHTML=`
+    <div style="padding:.75rem 1rem;background:var(--gl);border:1.5px solid var(--bd);border-radius:var(--r10);margin-bottom:.9rem;font-size:.85rem">
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <span style="color:var(--t2)">Wallet Value (LKR)</span><strong>${fmt(valLkr)}</strong></div>
+      <div style="display:flex;justify-content:space-between">
+        <span style="color:var(--t2)">Wallet Value (USD)</span><strong>$${fmtD(valUsd)}</strong></div>
+    </div>
+    <div class="mfg"><label>Transfer Proceeds To</label>
+      <select id="cs-dest">
+        ${S.data.banks.map(b=>`<option value="bank_${b.id}">${esc(b.account_name)} · ${esc(b.bank_name)} (${fmt(+b.balance||0)})</option>`).join('')}
+        <option value="cash">Cash in Hand (${fmt(getCash())})</option>
+        <option value="other">External / Hold as cash outside</option>
+      </select>
+    </div>
+    <div class="mfg"><label>Amount to Transfer (LKR)</label>
+      <input type="number" id="cs-amt" value="${valLkr.toFixed(2)}" min="0"/>
+    </div>
+    <div class="mfg"><label>Action after transfer</label>
+      <select id="cs-action">
+        <option value="remove">Remove wallet (fully sold)</option>
+        <option value="partial">Partial sell — keep wallet with updated value</option>
+      </select>
+    </div>
+    <p id="cs-err" style="color:var(--red);font-size:.78rem;min-height:1rem"></p>`;
+
+  $('mov').classList.remove('dn');
+  const origSave=$('msave').onclick;
+  $('msave').onclick=async()=>{
+    const dest=$('cs-dest').value;
+    const amt=parseFloat($('cs-amt').value)||0;
+    const action=$('cs-action').value;
+    $('cs-err').textContent='';
+    if(amt<=0){ $('cs-err').textContent='Enter a valid amount.'; return; }
+    if(amt>valLkr+1){ $('cs-err').textContent=`Amount exceeds wallet value (${fmt(valLkr)}).`; return; }
+
+    await creditDest(dest,amt,autoNote);
+    if(dest.startsWith('bank_')){
+      const bid=dest.replace('bank_','');
+      const rec={date:today(),account_id:bid,source:'Crypto Sale',description:autoNote,amount:amt};
+      const {data}=await dbInsert('income',{...rec}); S.data.income=[data||{...rec,id:genId()},...S.data.income];
+      await writeLedger('income',amt,'CRYPTO',bid,'Crypto Sale',autoNote,today());
+    } else if(dest==='cash'){
+      addCashLog('in',amt,autoNote);
+      await writeLedger('income',amt,'CRYPTO','CASH','Crypto Sale',autoNote,today());
+    }
+
+    const idx=S.data.crypto.findIndex(c=>c.id==cryptoId);
+    if(action==='remove'){
+      if(idx!==-1) S.data.crypto.splice(idx,1);
+      if(sb) await sb.from('crypto_wallets').delete().eq('id',cryptoId);
+      toast(`${wallet.coin_symbol} wallet sold & proceeds transferred!`,'s');
+    } else {
+      if(idx!==-1){
+        const newVal=Math.max(0,valLkr-amt);
+        S.data.crypto[idx].value_lkr=newVal;
+        S.data.crypto[idx].value_usd=Math.max(0,valUsd-(amt/320));
+        if(sb) await sb.from('crypto_wallets').update({value_lkr:newVal,value_usd:S.data.crypto[idx].value_usd}).eq('id',cryptoId);
+      }
+      toast(`Partial sale: ${fmt(amt)} transferred.`,'s');
+    }
+    $('msave').onclick=origSave;
+    closeModal(); renderAll();
+  };
 };
 
 // ── BUTTON → MODAL WIRING ─────────────────────────────────────────────
 const BTN_MAP={
   'badd':'banks','cadd':'cards','sadd':'stocks',
   'fdadd':'fd','funadd':'funds','exadd':'expenses',
-  'budadd':'budgets','cryptoadd':'crypto'
+  'budadd':'budgets','cryptoadd':'crypto','assetadd':'assets',
+  'loanadd':'loans'
 };
 Object.entries(BTN_MAP).forEach(([bid,key])=>{
   const b=$(bid); if(b) b.addEventListener('click',()=>openModal(key));
@@ -2412,65 +3793,881 @@ Object.entries(BTN_MAP).forEach(([bid,key])=>{
 // ── XSS ESCAPE ───────────────────────────────────────────────────────
 function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
 
+// ════════════════════════════════════════════════════════
+// LOANS MODULE
+// ════════════════════════════════════════════════════════
+const LOAN_TYPE_CLASSES={
+  'Home Loan':'lt-home','Vehicle Loan':'lt-vehicle','Personal Loan':'lt-personal',
+  'Business Loan':'lt-personal','Education Loan':'lt-personal',
+  'Credit Card Loan':'lt-credit','Other':'lt-other'
+};
+
+function renderLoans(){
+  const loans=S.data.loans;
+  // Totals
+  const totRem=loans.reduce((s,l)=>s+(+l.remaining_balance||0),0);
+  const now=new Date(), td=today();
+  const msStart=new Date(now.getFullYear(),now.getMonth(),1);
+  const msEnd  =new Date(now.getFullYear(),now.getMonth()+1,0);
+  const monthPay=loans.filter(l=>{
+    const nd=l.next_payment_date||'';
+    return nd>=msStart.toISOString().split('T')[0] && nd<=msEnd.toISOString().split('T')[0];
+  }).reduce((s,l)=>s+(+l.monthly_payment||0),0);
+
+  setText('loan-tot',fmt(totRem));
+  setText('loan-month-pay',fmt(monthPay));
+
+  // Next due date
+  const upcoming=loans.filter(l=>l.next_payment_date&&l.next_payment_date>=td)
+    .sort((a,b)=>a.next_payment_date.localeCompare(b.next_payment_date));
+  const nd=$('loan-next-due');
+  if(nd){
+    if(upcoming.length){
+      const l=upcoming[0], days=daysUntil(l.next_payment_date);
+      nd.innerHTML=`<span style="color:${days<=7?'var(--red)':days<=14?'var(--amber)':'var(--t1)'}">${esc(l.loan_name)} — ${l.next_payment_date} <small style="color:var(--t2)">(${days}d)</small></span>`;
+    } else {
+      nd.textContent='No upcoming payments';
+    }
+  }
+
+  if(!loans.length){
+    $('loans-list').innerHTML='<div class="emp">No loans yet. Click "+ Add Loan" to track your debt.</div>';
+    return;
+  }
+
+  $('loans-list').innerHTML=loans.map(l=>{
+    const rem=+l.remaining_balance||0;
+    const prin=+l.principal_amount||rem||1;
+    const paid=Math.max(0,prin-rem);
+    const pct=Math.min(100,(paid/prin)*100);
+    const rate=+l.interest_rate||0;
+    const mp=+l.monthly_payment||0;
+    const days=l.next_payment_date?daysUntil(l.next_payment_date):null;
+    const typeClass=LOAN_TYPE_CLASSES[l.loan_type]||'lt-other';
+    const dueColor=days!==null?(days<0?'var(--red)':days<=7?'var(--red)':days<=14?'var(--amber)':'var(--green)'):'var(--t2)';
+    const dueLabel=days!==null?(days<0?`OVERDUE ${Math.abs(days)}d`:days===0?'Due Today':`Due in ${days}d`):'—';
+
+    // Amortisation: calc remaining months
+    let remMonths='';
+    if(mp>0&&rem>0&&rate>0){
+      const mr=rate/12/100;
+      remMonths=Math.ceil(Math.log(mp/(mp-rem*mr))/Math.log(1+mr));
+      remMonths=isFinite(remMonths)&&remMonths>0?remMonths:Math.ceil(rem/mp);
+    } else if(mp>0&&rem>0){
+      remMonths=Math.ceil(rem/mp);
+    }
+    const totalInterestLeft=remMonths&&mp>0?Math.max(0,mp*remMonths-rem):0;
+
+    return `<div class="gc loan-card">
+      <div class="ih">
+        <div>
+          <div class="inm">${esc(l.loan_name)}</div>
+          <div class="isub">${esc(l.lender||'—')} · ${rate}% p.a.</div>
+        </div>
+        <span class="loan-type-badge ${typeClass}">${esc(l.loan_type||'Loan')}</span>
+      </div>
+      <div class="iamt neg">${fmt(rem)} <small style="font-size:.7rem;font-weight:400;color:var(--t2)">remaining</small></div>
+      <div class="loan-progress"><div class="loan-bar" style="width:${pct.toFixed(1)}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--t2)">
+        <span>Paid: ${fmt(paid)} (${pct.toFixed(0)}%)</span>
+        <span>Principal: ${fmt(prin)}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;font-size:.76rem;margin-top:.1rem">
+        <div class="gc" style="padding:.55rem .7rem">
+          <div style="color:var(--t2);font-size:.65rem;text-transform:uppercase;font-weight:700;margin-bottom:.15rem">Monthly EMI</div>
+          <div style="font-weight:700">${fmt(mp)}</div>
+        </div>
+        <div class="gc" style="padding:.55rem .7rem">
+          <div style="color:var(--t2);font-size:.65rem;text-transform:uppercase;font-weight:700;margin-bottom:.15rem">Next Payment</div>
+          <div style="font-weight:700;color:${dueColor}">${dueLabel}</div>
+        </div>
+        <div class="gc" style="padding:.55rem .7rem">
+          <div style="color:var(--t2);font-size:.65rem;text-transform:uppercase;font-weight:700;margin-bottom:.15rem">Est. Interest Left</div>
+          <div style="font-weight:700;color:var(--red)">${fmt(totalInterestLeft)}</div>
+        </div>
+      </div>
+      ${remMonths?`<div style="font-size:.75rem;color:var(--t2)">⏱ ~${remMonths} payments remaining · End: ${esc(l.end_date||'—')}</div>`:''}
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="mature-btn" onclick="payLoan('${l.id}')">💳 Make Payment</button>
+        <button class="transfer-btn" onclick="editLoan('${l.id}')">✏️ Edit</button>
+        <button class="bdel" onclick="rmItem('loans','${l.id}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.payLoan=function(loanId){
+  const loan=S.data.loans.find(l=>l.id==loanId);
+  if(!loan) return;
+  const rem=+loan.remaining_balance||0;
+  const mp=+loan.monthly_payment||0;
+  const sources=getPaySources();
+  setText('mtitle','💳 Loan Payment — '+loan.loan_name);
+  $('mbody').innerHTML=`
+    <div style="font-size:.85rem;color:var(--t2);margin-bottom:.75rem">
+      Remaining balance: <strong style="color:var(--red)">${fmt(rem)}</strong>
+      · Monthly EMI: <strong>${fmt(mp)}</strong>
+    </div>
+    <div class="mfg"><label>Payment Amount (LKR)</label>
+      <input type="number" id="lp-amt" value="${mp.toFixed(2)}" min="0"/>
+    </div>
+    <div class="mfg"><label>Pay From</label>
+      <select id="lp-src">
+        ${sources.map(s=>`<option value="${esc(s.id)}">${esc(s.label)} — ${fmt(s.balance)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="mfg"><label>Payment Date</label>
+      <input type="date" id="lp-date" value="${today()}"/>
+    </div>
+    <p id="lp-err" style="color:var(--red);font-size:.78rem;min-height:1rem"></p>`;
+  $('mov').classList.remove('dn');
+  const origSave=$('msave').onclick;
+  $('msave').onclick=async()=>{
+    const amt=parseFloat($('lp-amt').value)||0;
+    const srcId=$('lp-src').value;
+    const src=sources.find(s=>s.id===srcId);
+    const dt=$('lp-date').value||today();
+    $('lp-err').textContent='';
+    if(amt<=0){ $('lp-err').textContent='Enter a valid payment amount.'; return; }
+    if(amt>rem){ $('lp-err').textContent=`Payment exceeds remaining balance (${fmt(rem)}).`; return; }
+    if(src&&src.type!=='other'&&src.balance<amt){ $('lp-err').textContent=`Insufficient funds in ${src.label}.`; return; }
+    // Deduct from source
+    if(src&&srcId.startsWith('bank_')){
+      const bid=srcId.replace('bank_',''), idx=S.data.banks.findIndex(b=>b.id==bid);
+      if(idx!==-1){ S.data.banks[idx].balance=Math.max(0,(+S.data.banks[idx].balance||0)-amt); if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id); }
+    } else if(srcId==='cash'){ setCash(Math.max(0,getCash()-amt)); addCashLog('out',amt,'Loan Payment — '+loan.loan_name); }
+    // Update loan remaining balance
+    const newRem=Math.max(0,rem-amt);
+    // Advance next_payment_date by 1 month
+    let newNPD=loan.next_payment_date||dt;
+    if(newRem>0&&newNPD){
+      const d=new Date(newNPD); d.setMonth(d.getMonth()+1);
+      newNPD=d.toISOString().split('T')[0];
+    } else { newNPD=''; }
+    const idx=S.data.loans.findIndex(l=>l.id==loanId);
+    if(idx!==-1){
+      S.data.loans[idx].remaining_balance=newRem;
+      S.data.loans[idx].next_payment_date=newNPD;
+      if(sb) await sb.from('loans').update({remaining_balance:newRem,next_payment_date:newNPD}).eq('id',loanId);
+    }
+    // Log as expense + unified ledger
+    const expRec={date:dt,category:'Loan Repayment',description:'Loan Payment — '+loan.loan_name,paid_from:src?.label||'Other',amount:amt};
+    await dbInsert('expenses',{...expRec});
+    S.data.expenses=[{...expRec,id:genId()},...S.data.expenses];
+    await writeLedger('expense',amt,srcId,loanId,'Loan Repayment','Loan Payment — '+loan.loan_name,dt);
+    toast(`Paid ${fmt(amt)} towards ${loan.loan_name}`,'s');
+    if(newRem===0) toast('🎉 Loan fully repaid!','s');
+    $('msave').onclick=origSave;
+    closeModal(); renderAll();
+  };
+};
+
+window.editLoan=function(loanId){
+  const loan=S.data.loans.find(l=>l.id==loanId);
+  if(!loan) return;
+  setText('mtitle','✏️ Edit Loan — '+loan.loan_name);
+  $('mbody').innerHTML=`
+    <div class="mfg"><label>Remaining Balance (LKR)</label>
+      <input type="number" id="el-rem" value="${+loan.remaining_balance||0}"/></div>
+    <div class="mfg"><label>Monthly Payment (LKR)</label>
+      <input type="number" id="el-mp" value="${+loan.monthly_payment||0}"/></div>
+    <div class="mfg"><label>Interest Rate (% p.a.)</label>
+      <input type="number" id="el-rate" value="${+loan.interest_rate||0}"/></div>
+    <div class="mfg"><label>Next Payment Date</label>
+      <input type="date" id="el-npd" value="${loan.next_payment_date||today()}"/></div>
+    <div class="mfg"><label>End Date</label>
+      <input type="date" id="el-end" value="${loan.end_date||''}"/></div>`;
+  $('mov').classList.remove('dn');
+  const origSave=$('msave').onclick;
+  $('msave').onclick=async()=>{
+    const rem=parseFloat($('el-rem').value)||0;
+    const mp=parseFloat($('el-mp').value)||0;
+    const rate=parseFloat($('el-rate').value)||0;
+    const npd=$('el-npd').value;
+    const end=$('el-end').value;
+    const idx=S.data.loans.findIndex(l=>l.id==loanId);
+    if(idx!==-1){
+      S.data.loans[idx].remaining_balance=rem;
+      S.data.loans[idx].monthly_payment=mp;
+      S.data.loans[idx].interest_rate=rate;
+      S.data.loans[idx].next_payment_date=npd;
+      S.data.loans[idx].end_date=end;
+      if(sb) await sb.from('loans').update({remaining_balance:rem,monthly_payment:mp,interest_rate:rate,next_payment_date:npd,end_date:end}).eq('id',loanId);
+    }
+    toast('Loan updated!','s');
+    $('msave').onclick=origSave;
+    closeModal(); renderAll();
+  };
+};
+
+// ════════════════════════════════════════════════════════
+// CASH PAGE (dedicated)
+// ════════════════════════════════════════════════════════
+window.clearCashLog=function(){
+  if(!confirm('Clear all cash transaction history? This cannot be undone.')) return;
+  localStorage.removeItem('fv_cashlog_'+S.user.id);
+  renderCashPage();
+  toast('Cash history cleared.','i');
+};
+
+function renderCashPage(){
+  if(!$('sec-cash')) return;
+  const bal=getCash();
+  setText('cash-page-bal',fmt(bal));
+  const log=getCashLog();
+  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // Summary stats
+  const totalIn=log.filter(e=>e.type==='in').reduce((s,e)=>s+(+e.amt||0),0);
+  const totalOut=log.filter(e=>e.type==='out').reduce((s,e)=>s+(+e.amt||0),0);
+  const cashSummEl=$('cash-summary');
+  if(cashSummEl) cashSummEl.innerHTML=`
+    <div style="display:flex;justify-content:space-between;font-size:.85rem;padding:.5rem 0;border-bottom:1px solid var(--bd)">
+      <span class="pos">↑ Total In</span><strong class="pos">${fmt(totalIn)}</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:.85rem;padding:.5rem 0;border-bottom:1px solid var(--bd)">
+      <span class="neg">↓ Total Out</span><strong class="neg">${fmt(totalOut)}</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:.85rem;padding:.5rem 0">
+      <span>Net Flow</span><strong class="${totalIn-totalOut>=0?'pos':'neg'}">${fmt(totalIn-totalOut)}</strong></div>`;
+
+  // 14-day cashflow chart
+  const now=new Date(), lbs14=[], vs14in=[], vs14out=[];
+  for(let i=13;i>=0;i--){
+    const d=new Date(now); d.setDate(now.getDate()-i);
+    const ds=d.toISOString().split('T')[0];
+    const dayLog=log.filter(e=>e.ts.startsWith(ds));
+    lbs14.push(ds.slice(5));
+    vs14in.push(dayLog.filter(e=>e.type==='in').reduce((s,e)=>s+(+e.amt||0),0));
+    vs14out.push(dayLog.filter(e=>e.type==='out').reduce((s,e)=>s+(+e.amt||0),0));
+  }
+  const ch=$('ch-cashflow');
+  if(ch) ch.innerHTML=svgDualBars(lbs14,vs14in,vs14out,580,150);
+
+  // Transactions list
+  const body=$('cash-txns-body');
+  if(!body) return;
+  if(!log.length){ body.innerHTML='<div style="text-align:center;color:var(--t2);padding:2rem;font-size:.85rem">No cash transactions yet. Add cash using the buttons above.</div>'; return; }
+  body.innerHTML=log.map(e=>{
+    const d=new Date(e.ts);
+    const ds=d.getDate()+' '+mn[d.getMonth()]+' '+d.getFullYear()+' '+d.toTimeString().slice(0,5);
+    return `<div class="cash-txn-row cash-txn-${e.type==='in'?'in':'out'}">
+      <div class="cash-txn-icon">${e.type==='in'?'↑':'↓'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(e.note||'—')}</div>
+        <div style="font-size:.72rem;color:var(--t2)">${ds}</div>
+      </div>
+      <div class="cash-txn-amt">${e.type==='in'?'+':'−'}${fmt(+e.amt||0)}</div>
+    </div>`;
+  }).join('');
+}
+
+function svgDualBars(labels,vIn,vOut,w,h){
+  if(!labels.length) return '';
+  const maxVal=Math.max(...vIn,...vOut,1);
+  const pB=20,pT=6,gap=w/labels.length,bW=Math.max(3,(gap*0.38));
+  const tc=getComputedStyle(document.documentElement).getPropertyValue('--t2').trim()||'rgba(200,200,220,.5)';
+  let out='';
+  labels.forEach((l,i)=>{
+    const bh1=Math.max(2,((vIn[i]||0)/maxVal)*(h-pB-pT));
+    const bh2=Math.max(2,((vOut[i]||0)/maxVal)*(h-pB-pT));
+    const x=i*gap+(gap-bW*2-2)/2;
+    out+=`<rect x="${x.toFixed(1)}" y="${(pT+(h-pB-pT)-bh1).toFixed(1)}" width="${bW.toFixed(1)}" height="${bh1.toFixed(1)}" rx="3" fill="var(--green)" opacity=".7"/>
+    <rect x="${(x+bW+2).toFixed(1)}" y="${(pT+(h-pB-pT)-bh2).toFixed(1)}" width="${bW.toFixed(1)}" height="${bh2.toFixed(1)}" rx="3" fill="var(--red)" opacity=".7"/>`;
+    if(i%3===0||i===labels.length-1) out+=`<text x="${(x+bW).toFixed(1)}" y="${h-3}" text-anchor="middle" font-size="8.5" fill="${tc}">${l}</text>`;
+  });
+  return `<svg viewBox="0 0 ${w} ${h}" style="display:block;width:100%;overflow:visible">
+    <text x="2" y="12" font-size="9" fill="var(--green)" opacity=".8">▪ In</text>
+    <text x="28" y="12" font-size="9" fill="var(--red)" opacity=".8">▪ Out</text>
+    ${out}</svg>`;
+}
+
+// Cash page: Add In / Log Out buttons
+$('cash-add-in-btn')?.addEventListener('click',()=>{
+  // getPaySources() already includes 'other' — filter out cash (can't fund cash from cash)
+  const sources=getPaySources().filter(s=>s.type!=='cash');
+  setText('mtitle','💵 Add Cash In');
+  $('mbody').innerHTML=`
+    <div class="mfg"><label>Source</label>
+      <select id="cash-in-src">
+        ${sources.map(s=>`<option value="${esc(s.id)}">${esc(s.label)}${s.balance?` — ${fmt(s.balance)}`:''}</option>`).join('')}
+      </select>
+    </div>
+    <div class="mfg"><label>Amount (LKR)</label>
+      <input type="number" id="cash-in-amt" value="0" min="0" step="100"/></div>
+    <div class="mfg"><label>Note / Description</label>
+      <input type="text" id="cash-in-note" placeholder="e.g. ATM withdrawal"/></div>
+    <p id="cash-in-err" style="color:var(--red);font-size:.78rem;min-height:1rem"></p>`;
+  $('mov').classList.remove('dn');
+  const origSave=$('msave').onclick;
+  $('msave').onclick=async()=>{
+    const amt=parseFloat($('cash-in-amt').value)||0;
+    const srcId=$('cash-in-src').value;
+    const note=$('cash-in-note').value.trim()||'Cash added';
+    $('cash-in-err').textContent='';
+    if(amt<=0){ $('cash-in-err').textContent='Enter a valid amount.'; return; }
+    // Pre-flight: check source balance before any DB write
+    const src=getPaySources().find(s=>s.id===srcId);
+    if(src&&src.type!=='other'&&src.balance<amt){
+      $('cash-in-err').textContent=`Insufficient funds in ${src.label} (${fmt(src.balance)} available).`; return;
+    }
+    if(src&&srcId.startsWith('bank_')){
+      const bid=srcId.replace('bank_',''), idx=S.data.banks.findIndex(b=>b.id==bid);
+      if(idx!==-1){ S.data.banks[idx].balance=Math.max(0,(+S.data.banks[idx].balance||0)-amt); if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id); }
+      // Log as a transfer in the ledger — not income
+      await writeLedger('transfer',amt,'bank_'+src.ref?.id,'CASH','Cash Withdrawal','Cash added from '+src.label,today());
+    }
+    setCash(getCash()+amt);
+    addCashLog('in',amt,note+(src&&src.type!=='other'?' (from '+src.label+')':''));
+    $('msave').onclick=origSave;
+    closeModal(); renderAll();
+    toast(`+${fmt(amt)} added to cash.`,'s');
+  };
+});
+
+$('cash-add-out-btn')?.addEventListener('click',()=>{
+  const dests=getPaySources().filter(s=>s.type==='bank');
+  setText('mtitle','💵 Log Cash Out');
+  $('mbody').innerHTML=`
+    <div class="mfg"><label>Amount (LKR)</label>
+      <input type="number" id="cash-out-amt" value="0" min="0" step="100"/></div>
+    <div class="mfg"><label>Category</label>
+      <select id="cash-out-cat">
+        <option>Food</option><option>Transport</option><option>Utilities</option>
+        <option>Shopping</option><option>Healthcare</option><option>Entertainment</option>
+        <option>Education</option><option>Loan Repayment</option><option>Transfer to Bank</option><option>Other</option>
+      </select>
+    </div>
+    <div class="mfg"><label>Note / Description</label>
+      <input type="text" id="cash-out-note" placeholder="What was this for?"/></div>
+    <p id="cash-out-err" style="color:var(--red);font-size:.78rem;min-height:1rem"></p>`;
+  $('mov').classList.remove('dn');
+  const origSave=$('msave').onclick;
+  $('msave').onclick=async()=>{
+    const amt=parseFloat($('cash-out-amt').value)||0;
+    const cat=$('cash-out-cat').value;
+    const note=$('cash-out-note').value.trim()||cat;
+    $('cash-out-err').textContent='';
+    const cur=getCash();
+    if(amt<=0){ $('cash-out-err').textContent='Enter a valid amount.'; return; }
+    if(amt>cur){ $('cash-out-err').textContent=`Only ${fmt(cur)} in cash.`; return; }
+    setCash(Math.max(0,cur-amt));
+    addCashLog('out',amt,note);
+    // Also log as expense
+    const expRec={date:today(),category:cat,description:note,paid_from:'Cash in Hand',amount:amt};
+    await dbInsert('expenses',{...expRec});
+    S.data.expenses=[{...expRec,id:genId()},...S.data.expenses];
+    $('msave').onclick=origSave;
+    closeModal(); renderAll();
+    toast(`${fmt(amt)} logged as cash outflow.`,'i');
+  };
+});
+
+// ════════════════════════════════════════════════════════
+// CALENDAR MODULE
+// ════════════════════════════════════════════════════════
+let CAL_DATE=new Date();
+let CAL_SELECTED=null;
+
+$('cal-prev')?.addEventListener('click',()=>{ CAL_DATE=new Date(CAL_DATE.getFullYear(),CAL_DATE.getMonth()-1,1); renderCalendar(); });
+$('cal-next')?.addEventListener('click',()=>{ CAL_DATE=new Date(CAL_DATE.getFullYear(),CAL_DATE.getMonth()+1,1); renderCalendar(); });
+$('cal-today')?.addEventListener('click',()=>{ CAL_DATE=new Date(); CAL_SELECTED=today(); renderCalendar(); });
+
+// navTo already defined above with calendar/cash/loans hooks
+
+function getAllCalEvents(){
+  // Gather all dated events
+  const events={};
+  function addEv(date,type,label,amount){
+    if(!date||date.length<10) return;
+    const d=date.slice(0,10);
+    if(!events[d]) events[d]=[];
+    events[d].push({type,label,amount:+amount||0});
+  }
+  S.data.income.forEach(i=>addEv(i.date,'inc',i.source+(i.description?' — '+i.description:''),i.amount));
+  S.data.expenses.forEach(e=>addEv(e.date,'exp',e.category+(e.description?' · '+e.description:''),e.amount));
+  S.data.loans.forEach(l=>{ if(l.next_payment_date) addEv(l.next_payment_date,'loan','EMI — '+l.loan_name,l.monthly_payment); });
+  S.data.fd.forEach(f=>{ if(f.maturity_date) addEv(f.maturity_date,'inc','FD Maturity — '+f.bank,fdMat(+f.principal,+f.rate||+f.interest_rate,f.start_date||f.start,f.maturity_date)); });
+  // Cash log
+  const cashLog=getCashLog();
+  cashLog.forEach(e=>{ const d=new Date(e.ts).toISOString().split('T')[0]; addEv(d,e.type==='in'?'inc':'exp',e.note||'Cash',e.amt); });
+  return events;
+}
+
+function renderCalendar(){
+  const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const y=CAL_DATE.getFullYear(), m=CAL_DATE.getMonth();
+  setText('cal-month-label', mn[m]+' '+y);
+
+  const events=getAllCalEvents();
+  const firstDay=new Date(y,m,1).getDay(); // 0=Sun
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const td=today();
+
+  const grid=$('cal-grid');
+  if(!grid) return;
+
+  // Day headers
+  const dayHdrs=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div class="cal-day-hdr">${d}</div>`).join('');
+
+  // Blank cells for start
+  let cells=Array(firstDay).fill('<div></div>');
+
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayEvs=events[ds]||[];
+    const isToday=ds===td;
+    const isSel=ds===CAL_SELECTED;
+    const incSum=dayEvs.filter(e=>e.type==='inc').reduce((s,e)=>s+e.amount,0);
+    const expSum=dayEvs.filter(e=>e.type==='exp').reduce((s,e)=>s+e.amount,0);
+    const hasDots=dayEvs.length>0;
+    const dots=hasDots?`<div style="display:flex;flex-wrap:wrap;gap:1px;margin-top:2px">`
+      +(dayEvs.filter(e=>e.type==='inc').length?`<span class="cal-dot cal-dot-inc"></span>`:'')
+      +(dayEvs.filter(e=>e.type==='exp').length?`<span class="cal-dot cal-dot-exp"></span>`:'')
+      +(dayEvs.filter(e=>e.type==='loan').length?`<span class="cal-dot cal-dot-loan"></span>`:'')
+      +`</div>`:''
+    ;
+    const totLine=incSum>0?`<div class="cal-total-pos">+${Math.round(incSum/1000)}k</div>`
+      :(expSum>0?`<div class="cal-total-neg">-${Math.round(expSum/1000)}k</div>`:'');
+    cells.push(`<div class="cal-cell${isToday?' today':''}${isSel?' selected':''}" onclick="calSelectDay('${ds}')">
+      <div class="cal-date">${d}</div>${dots}${totLine}</div>`);
+  }
+
+  grid.innerHTML=dayHdrs+cells.join('');
+
+  // Show detail for selected day
+  if(CAL_SELECTED) renderCalDetail(CAL_SELECTED, events[CAL_SELECTED]||[]);
+}
+
+window.calSelectDay=function(ds){
+  CAL_SELECTED=ds;
+  const events=getAllCalEvents();
+  renderCalDetail(ds, events[ds]||[]);
+  // Re-render to update selected style
+  const grid=$('cal-grid');
+  if(grid) grid.querySelectorAll('.cal-cell').forEach(c=>c.classList.toggle('selected',c.onclick?.toString().includes(`'${ds}'`)));
+};
+
+function renderCalDetail(ds, evs){
+  const detail=$('cal-day-detail');
+  const title=$('cal-detail-title');
+  const body=$('cal-detail-body');
+  if(!detail||!title||!body) return;
+  detail.style.display='block';
+  title.textContent='📅 '+ds;
+  if(!evs.length){ body.innerHTML='<div style="color:var(--t2);font-size:.85rem;padding:.5rem 0">No transactions on this date.</div>'; return; }
+  const incSum=evs.filter(e=>e.type==='inc').reduce((s,e)=>s+e.amount,0);
+  const expSum=evs.filter(e=>e.type==='exp').reduce((s,e)=>s+e.amount,0);
+  body.innerHTML=`
+    <div style="display:flex;gap:1rem;margin-bottom:.8rem;font-size:.82rem">
+      <span class="pos">↑ Income: ${fmt(incSum)}</span>
+      <span class="neg">↓ Expenses: ${fmt(expSum)}</span>
+      <span style="${(incSum-expSum)>=0?'color:var(--green)':'color:var(--red)'}">Net: ${fmt(incSum-expSum)}</span>
+    </div>
+    ${evs.map(e=>`<div class="stmt-row stmt-${e.type==='inc'?'inc':'exp'}">
+      <div class="stmt-icon">${e.type==='inc'?'↑':e.type==='loan'?'💳':'↓'}</div>
+      <div class="stmt-info"><div class="stmt-desc">${esc(e.label)}</div>
+      <div class="stmt-meta"><span class="bdg" style="font-size:.65rem">${e.type==='inc'?'Income':e.type==='loan'?'Loan EMI':'Expense'}</span></div></div>
+      <div class="stmt-amt ${e.type==='inc'?'pos':'neg'}">${e.type==='inc'?'+':'−'}${fmt(e.amount)}</div>
+    </div>`).join('')}`;
+}
+
+// ════════════════════════════════════════════════════════
+// ACCOUNT MANAGEMENT
+// ════════════════════════════════════════════════════════
+$('btn-acct')?.addEventListener('click',()=>{
+  if(!sb||!S.user){ toast('Not connected to Supabase.','e'); return; }
+  const user=S.user;
+  const email=user.email||'';
+  const name=user.user_metadata?.full_name||email.split('@')[0]||'User';
+  setText('mtitle','⚙️ Account Settings');
+  $('mbody').innerHTML=`
+    <div style="display:flex;align-items:center;gap:.9rem;margin-bottom:1.2rem;padding:.9rem;background:var(--gl);border:1.5px solid var(--bd);border-radius:var(--r10)">
+      <div class="uav" style="width:44px;height:44px;font-size:1.1rem">${name[0].toUpperCase()}</div>
+      <div><div style="font-weight:700">${esc(name)}</div><div style="font-size:.78rem;color:var(--t2)">${esc(email)}</div></div>
+    </div>
+    <div class="mfg"><label>Display Name</label>
+      <input type="text" id="acct-name" value="${esc(name)}" placeholder="Full name"/></div>
+    <div class="mfg"><label>New Password <span style="font-weight:400;color:var(--t3);font-size:.7rem;text-transform:none"> — leave blank to keep current</span></label>
+      <input type="password" id="acct-pw" placeholder="Min. 6 characters" autocomplete="new-password"/></div>
+    <div class="mfg"><label>Confirm New Password</label>
+      <input type="password" id="acct-pw2" placeholder="Repeat password" autocomplete="new-password"/></div>
+    <p id="acct-msg" style="min-height:1rem;font-size:.8rem;text-align:center;color:var(--t2)"></p>
+    <div class="acct-danger">
+      <h4>⚠️ Danger Zone</h4>
+      <p style="font-size:.8rem;color:var(--t2);margin-bottom:.7rem">Deleting your account will permanently erase all your data and cannot be undone.</p>
+      <button class="btn" style="background:var(--red);color:#fff;font-size:.82rem;padding:.5rem 1rem;border-radius:var(--r10)" id="acct-delete-btn">🗑 Delete My Account</button>
+    </div>`;
+
+  $('mov').classList.remove('dn');
+  const origSave=$('msave').onclick;
+  const origSaveLabel=$('msave').textContent;
+  $('msave').textContent='Save Changes';
+  $('msave').onclick=async()=>{
+    const newName=$('acct-name').value.trim();
+    const pw=$('acct-pw').value;
+    const pw2=$('acct-pw2').value;
+    const msgEl=$('acct-msg');
+    msgEl.textContent='';msgEl.style.color='var(--t2)';
+    if(pw&&pw.length<6){ msgEl.textContent='Password must be at least 6 characters.';msgEl.style.color='var(--red)'; return; }
+    if(pw&&pw!==pw2){ msgEl.textContent='Passwords do not match.';msgEl.style.color='var(--red)'; return; }
+    const updates={};
+    if(newName&&newName!==name) updates.data={full_name:newName};
+    if(pw) updates.password=pw;
+    if(Object.keys(updates).length===0){ msgEl.textContent='No changes made.'; return; }
+    $('msave').disabled=true; $('msave').textContent='Saving…';
+    try{
+      const {error}=await sb.auth.updateUser(updates);
+      if(error){ msgEl.textContent=error.message;msgEl.style.color='var(--red)'; }
+      else{
+        msgEl.textContent='✅ Account updated successfully!';msgEl.style.color='var(--green)';
+        if(newName){ setText('uname',newName); setText('gname',newName.split(' ')[0]); $('uav').textContent=newName[0].toUpperCase(); }
+        setTimeout(()=>{ $('msave').textContent=origSaveLabel; $('msave').onclick=origSave; $('msave').disabled=false; closeModal(); },1500);
+        return;
+      }
+    }catch(e){ msgEl.textContent='Error: '+e.message;msgEl.style.color='var(--red)'; }
+    $('msave').disabled=false; $('msave').textContent='Save Changes';
+  };
+
+  // ── Delete account button — nuclear RPC version ──────────────────────
+  setTimeout(()=>{
+    $('acct-delete-btn')?.addEventListener('click',()=>{
+      closeModal();
+      // Two-step confirmation for nuclear action
+      confirmModal(
+        '⚠️ <strong style="color:var(--red)">PERMANENT DELETION</strong><br><br>' +
+        'This will <strong>completely and irreversibly erase</strong> your Finova account including:<br>' +
+        '• All financial data (banks, investments, expenses, loans)<br>' +
+        '• Your login credentials from the authentication system<br>' +
+        '• All history and settings<br><br>' +
+        'You will <strong>not</strong> be able to log back in. This cannot be undone.',
+        async()=>{
+          // Show a blocking overlay so user can't interact during deletion
+          const overlay=document.createElement('div');
+          overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem';
+          overlay.innerHTML='<div style="color:#fff;font-size:1.1rem;font-weight:600">🗑 Deleting your account…</div><div style="color:rgba(255,255,255,.6);font-size:.85rem">Please wait, do not close this window</div>';
+          document.body.appendChild(overlay);
+
+          try{
+            // Step 1: Clear all localStorage data first
+            ['fv_cash_','fv_cashlog_','fv_theme','fv_lu_'].forEach(k=>{
+              Object.keys(localStorage).filter(key=>key.includes(k)).forEach(key=>localStorage.removeItem(key));
+            });
+
+            // Step 2: Call the PostgreSQL RPC function that runs as SECURITY DEFINER
+            // This function deletes all public table rows AND the auth.users record
+            if(!sb) throw new Error('Supabase not connected.');
+            const {error:rpcError}=await sb.rpc('delete_user_entirely');
+            if(rpcError) throw new Error('RPC failed: '+rpcError.message);
+
+            // Step 3: Sign out the client session (token is now invalid server-side)
+            await sb.auth.signOut();
+
+            overlay.innerHTML='<div style="color:#4ade80;font-size:1.1rem;font-weight:600">✓ Account deleted successfully</div><div style="color:rgba(255,255,255,.6);font-size:.85rem">Redirecting…</div>';
+            setTimeout(()=>{ location.href=location.origin+location.pathname; }, 1500);
+
+          }catch(e){
+            document.body.removeChild(overlay);
+            // Do NOT sign out — deletion failed, user should still be logged in
+            toast('Deletion failed: '+e.message+' — your account has NOT been deleted.','e');
+          }
+        }
+      );
+    });
+  },50);
+});
+
+// ── Redirect tb-logout to btn-out ────────────────────────────────────
+$('tb-logout')?.addEventListener('click',()=>$('btn-out')?.click());
+
+// ── QUICK-ADD TRANSACTION (topbar + button) ───────────────────────────
+const AUTO_DESCS={
+  'Salary':'Monthly salary credit',
+  'Freelance':'Freelance payment received',
+  'Business':'Business income',
+  'Interest':'Interest income',
+  'Dividend':'Dividend payment',
+  'Rental':'Rental income',
+  'Stock Sale':'Stock Sale — proceeds',
+  'FD Maturity':'Fixed Deposit Withdrawal — maturity proceeds',
+  'Fund Redemption':'Fund Redemption — proceeds',
+  'Crypto Sale':'Crypto Sale — proceeds',
+  'Physical Asset Sale':'Physical Assets Transfer — asset proceeds',
+  'Loan Repayment':'Loan repayment',
+  'Food':'Food & dining',
+  'Transport':'Transport',
+  'Utilities':'Utilities & bills',
+  'Entertainment':'Entertainment',
+  'Healthcare':'Healthcare',
+  'Shopping':'Shopping',
+  'Education':'Education',
+};
+
+const QA_INCOME_CATS=['Salary','Freelance','Business','Interest','Dividend','Rental','Investment Return','Stock Sale','FD Maturity','Fund Redemption','Crypto Sale','Physical Asset Sale','Gift','Refund','Other Income'];
+const QA_EXPENSE_CATS=['Food','Transport','Rent','Bills & Utilities','Healthcare','Shopping','Education','Entertainment','Loan Repayment','Insurance','Maintenance','Subscription','Others'];
+
+function openQuickAdd(){
+  setText('mtitle','⚡ Quick Transaction');
+  $('mbody').innerHTML=`
+    <div class="mfg"><label>Transaction Type</label>
+      <div style="display:flex;gap:.5rem">
+        <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;border-radius:var(--r10);border:1.5px solid var(--bd);cursor:pointer;transition:all var(--tr)" id="qa-lbl-inc">
+          <input type="radio" name="qa-type" value="income" id="qa-inc" checked style="accent-color:var(--green)"/> <span style="font-weight:600;color:var(--green)">↑ Income</span>
+        </label>
+        <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;border-radius:var(--r10);border:1.5px solid var(--bd);cursor:pointer;transition:all var(--tr)" id="qa-lbl-exp">
+          <input type="radio" name="qa-type" value="expense" id="qa-exp" style="accent-color:var(--red)"/> <span style="font-weight:600;color:var(--red)">↓ Expense</span>
+        </label>
+        <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;border-radius:var(--r10);border:1.5px solid var(--bd);cursor:pointer;transition:all var(--tr)" id="qa-lbl-xfr">
+          <input type="radio" name="qa-type" value="transfer" id="qa-xfr" style="accent-color:var(--blue)"/> <span style="font-weight:600;color:var(--blue)">⇄ Transfer</span>
+        </label>
+      </div>
+    </div>
+    <div class="mfg"><label>Date</label>
+      <input type="date" id="qa-date" value="${today()}"/></div>
+    <div class="mfg" id="qa-cat-wrap">
+      <label id="qa-cat-lbl">Category</label>
+      <select id="qa-cat">
+        ${QA_INCOME_CATS.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="mfg"><label id="qa-src-lbl">Source Account</label>
+      <select id="qa-src">
+        ${getPaySources().map(s=>`<option value="${esc(s.id)}">${esc(s.label)}${s.balance?` — ${fmt(s.balance)}`:''}</option>`).join('')}
+      </select>
+    </div>
+    <div class="mfg dn" id="qa-dest-wrap"><label>Transfer To</label>
+      <select id="qa-dest">
+        ${S.data.banks.map(b=>`<option value="bank_${b.id}">${esc(b.account_name)} · ${esc(b.bank_name)}</option>`).join('')}
+        <option value="cash">Cash in Hand</option>
+        <option value="other">External / Other</option>
+      </select>
+    </div>
+    <div class="mfg"><label>Amount (LKR)</label>
+      <input type="number" id="qa-amt" value="0" min="0" step="100"/></div>
+    <div class="mfg"><label>Description</label>
+      <input type="text" id="qa-desc" placeholder="Auto-filled based on category"/></div>
+    <p id="qa-err" style="color:var(--red);font-size:.78rem;min-height:1rem"></p>`;
+
+  $('mov').classList.remove('dn');
+  setTimeout(()=>$('qa-amt')?.focus(),40);
+
+  // ── Dynamic category filter — updates in real-time on type change ─────
+  function refreshCategories(){
+    const type=document.querySelector('input[name="qa-type"]:checked')?.value||'income';
+    const catSel=$('qa-cat');
+    const catWrap=$('qa-cat-wrap');
+    const destWrap=$('qa-dest-wrap');
+    const srcLbl=$('qa-src-lbl');
+
+    // Highlight active type label
+    ['inc','exp','xfr'].forEach(k=>{
+      const lbl=$('qa-lbl-'+k);
+      if(lbl) lbl.style.borderColor=document.getElementById('qa-'+k)?.checked?'var(--blue)':'var(--bd)';
+    });
+
+    if(type==='transfer'){
+      catWrap.classList.add('dn');
+      destWrap.classList.remove('dn');
+      if(srcLbl) srcLbl.textContent='Transfer From';
+      return;
+    }
+    catWrap.classList.remove('dn');
+    destWrap.classList.add('dn');
+
+    // Rebuild category options filtered by type
+    const cats=type==='income'?QA_INCOME_CATS:QA_EXPENSE_CATS;
+    if(catSel){
+      catSel.innerHTML=cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    }
+    if(srcLbl) srcLbl.textContent=type==='income'?'Credit To Account':'Debit From Account';
+    updateAutoDesc();
+  }
+
+  // Auto-description helper
+  function updateAutoDesc(){
+    const cat=$('qa-cat')?.value||'';
+    const desc=$('qa-desc');
+    const AUTO={
+      'Salary':'Monthly salary credit','Freelance':'Freelance payment received',
+      'Business':'Business income','Interest':'Interest income',
+      'Dividend':'Dividend payment','Rental':'Rental income',
+      'Investment Return':'Investment return','Stock Sale':'Stock Sale — proceeds',
+      'FD Maturity':'Fixed Deposit Withdrawal — maturity proceeds',
+      'Fund Redemption':'Fund Redemption — proceeds',
+      'Crypto Sale':'Crypto Sale — proceeds',
+      'Physical Asset Sale':'Physical Assets Transfer — asset proceeds',
+      'Gift':'Gift received','Refund':'Refund received',
+      'Other Income':'Income',
+      'Food':'Food & dining','Transport':'Transport','Rent':'Rent payment',
+      'Bills & Utilities':'Bills & utilities','Healthcare':'Healthcare',
+      'Shopping':'Shopping','Education':'Education','Entertainment':'Entertainment',
+      'Loan Repayment':'Loan repayment','Insurance':'Insurance premium',
+      'Maintenance':'Maintenance & repairs','Subscription':'Subscription fee',
+      'Others':'Other expense',
+    };
+    if(desc) desc.placeholder=AUTO[cat]||cat;
+  }
+
+  document.querySelectorAll('input[name="qa-type"]').forEach(r=>r.addEventListener('change',refreshCategories));
+  $('qa-cat')?.addEventListener('change',updateAutoDesc);
+  refreshCategories(); // initialise
+
+  const origSave=$('msave').onclick;
+  $('msave').onclick=async()=>{
+    const type=document.querySelector('input[name="qa-type"]:checked')?.value||'income';
+    const dt=$('qa-date').value||today();
+    const cat=$('qa-cat')?.value||'';
+    const srcId=$('qa-src').value;
+    const destId=$('qa-dest')?.value||'';
+    const amt=parseFloat($('qa-amt').value)||0;
+    const rawDesc=$('qa-desc').value.trim();
+    const autoDesc=rawDesc||cat;
+    $('qa-err').textContent='';
+
+    if(amt<=0){ $('qa-err').textContent='Enter a valid amount.'; return; }
+
+    // Pre-flight balance check
+    const src=getPaySources().find(s=>s.id===srcId);
+    if(type!=='income'&&src&&src.type!=='other'&&src.balance<amt){
+      $('qa-err').textContent=`Insufficient funds in ${src.label} (${fmt(src.balance)} available).`; return;
+    }
+
+    $('msave').disabled=true; $('msave').textContent='Saving…';
+    try{
+      if(type==='income'){
+        if(srcId.startsWith('bank_')){
+          const bid=srcId.replace('bank_',''), idx=S.data.banks.findIndex(b=>b.id==bid);
+          if(idx!==-1){ S.data.banks[idx].balance=(+S.data.banks[idx].balance||0)+amt; if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id); }
+          const rec={date:dt,account_id:srcId.replace('bank_',''),source:cat||'Income',description:autoDesc,amount:amt};
+          const {data}=await dbInsert('income',{...rec}); S.data.income=[data||{...rec,id:genId()},...S.data.income];
+        } else if(srcId==='cash'){ setCash(getCash()+amt); addCashLog('in',amt,autoDesc); }
+        await writeLedger('income',amt,null,srcId.startsWith('bank_')?srcId.replace('bank_',''):null,cat||'Income',autoDesc,dt);
+        toast(`+${fmt(amt)} income recorded.`,'s');
+      } else if(type==='expense'){
+        if(srcId.startsWith('bank_')){
+          const bid=srcId.replace('bank_',''), idx=S.data.banks.findIndex(b=>b.id==bid);
+          if(idx!==-1){ S.data.banks[idx].balance=Math.max(0,(+S.data.banks[idx].balance||0)-amt); if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id); }
+        } else if(srcId==='cash'){ setCash(Math.max(0,getCash()-amt)); addCashLog('out',amt,autoDesc); }
+        else if(srcId.startsWith('crypto_')){
+          const cid=srcId.replace('crypto_',''), idx=S.data.crypto.findIndex(c=>c.id==cid);
+          if(idx!==-1){ S.data.crypto[idx].value_lkr=Math.max(0,(+S.data.crypto[idx].value_lkr||0)-amt); if(sb) await sb.from('crypto_wallets').update({value_lkr:S.data.crypto[idx].value_lkr}).eq('id',S.data.crypto[idx].id); }
+        }
+        const rec={date:dt,category:cat||'Others',description:autoDesc,paid_from:src?.label||'Other',amount:amt};
+        const {data}=await dbInsert('expenses',{...rec}); S.data.expenses=[data||{...rec,id:genId()},...S.data.expenses];
+        await writeLedger('expense',amt,srcId,null,cat||'Others',autoDesc,dt);
+        toast(`${fmt(amt)} expense logged.`,'i');
+      } else {
+        // Transfer — internal only, does not affect income/expense totals
+        if(srcId.startsWith('bank_')){
+          const bid=srcId.replace('bank_',''), idx=S.data.banks.findIndex(b=>b.id==bid);
+          if(idx!==-1){ S.data.banks[idx].balance=Math.max(0,(+S.data.banks[idx].balance||0)-amt); if(sb) await sb.from('bank_accounts').update({balance:S.data.banks[idx].balance}).eq('id',S.data.banks[idx].id); }
+        } else if(srcId==='cash'){ setCash(Math.max(0,getCash()-amt)); addCashLog('out',amt,'Transfer: '+autoDesc); }
+        else if(srcId.startsWith('crypto_')){
+          const cid=srcId.replace('crypto_',''), idx=S.data.crypto.findIndex(c=>c.id==cid);
+          if(idx!==-1){ S.data.crypto[idx].value_lkr=Math.max(0,(+S.data.crypto[idx].value_lkr||0)-amt); if(sb) await sb.from('crypto_wallets').update({value_lkr:S.data.crypto[idx].value_lkr}).eq('id',S.data.crypto[idx].id); }
+        }
+        await creditDest(destId, amt);
+        const rec={date:dt,category:'Internal Transfer',description:autoDesc||`Transfer from ${src?.label||'account'}`,paid_from:src?.label||'Other',amount:amt};
+        await dbInsert('expenses',{...rec});
+        await writeLedger('transfer',amt,srcId,destId,'Internal Transfer',autoDesc||'Transfer',dt);
+        toast(`Transferred ${fmt(amt)} successfully!`,'s');
+      }
+    } catch(e){ $('qa-err').textContent='Error: '+e.message; $('msave').disabled=false; $('msave').textContent='Save'; return; }
+
+    $('msave').disabled=false; $('msave').textContent='Save';
+    $('msave').onclick=origSave;
+    closeModal(); renderAll();
+  };
+}
+
+['tb-qadd','tb-qadd-m'].forEach(id=>{ $(id)?.addEventListener('click',openQuickAdd); });
+
 } // end init()
 })();
 </script>
 
-<!-- ══════════════════════ SUPABASE SCHEMA (reference) ══════════════════════
-Run this SQL in your Supabase SQL Editor (Dashboard → SQL Editor → New Query):
+<!-- ══════════════════════ SUPABASE SCHEMA — COMPLETE DDL ══════════════════════
+Run ALL of this in your Supabase SQL Editor (Dashboard → SQL Editor → New Query).
+Run in order. Safe to re-run — uses IF NOT EXISTS / OR REPLACE.
+═══════════════════════════════════════════════════════════════════════════════
 
-create table bank_accounts (
+-- ═══════════════════════════════════════════
+-- PHASE 1: CORE TABLES
+-- ═══════════════════════════════════════════
+
+create table if not exists bank_accounts (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
   bank_name text not null, account_name text not null,
   balance numeric(15,2) not null default 0, currency text default 'LKR',
+  account_number text,
+  funding_source text,
+  source_account_id uuid,
   created_at timestamptz default now()
 );
 alter table bank_accounts enable row level security;
+drop policy if exists "own" on bank_accounts;
 create policy "own" on bank_accounts for all using (auth.uid()=user_id);
 
-create table cards (
+create table if not exists cards (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
   card_name text not null, bank text not null,
   credit_limit numeric(15,2) default 0, outstanding numeric(15,2) default 0,
-  due_date date, created_at timestamptz default now()
+  due_date date, card_number text, created_at timestamptz default now()
 );
 alter table cards enable row level security;
+drop policy if exists "own" on cards;
 create policy "own" on cards for all using (auth.uid()=user_id);
 
-create table fixed_deposits (
+create table if not exists stocks (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  symbol text not null, company_name text not null, exchange text default 'CSE',
+  shares numeric(14,4) not null, purchase_price numeric(14,4) not null,
+  current_price numeric(14,4), purchase_date date not null, paid_from text,
+  created_at timestamptz default now()
+);
+alter table stocks enable row level security;
+drop policy if exists "own" on stocks;
+create policy "own" on stocks for all using (auth.uid()=user_id);
+
+create table if not exists fixed_deposits (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
   bank text not null, principal numeric(15,2) not null,
   rate numeric(6,3) not null, start_date date not null, maturity_date date not null,
-  created_at timestamptz default now()
+  paid_from text, created_at timestamptz default now()
 );
 alter table fixed_deposits enable row level security;
+drop policy if exists "own" on fixed_deposits;
 create policy "own" on fixed_deposits for all using (auth.uid()=user_id);
 
-create table funds (
+create table if not exists funds (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
   fund_name text not null, invested_amount numeric(15,2) not null,
   current_value numeric(15,2) not null, purchase_date date not null,
-  created_at timestamptz default now()
+  paid_from text, created_at timestamptz default now()
 );
 alter table funds enable row level security;
+drop policy if exists "own" on funds;
 create policy "own" on funds for all using (auth.uid()=user_id);
 
-create table stocks (
+create table if not exists physical_assets (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
-  symbol text not null, company_name text not null,
-  shares numeric(14,4) not null, purchase_price numeric(14,4) not null,
-  current_price numeric(14,4), purchase_date date not null,
+  asset_name text not null, category text not null,
+  purchase_value numeric(15,2) not null default 0,
+  current_value numeric(15,2) not null default 0,
+  purchase_date date, description text,
+  paid_from text,
+  ai_valuation_history jsonb default '[]'::jsonb,
   created_at timestamptz default now()
 );
-alter table stocks enable row level security;
-create policy "own" on stocks for all using (auth.uid()=user_id);
+alter table physical_assets enable row level security;
+drop policy if exists "own" on physical_assets;
+create policy "own" on physical_assets for all using (auth.uid()=user_id);
 
-create table expenses (
+create table if not exists expenses (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
   date date not null default current_date, category text not null,
@@ -2478,22 +4675,21 @@ create table expenses (
   created_at timestamptz default now()
 );
 alter table expenses enable row level security;
+drop policy if exists "own" on expenses;
 create policy "own" on expenses for all using (auth.uid()=user_id);
-create index on expenses(user_id, date);
+create index if not exists expenses_user_date on expenses(user_id, date);
 
--- If your expenses table already exists without paid_from, run this:
--- alter table expenses add column if not exists paid_from text;
-
-create table budgets (
+create table if not exists budgets (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
   category text not null, budget_limit numeric(12,2) not null,
   created_at timestamptz default now()
 );
 alter table budgets enable row level security;
+drop policy if exists "own" on budgets;
 create policy "own" on budgets for all using (auth.uid()=user_id);
 
-create table crypto_wallets (
+create table if not exists crypto_wallets (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
   wallet_name text not null, coin_symbol text not null,
@@ -2502,13 +4698,14 @@ create table crypto_wallets (
   current_price_usd numeric(18,6) default 0,
   value_usd numeric(18,2) default 0,
   value_lkr numeric(18,2) default 0,
-  wallet_address text,
+  wallet_address text, funded_from text,
   created_at timestamptz default now()
 );
 alter table crypto_wallets enable row level security;
+drop policy if exists "own" on crypto_wallets;
 create policy "own" on crypto_wallets for all using (auth.uid()=user_id);
 
-create table income (
+create table if not exists income (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade not null,
   account_id uuid, date date not null default current_date,
@@ -2517,9 +4714,225 @@ create table income (
   created_at timestamptz default now()
 );
 alter table income enable row level security;
+drop policy if exists "own" on income;
 create policy "own" on income for all using (auth.uid()=user_id);
-create index on income(user_id, date);
+create index if not exists income_user_date on income(user_id, date);
 
+-- ═══════════════════════════════════════════
+-- PHASE 1: LOANS TABLE
+-- ═══════════════════════════════════════════
+
+create table if not exists loans (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  loan_name text not null,
+  loan_type text not null default 'Personal Loan',
+  lender text,
+  principal_amount numeric(15,2) not null default 0,
+  remaining_balance numeric(15,2) not null default 0,
+  interest_rate numeric(6,3) not null default 0,
+  monthly_payment numeric(15,2) not null default 0,
+  start_date date,
+  end_date date,
+  next_payment_date date,
+  paid_from text,
+  linked_account_id uuid references bank_accounts(id) on delete set null,
+  created_at timestamptz default now()
+);
+alter table loans enable row level security;
+drop policy if exists "own" on loans;
+create policy "own" on loans for all using (auth.uid()=user_id);
+
+-- ═══════════════════════════════════════════
+-- PHASE 1: UNIFIED LEDGER TABLE
+-- Central audit log for all financial events
+-- ═══════════════════════════════════════════
+
+create table if not exists unified_ledger (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  type text not null check (type in ('income','expense','transfer')),
+  amount numeric(15,2) not null default 0,
+  source_account_id text,          -- bank UUID | 'CASH' | 'INVESTMENT' | 'ASSET' | 'CRYPTO' | 'EXTERNAL'
+  target_account_id text,          -- bank UUID | 'CASH' | loan UUID | null
+  category text not null default 'Other',
+  description text not null default '',
+  date date not null default current_date,
+  created_at timestamptz default now()
+);
+alter table unified_ledger enable row level security;
+drop policy if exists "own" on unified_ledger;
+create policy "own" on unified_ledger for all using (auth.uid()=user_id);
+create index if not exists ledger_user_date on unified_ledger(user_id, date);
+create index if not exists ledger_user_type on unified_ledger(user_id, type);
+create index if not exists ledger_source_acct on unified_ledger(source_account_id);
+create index if not exists ledger_target_acct on unified_ledger(target_account_id);
+
+-- ═══════════════════════════════════════════
+-- PHASE 1: TRIGGER — auto-update bank balance
+-- When a unified_ledger income row is inserted
+-- with a valid bank UUID as target_account_id,
+-- increment that bank's balance automatically.
+-- ═══════════════════════════════════════════
+
+create or replace function sync_bank_balance_from_ledger()
+returns trigger language plpgsql security definer as $$
+begin
+  -- INCOME → credit target bank account
+  if NEW.type = 'income' and NEW.target_account_id is not null then
+    begin
+      update bank_accounts
+        set balance = balance + NEW.amount
+        where id = NEW.target_account_id::uuid
+          and user_id = NEW.user_id;
+    exception when others then null; end;
+  end if;
+
+  -- EXPENSE → debit source bank account
+  if NEW.type = 'expense' and NEW.source_account_id is not null then
+    begin
+      update bank_accounts
+        set balance = greatest(0, balance - NEW.amount)
+        where id = NEW.source_account_id::uuid
+          and user_id = NEW.user_id;
+    exception when others then null; end;
+  end if;
+
+  -- TRANSFER → debit source, credit target
+  if NEW.type = 'transfer' then
+    begin
+      update bank_accounts
+        set balance = greatest(0, balance - NEW.amount)
+        where id = NEW.source_account_id::uuid
+          and user_id = NEW.user_id;
+    exception when others then null; end;
+    begin
+      update bank_accounts
+        set balance = balance + NEW.amount
+        where id = NEW.target_account_id::uuid
+          and user_id = NEW.user_id;
+    exception when others then null; end;
+  end if;
+
+  return NEW;
+end;
+$$;
+
+drop trigger if exists trg_ledger_balance_sync on unified_ledger;
+create trigger trg_ledger_balance_sync
+  after insert on unified_ledger
+  for each row execute function sync_bank_balance_from_ledger();
+
+-- ═══════════════════════════════════════════
+-- MIGRATION HELPERS (safe to run any time)
+-- ═══════════════════════════════════════════
+
+alter table physical_assets add column if not exists ai_valuation_history jsonb default '[]'::jsonb;
+alter table physical_assets add column if not exists paid_from text;
+alter table bank_accounts    add column if not exists account_number text;
+alter table bank_accounts    add column if not exists funding_source text;
+alter table bank_accounts    add column if not exists source_account_id uuid;
+alter table cards            add column if not exists card_number text;
+alter table stocks           add column if not exists exchange text default 'CSE';
+alter table stocks           add column if not exists paid_from text;
+alter table fixed_deposits   add column if not exists paid_from text;
+alter table funds            add column if not exists paid_from text;
+alter table crypto_wallets   add column if not exists funded_from text;
+alter table loans            add column if not exists linked_account_id uuid references bank_accounts(id) on delete set null;
+
+-- FIX: "could not find the fund_from column of bank_accounts in the schema cache"
+-- Drop any accidentally-created fund_from column from bank_accounts:
+-- alter table bank_accounts drop column if exists funded_from;
+-- alter table bank_accounts drop column if exists fund_from;
+
+-- Enable realtime safely
+do $$ begin
+  if exists (select 1 from pg_tables where schemaname='public' and tablename='unified_ledger') then
+    alter publication supabase_realtime add table unified_ledger;
+  end if;
+  if exists (select 1 from pg_tables where schemaname='public' and tablename='bank_accounts') then
+    alter publication supabase_realtime add table bank_accounts;
+  end if;
+exception when duplicate_object then null;
+end $$;
+
+-- ═══════════════════════════════════════════════════════════
+-- NUCLEAR ACCOUNT DELETION — RPC FUNCTION
+-- Creates a SECURITY DEFINER function that can delete the
+-- calling user from auth.users (bypasses RLS for this purpose).
+-- Run ONCE in Supabase SQL Editor.
+-- ═══════════════════════════════════════════════════════════
+
+create or replace function public.delete_user_entirely()
+returns void
+language plpgsql
+security definer                 -- runs as the function owner (postgres), not the caller
+set search_path = public, auth   -- ensures auth schema is accessible
+as $$
+declare
+  uid uuid := auth.uid();        -- the calling authenticated user's ID
+begin
+  -- Guard: only allow authenticated users to delete themselves
+  if uid is null then
+    raise exception 'Not authenticated';
+  end if;
+
+  -- Step 1: Wipe all public table data for this user
+  delete from public.unified_ledger    where user_id = uid;
+  delete from public.income            where user_id = uid;
+  delete from public.expenses          where user_id = uid;
+  delete from public.budgets           where user_id = uid;
+  delete from public.loans             where user_id = uid;
+  delete from public.stocks            where user_id = uid;
+  delete from public.fixed_deposits    where user_id = uid;
+  delete from public.funds             where user_id = uid;
+  delete from public.crypto_wallets    where user_id = uid;
+  delete from public.physical_assets   where user_id = uid;
+  delete from public.cards             where user_id = uid;
+  delete from public.bank_accounts     where user_id = uid;
+
+  -- Step 2: Delete the user record from auth.users entirely
+  -- This removes their login credentials, email, and all metadata
+  delete from auth.users where id = uid;
+end;
+$$;
+
+-- Grant EXECUTE permission to authenticated users (they can only delete themselves
+-- because the function uses auth.uid() internally — not an ID they pass in)
+revoke all on function public.delete_user_entirely() from public;
+grant execute on function public.delete_user_entirely() to authenticated;
+
+-- ═══════════════════════════════════════════════════════════
+-- GOOGLE OAUTH SETUP GUIDE
+-- ═══════════════════════════════════════════════════════════
+--
+-- 1. GOOGLE CLOUD CONSOLE (console.cloud.google.com):
+--    a. Create or select a project.
+--    b. Go to APIs & Services → Credentials → Create Credentials → OAuth 2.0 Client IDs.
+--    c. Application type: Web application.
+--    d. Authorized JavaScript origins:
+--       • https://YOUR-PROJECT-REF.supabase.co
+--       • http://localhost (for local dev)
+--    e. Authorized redirect URIs:
+--       • https://YOUR-PROJECT-REF.supabase.co/auth/v1/callback
+--    f. Copy the Client ID and Client Secret.
+--
+-- 2. SUPABASE DASHBOARD (app.supabase.com):
+--    a. Go to Authentication → Providers → Google.
+--    b. Toggle "Enable Google provider" ON.
+--    c. Paste your Google Client ID and Client Secret.
+--    d. Save.
+--
+-- 3. ALLOWED REDIRECT URLS (Supabase Dashboard → Authentication → URL Configuration):
+--    Add your production URL, e.g.:
+--    • https://finovasmart.netlify.app
+--    • http://localhost:3000 (local dev)
+--    The JS code auto-detects window.location.origin so no code change is needed.
+--
+-- 4. No SQL changes needed for Google OAuth — Supabase handles the auth.users
+--    row automatically. The app checks user.app_metadata.provider === 'google'
+--    to detect first-time Google logins and set finova_initialized flag.
+--
 ═══════════════════════════════════════════════════════════════════════════ -->
 </body>
 </html>
