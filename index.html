@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Finova — Personal Finance</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233b82f6'/%3E%3Crect x='7' y='7' width='5' height='18' rx='1.5' fill='white'/%3E%3Crect x='7' y='7' width='17' height='5' rx='1.5' fill='white'/%3E%3Crect x='7' y='15' width='13' height='5' rx='1.5' fill='white'/%3E%3C/svg%3E"/>
 
 <!-- ╔══════════════════════════════════════════════════════════════╗
      ║  ⚙️  CONFIGURATION — Replace all YOUR_... values below      ║
@@ -355,6 +356,58 @@ img{max-width:100%}
   background:rgba(74,222,128,.1);color:var(--green);border-radius:99px;
   padding:.18rem .5rem;font-weight:600}
 
+/* ── AUTOCOMPLETE ── */
+.ac-wrap{position:relative}
+.ac-drop{position:absolute;top:100%;left:0;right:0;z-index:200;
+  background:var(--ele);border:1.5px solid var(--bd2);border-radius:var(--r10);
+  box-shadow:var(--sh);max-height:220px;overflow-y:auto;margin-top:3px}
+.ac-item{padding:.6rem 1rem;font-size:.875rem;cursor:pointer;
+  display:flex;align-items:center;gap:.75rem;transition:background var(--tr)}
+.ac-item:hover{background:var(--gl2)}
+.ac-sym{font-weight:700;color:var(--blue);font-variant-numeric:tabular-nums;min-width:80px}
+.ac-name{color:var(--t2);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-loading{padding:.8rem 1rem;font-size:.82rem;color:var(--t2);text-align:center}
+
+/* ── STATEMENT PANEL ── */
+.stmt-panel{position:fixed;top:0;right:0;width:min(520px,100vw);height:100vh;
+  background:var(--sur);border-left:1.5px solid var(--bd);z-index:500;
+  display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);
+  box-shadow:-8px 0 32px rgba(0,0,0,.35)}
+.stmt-panel.open{transform:translateX(0)}
+.stmt-head{padding:1.2rem 1.4rem;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.stmt-head h2{font-size:1.05rem;font-weight:700}
+.stmt-actions{display:flex;gap:.5rem;align-items:center}
+.stmt-body{flex:1;overflow-y:auto;padding:1.2rem 1.4rem;display:flex;flex-direction:column;gap:1rem}
+.stmt-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
+.stmt-stat{background:var(--gl);border:1.5px solid var(--bd);border-radius:var(--r10);padding:.85rem 1rem}
+.stmt-stat label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t2)}
+.stmt-stat .sv{font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums;margin-top:.2rem}
+.stmt-row{display:flex;align-items:center;gap:.75rem;padding:.7rem 0;border-bottom:1px solid var(--bd);font-size:.85rem}
+.stmt-row:last-child{border-bottom:none}
+.stmt-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:.9rem;flex-shrink:0}
+.stmt-inc .stmt-icon{background:rgba(74,222,128,.12)}
+.stmt-exp .stmt-icon{background:rgba(248,113,113,.12)}
+.stmt-info{flex:1;min-width:0}
+.stmt-desc{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stmt-meta{font-size:.72rem;color:var(--t2);margin-top:.1rem}
+.stmt-amt{font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0}
+.stmt-inc .stmt-amt{color:var(--green)}
+.stmt-exp .stmt-amt{color:var(--red)}
+.stmt-empty{text-align:center;color:var(--t2);padding:2rem;font-size:.85rem}
+.stmt-month-lbl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--t2);padding:.4rem 0;margin-top:.4rem}
+
+/* ── CRYPTO ── */
+.crypto-addr{font-size:.7rem;color:var(--t2);font-family:monospace;word-break:break-all;margin-top:.15rem}
+.coin-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:1.1rem;flex-shrink:0;background:var(--gl)}
+
+/* ── PAID FROM BADGE ── */
+.pf-bdg{font-size:.7rem;color:var(--t2);display:inline-flex;align-items:center;gap:.25rem}
+
 /* ════════════════════ RESPONSIVE ════════════════════ */
 @media(max-width:1100px){
   .sgrid{grid-template-columns:repeat(2,1fr)}
@@ -397,20 +450,12 @@ img{max-width:100%}
   <div class="acard">
     <div class="alogo">
       <svg class="alogo-svg" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="lg1" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#60a5fa"/>
-            <stop offset="100%" stop-color="#3b82f6"/>
-          </linearGradient>
-          <linearGradient id="lg2" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#3b82f6"/>
-            <stop offset="100%" stop-color="#1d4ed8"/>
-          </linearGradient>
-        </defs>
-        <rect width="44" height="44" rx="12" fill="url(#lg2)"/>
-        <rect width="44" height="44" rx="12" fill="white" fill-opacity="0.06"/>
-        <path d="M13 12h18v4H17v6h12v4H17v8h-4V12z" fill="white" fill-opacity="0.95"/>
-        <circle cx="34" cy="10" r="4" fill="#60a5fa" fill-opacity="0.8"/>
+        <rect width="44" height="44" rx="12" fill="#3b82f6"/>
+        <rect width="44" height="44" rx="12" fill="white" fill-opacity="0.08"/>
+        <!-- F letterform: vertical bar + top bar + middle bar -->
+        <rect x="10" y="10" width="7" height="24" rx="2" fill="white"/>
+        <rect x="10" y="10" width="23" height="7" rx="2" fill="white"/>
+        <rect x="10" y="21" width="18" height="7" rx="2" fill="white"/>
       </svg>
       <span class="alogo-t">Finova</span>
     </div>
@@ -448,10 +493,12 @@ img{max-width:100%}
     <div class="sbh">
       <div class="logo">
         <svg class="logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="32" rx="9" fill="#3b82f6"/>
-          <rect width="32" height="32" rx="9" fill="white" fill-opacity="0.07"/>
-          <path d="M9 8h14v3.2H12.4v4.4h9v3.2h-9v6.4H9V8z" fill="white" fill-opacity="0.95"/>
-          <circle cx="25" cy="7" r="3" fill="#60a5fa" fill-opacity="0.85"/>
+          <rect width="32" height="32" rx="8" fill="#3b82f6"/>
+          <rect width="32" height="32" rx="8" fill="white" fill-opacity="0.08"/>
+          <!-- F letterform -->
+          <rect x="7" y="7" width="5" height="18" rx="1.5" fill="white"/>
+          <rect x="7" y="7" width="17" height="5" rx="1.5" fill="white"/>
+          <rect x="7" y="15" width="13" height="5" rx="1.5" fill="white"/>
         </svg>
         <span class="lt">Finova</span>
       </div>
@@ -464,6 +511,7 @@ img{max-width:100%}
       <a class="ni" data-s="stocks">  <span class="ni-dot">◉</span> Stocks</a>
       <a class="ni" data-s="fd">      <span class="ni-dot">◉</span> Fixed Deposits</a>
       <a class="ni" data-s="funds">   <span class="ni-dot">◉</span> Funds</a>
+      <a class="ni" data-s="crypto">  <span class="ni-dot">◉</span> Crypto Wallets</a>
       <a class="ni" data-s="expenses"><span class="ni-dot">◉</span> Expenses</a>
       <a class="ni" data-s="budgets"> <span class="ni-dot">◉</span> Budgets</a>
       <a class="ni" data-s="networth"><span class="ni-dot">◉</span> Net Worth</a>
@@ -582,6 +630,16 @@ img{max-width:100%}
         <div class="ig" id="funds-list"><div class="emp">No funds yet.</div></div>
       </section>
 
+      <!-- CRYPTO -->
+      <section id="sec-crypto" class="sec">
+        <div class="sh">
+          <div><h1>Crypto Wallets</h1><p class="ssub">Track all your cryptocurrency holdings.</p></div>
+          <button class="btn bp" id="cryptoadd">+ Add Wallet</button>
+        </div>
+        <div class="bnr gc"><label>Total Crypto Value (USD)</label><div class="bnrv" id="cry-tot">$0</div></div>
+        <div class="ig" id="crypto-list"><div class="emp">No crypto wallets yet. Click "+ Add Wallet".</div></div>
+      </section>
+
       <!-- EXPENSES -->
       <section id="sec-expenses" class="sec">
         <div class="sh">
@@ -599,8 +657,8 @@ img{max-width:100%}
         </div>
         <div class="tcrd gc">
           <table class="tbl">
-            <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead>
-            <tbody id="ex-body"><tr><td colspan="5" class="ec">No expenses yet.</td></tr></tbody>
+            <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Paid From</th><th>Amount</th><th></th></tr></thead>
+            <tbody id="ex-body"><tr><td colspan="6" class="ec">No expenses yet.</td></tr></tbody>
           </table>
         </div>
       </section>
@@ -639,6 +697,22 @@ img{max-width:100%}
     </div><!-- /ct -->
   </main>
 </div><!-- /app -->
+
+<!-- STATEMENT PANEL -->
+<div class="stmt-panel" id="stmt-panel">
+  <div class="stmt-head">
+    <div>
+      <h2 id="stmt-title">Account Statement</h2>
+      <div style="font-size:.78rem;color:var(--t2)" id="stmt-sub"></div>
+    </div>
+    <div class="stmt-actions">
+      <button class="btn bp" id="stmt-add-income" style="font-size:.8rem;padding:.45rem .9rem">+ Add Income</button>
+      <button class="iBtn" id="stmt-close">✕</button>
+    </div>
+  </div>
+  <div class="stmt-body" id="stmt-body"></div>
+</div>
+<div class="sbbd" id="stmt-bd"></div>
 
 <!-- MODAL -->
 <div class="mov dn" id="mov">
@@ -710,8 +784,9 @@ function toast(msg,t='i'){
 const S = {
   user: null,
   theme: localStorage.getItem('fv_theme')||'dark',
-  data: { banks:[], cards:[], fd:[], funds:[], stocks:[], expenses:[], budgets:[] },
+  data: { banks:[], cards:[], fd:[], funds:[], stocks:[], expenses:[], budgets:[], crypto:[], income:[] },
   stockRefreshTimer: null,
+  stmtBankId: null,
 };
 
 // ── THEME ─────────────────────────────────────────────────────────────
@@ -746,18 +821,14 @@ $('btn-signin').addEventListener('click', async()=>{
   const pass =($('li-pw').value||'');
   if(!email){ amsg('Enter your email.'); return; }
   if(!pass ) { amsg('Enter your password.'); return; }
+  if(!sb){ amsg('Supabase not configured — add your keys to the CFG block at the top of this file.'); return; }
 
-  if(!sb){
-    amsg('Supabase not configured. Add your keys at the top of the file, or use Demo.','');
-    return;
-  }
   btnLoad('btn-signin',true,'Sign In');
+  amsg('');
   try{
-    const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
-    if(error){ amsg(error.message); return; }
-    S.user = data.user;
-    await loadAll();
-    launch();
+    const {error} = await sb.auth.signInWithPassword({email,password:pass});
+    if(error){ amsg(error.message); }
+    // ✅ on success, onAuthStateChange fires and calls launch() — no need to do it here
   }catch(e){ amsg('Connection error: '+e.message); }
   finally{ btnLoad('btn-signin',false,'Sign In'); }
 });
@@ -770,12 +841,10 @@ $('btn-signup').addEventListener('click', async()=>{
   if(!name )  { amsg('Enter your full name.'); return; }
   if(!email||!email.includes('@')){ amsg('Enter a valid email.'); return; }
   if(pass.length<6){ amsg('Password must be at least 6 characters.'); return; }
+  if(!sb){ amsg('Supabase not configured — add your keys to the CFG block at the top of this file.'); return; }
 
-  if(!sb){
-    amsg('Supabase not configured. Add your keys at the top of the file, or use Demo.','');
-    return;
-  }
   btnLoad('btn-signup',true,'Create Account');
+  amsg('');
   try{
     const {data,error} = await sb.auth.signUp({
       email, password:pass,
@@ -786,13 +855,11 @@ $('btn-signup').addEventListener('click', async()=>{
     });
     if(error){ amsg(error.message); return; }
     if(data.session){
-      // Email confirm disabled → logged in immediately
-      S.user = data.user;
-      await loadAll();
-      launch();
+      // Email confirm disabled → onAuthStateChange fires → launch() called automatically
+      amsg('✅ Account created! Loading your dashboard…', true);
     } else {
-      amsg('✅ Account created! Check your email for a confirmation link, then sign in.',true);
-      setTimeout(()=>document.querySelector('.atab[data-tab=login]')?.click(),1800);
+      amsg('✅ Account created! Check your email to confirm, then sign in.', true);
+      setTimeout(()=>document.querySelector('.atab[data-tab=login]')?.click(), 2000);
     }
   }catch(e){ amsg('Connection error: '+e.message); }
   finally{ btnLoad('btn-signup',false,'Create Account'); }
@@ -810,13 +877,17 @@ $('btn-out').addEventListener('click',async()=>{
   location.reload();
 });
 
-// ── AUTO-LOGIN (Supabase session) ─────────────────────────────────────
+// ── AUTH STATE CHANGE — single launch point ───────────────────────────
+// This fires for: sign-in, sign-up (if confirm disabled), token refresh, page reload with active session
 if(sb){
   sb.auth.onAuthStateChange(async(event,session)=>{
-    if(session?.user && !S.user){
-      S.user=session.user;
+    if((event==='SIGNED_IN' || event==='INITIAL_SESSION') && session?.user && !S.user){
+      S.user = session.user;
       await loadAll();
       launch();
+    }
+    if(event==='SIGNED_OUT'){
+      S.user=null;
     }
   });
 }
@@ -833,6 +904,8 @@ async function loadAll(){
     {key:'stocks',  tbl:'stocks'},
     {key:'expenses',tbl:'expenses'},
     {key:'budgets', tbl:'budgets'},
+    {key:'crypto',  tbl:'crypto_wallets'},
+    {key:'income',  tbl:'income'},
   ];
   await Promise.all(tbls.map(async({key,tbl})=>{
     const {data,error}=await sb.from(tbl).select('*').eq('user_id',uid).order('created_at',{ascending:false});
@@ -856,7 +929,8 @@ async function dbDelete(tbl,id){
 
 // Map from state key → Supabase table name
 const TBL={banks:'bank_accounts',cards:'cards',fd:'fixed_deposits',
-  funds:'funds',stocks:'stocks',expenses:'expenses',budgets:'budgets'};
+  funds:'funds',stocks:'stocks',expenses:'expenses',budgets:'budgets',
+  crypto:'crypto_wallets',income:'income'};
 
 // ── LAUNCH APP ────────────────────────────────────────────────────────
 function launch(){
@@ -874,7 +948,7 @@ function launch(){
 
 // ── NAVIGATION ────────────────────────────────────────────────────────
 const TITLES={dash:'Overview',banks:'Bank Accounts',cards:'Cards',stocks:'Stock Portfolio',
-  fd:'Fixed Deposits',funds:'Funds',expenses:'Expenses',budgets:'Budgets',networth:'Net Worth'};
+  fd:'Fixed Deposits',funds:'Funds',crypto:'Crypto Wallets',expenses:'Expenses',budgets:'Budgets',networth:'Net Worth'};
 
 Q('.ni').forEach(item=>item.addEventListener('click',()=>{
   const s=item.dataset.s;
@@ -952,8 +1026,9 @@ function calcTotals(){
   const fdv    = S.data.fd.reduce((s,f)=>s+fdMat(+f.principal,+f.rate||+f.interest_rate,f.start_date||f.start,f.maturity_date||f.maturity),0);
   const funds  = S.data.funds.reduce((s,f)=>s+(+f.current_value||0),0);
   const stocks = S.data.stocks.reduce((s,st)=>s+((+st.current_price||+st.purchase_price||0)*(+st.shares||0)),0);
+  const crypto = S.data.crypto.reduce((s,c)=>s+(+c.value_lkr||0),0);
   const cards  = S.data.cards.reduce((s,c)=>s+(+c.outstanding||+c.outstanding_balance||0),0);
-  const assets = banks+fdv+funds+stocks;
+  const assets = banks+fdv+funds+stocks+crypto;
   const now=new Date(), ms=new Date(now.getFullYear(),now.getMonth(),1);
   const ws=new Date(now); ws.setDate(now.getDate()-7);
   const td=today();
@@ -963,7 +1038,7 @@ function calcTotals(){
   const totExp= S.data.expenses.reduce((s,e)=>s+(+e.amount||0),0);
   // Net worth = assets − card liabilities − total cumulative expenses
   const nw = assets - cards - totExp;
-  return {banks,fdv,funds,stocks,cards,assets,nw,mExp,wExp,dExp,totExp};
+  return {banks,fdv,funds,stocks,crypto,cards,assets,nw,mExp,wExp,dExp,totExp};
 }
 
 // ══════════════════════════════════════════════════════
@@ -1095,6 +1170,7 @@ function renderAll(){
   renderStocks();
   renderFDs();
   renderFunds();
+  renderCrypto();
   renderExpenses();
   renderBudgets();
   renderNetWorth();
@@ -1122,8 +1198,8 @@ function renderDash(){
   $('spark').innerHTML=svgSparkline(trendData(T.nw,12),200,80,'#3b82f6');
 
   // Donut allocation
-  const av=[T.banks,T.stocks,T.fdv,T.funds].filter(v=>v>0);
-  const al=['Banks','Stocks','FDs','Funds'].filter((_,i)=>[T.banks,T.stocks,T.fdv,T.funds][i]>0);
+  const av=[T.banks,T.stocks,T.fdv,T.funds,T.crypto].filter(v=>v>0);
+  const al=['Banks','Stocks','FDs','Funds','Crypto'].filter((_,i)=>[T.banks,T.stocks,T.fdv,T.funds,T.crypto][i]>0);
   $('ch-alloc').innerHTML=av.length?svgDonut(al,av,200):'<p style="color:var(--t2);padding:2rem;text-align:center;font-size:.82rem">Add assets to see allocation</p>';
 
   // Monthly expense bars
@@ -1167,15 +1243,25 @@ function renderBanks(){
   const banks=S.data.banks;
   const tot=banks.reduce((s,b)=>s+(+b.balance||0),0);
   setText('b-tot',fmt(tot));
-  $('banks-list').innerHTML=banks.length?banks.map(b=>`
-    <div class="gc itm">
+  $('banks-list').innerHTML=banks.length?banks.map(b=>{
+    // sum income and expenses for this account
+    const inc=S.data.income.filter(i=>i.account_id===b.id).reduce((s,i)=>s+(+i.amount||0),0);
+    const exp=S.data.expenses.filter(e=>e.paid_from===b.account_name).reduce((s,e)=>s+(+e.amount||0),0);
+    return `<div class="gc itm">
       <div class="ih">
         <div><div class="inm">${esc(b.account_name)}</div><div class="isub">${esc(b.bank_name)}</div></div>
         <span class="bdg">${esc(b.currency||'LKR')}</span>
       </div>
       <div class="iamt">${fmt(+b.balance)}</div>
-      <button class="bdel" onclick="rmItem('banks','${b.id}')">Delete</button>
-    </div>`).join(''):'<div class="emp">No bank accounts yet. Click "+ Add Account".</div>';
+      <div style="display:flex;gap:1rem;font-size:.78rem">
+        <span class="pos">↑ Income: ${fmt(inc)}</span>
+        <span class="neg">↓ Expenses: ${fmt(exp)}</span>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn bg" style="font-size:.78rem;padding:.38rem .8rem" onclick="showStatement('${b.id}')">📋 View Statement</button>
+        <button class="bdel" onclick="rmItem('banks','${b.id}')">Delete</button>
+      </div>
+    </div>`;}).join(''):'<div class="emp">No bank accounts yet. Click "+ Add Account".</div>';
 }
 
 // ── CARDS ─────────────────────────────────────────────────────────────
@@ -1277,20 +1363,45 @@ function renderFunds(){
     </div>`;}).join(''):'<div class="emp">No funds yet. Click "+ Add Fund".</div>';
 }
 
-// ── EXPENSES ──────────────────────────────────────────────────────────
+// ── CRYPTO ────────────────────────────────────────────────────────────
+const COIN_ICONS={'BTC':'₿','ETH':'Ξ','USDT':'₮','BNB':'◆','SOL':'◎','ADA':'₳','XRP':'✕','DOT':'●','DOGE':'Ð','MATIC':'⬡'};
+function renderCrypto(){
+  const wallets=S.data.crypto;
+  const tot=wallets.reduce((s,c)=>s+(+c.value_usd||0),0);
+  const el=$('cry-tot'); if(el) el.textContent='$'+tot.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  $('crypto-list').innerHTML=wallets.length?wallets.map(c=>{
+    const val=+c.value_lkr||0, usd=+c.value_usd||0;
+    const gain=(+c.current_price_usd||0)-(+c.buy_price_usd||0);
+    const gainPct=(+c.buy_price_usd)?gain/(+c.buy_price_usd)*100:0;
+    const icon=COIN_ICONS[c.coin_symbol?.toUpperCase()]||'🪙';
+    return `<div class="gc itm">
+      <div class="ih">
+        <div style="display:flex;align-items:center;gap:.65rem">
+          <div class="coin-icon">${icon}</div>
+          <div>
+            <div class="inm">${esc(c.wallet_name)}</div>
+            <div class="isub">${esc(c.coin_symbol)} · ${(+c.amount||0).toLocaleString()} coins</div>
+          </div>
+        </div>
+        <span class="bdg ${gain>=0?'pos':'neg'}">${gain>=0?'+':''}${gainPct.toFixed(1)}%</span>
+      </div>
+      <div class="iamt">${fmt(val)}</div>
+      <div class="isub">≈ $${fmtD(usd)} · Buy: $${fmtD(+c.buy_price_usd)} · Now: $${fmtD(+c.current_price_usd)}</div>
+      ${c.wallet_address?`<div class="crypto-addr">📍 ${esc(c.wallet_address)}</div>`:''}
+      <button class="bdel" onclick="rmItem('crypto','${c.id}')">Delete</button>
+    </div>`;}).join(''):'<div class="emp">No crypto wallets yet. Click "+ Add Wallet".</div>';
+}
 function renderExpenses(){
   const exps=S.data.expenses;
   const T=calcTotals();
   setText('ex-m',fmt(T.mExp)); setText('ex-w',fmt(T.wExp)); setText('ex-d',fmt(T.dExp));
 
-  // Category donut (this month)
   const now=new Date(), ms=new Date(now.getFullYear(),now.getMonth(),1);
   const cm={};
   exps.filter(e=>new Date(e.date)>=ms).forEach(e=>{ cm[e.category]=(cm[e.category]||0)+(+e.amount||0); });
   const cats=Object.keys(cm);
   $('ch-ecat').innerHTML=cats.length?svgDonut(cats,cats.map(c=>cm[c]),200):'<p style="color:var(--t2);padding:2rem;text-align:center;font-size:.82rem">No expenses this month</p>';
 
-  // Daily trend
   const lbs14=[],vs14=[];
   for(let i=13;i>=0;i--){
     const d=new Date(now); d.setDate(now.getDate()-i);
@@ -1300,15 +1411,15 @@ function renderExpenses(){
   }
   $('ch-etrnd').innerHTML=svgBars(lbs14,vs14,600,160);
 
-  // Table
-  $('ex-body').innerHTML=exps.length?exps.slice(0,60).map(e=>`
+  $('ex-body').innerHTML=exps.length?exps.slice(0,100).map(e=>`
     <tr>
       <td>${e.date}</td>
       <td><span class="bdg">${esc(e.category)}</span></td>
       <td>${esc(e.description||'')}</td>
+      <td><span class="pf-bdg">💳 ${esc(e.paid_from||'—')}</span></td>
       <td class="mono">${fmt(+e.amount)}</td>
       <td><button class="bdel" onclick="rmItem('expenses','${e.id}')">✕</button></td>
-    </tr>`).join(''):'<tr><td colspan="5" class="ec">No expenses yet. Click "+ Log Expense".</td></tr>';
+    </tr>`).join(''):'<tr><td colspan="6" class="ec">No expenses yet. Click "+ Log Expense".</td></tr>';
 }
 
 // ── BUDGETS ───────────────────────────────────────────────────────────
@@ -1361,7 +1472,8 @@ function renderNetWorth(){
     <div class="nwr"><span>Bank Accounts</span><span class="nwrv">${fmt(T.banks)}</span></div>
     <div class="nwr"><span>Fixed Deposits</span><span class="nwrv">${fmt(T.fdv)}</span></div>
     <div class="nwr"><span>Mutual Funds</span><span class="nwrv">${fmt(T.funds)}</span></div>
-    <div class="nwr"><span>Stock Portfolio</span><span class="nwrv">${fmt(T.stocks)}</span></div>`;
+    <div class="nwr"><span>Stock Portfolio</span><span class="nwrv">${fmt(T.stocks)}</span></div>
+    <div class="nwr"><span>Crypto Wallets</span><span class="nwrv">${fmt(T.crypto)}</span></div>`;
 
   // Liabilities: card outstandings + expenses
   const cardRows=S.data.cards.map(c=>{
@@ -1373,8 +1485,8 @@ function renderNetWorth(){
     +(S.data.cards.length===0&&T.totExp===0?'<div class="nwr"><span>No liabilities 🎉</span><span class="nwrv">—</span></div>':'');
 
   // Horizontal bar chart
-  const lbls=['Banks','Fixed Deps.','Funds','Stocks','Card Debt','Expenses'];
-  const vals=[T.banks,T.fdv,T.funds,T.stocks,-T.cards,-T.totExp];
+  const lbls=['Banks','Fixed Deps.','Funds','Stocks','Crypto','Card Debt','Expenses'];
+  const vals=[T.banks,T.fdv,T.funds,T.stocks,T.crypto,-T.cards,-T.totExp];
   $('ch-nwcomp').innerHTML=svgHBars(lbls,vals,700,180);
 }
 
@@ -1444,10 +1556,11 @@ const FORMS={
     table:'expenses',
     stateKey:'expenses',
     fields:[
-      {id:'date',        lbl:'Date',        type:'date'},
-      {id:'category',    lbl:'Category',    type:'select',opts:['Food','Transport','Utilities','Entertainment','Healthcare','Shopping','Education','Others']},
-      {id:'description', lbl:'Description', type:'text',  ph:'What was this for?'},
-      {id:'amount',      lbl:'Amount (LKR)',type:'number',ph:'0'},
+      {id:'date',        lbl:'Date',          type:'date'},
+      {id:'category',    lbl:'Category',      type:'select',opts:['Food','Transport','Utilities','Entertainment','Healthcare','Shopping','Education','Others']},
+      {id:'description', lbl:'Description',   type:'text',  ph:'What was this for?'},
+      {id:'paid_from',   lbl:'Paid From',     type:'select',opts:['__DYNAMIC__']},
+      {id:'amount',      lbl:'Amount (LKR)',  type:'number',ph:'0'},
     ]
   },
   budgets:{
@@ -1459,24 +1572,89 @@ const FORMS={
       {id:'budget_limit',lbl:'Monthly Limit (LKR)',type:'number',ph:'0'},
     ]
   },
+  crypto:{
+    title:'Add Crypto Wallet',
+    table:'crypto_wallets',
+    stateKey:'crypto',
+    fields:[
+      {id:'wallet_name',      lbl:'Wallet Name',          type:'text',  ph:'e.g. My Bitcoin Wallet'},
+      {id:'coin_symbol',      lbl:'Coin Symbol',          type:'select',opts:['BTC','ETH','USDT','BNB','SOL','ADA','XRP','DOT','DOGE','MATIC','LTC','AVAX','OTHER']},
+      {id:'amount',           lbl:'Amount (coins held)',  type:'number',ph:'0'},
+      {id:'buy_price_usd',    lbl:'Buy Price (USD)',      type:'number',ph:'0'},
+      {id:'current_price_usd',lbl:'Current Price (USD)',  type:'number',ph:'0'},
+      {id:'value_usd',        lbl:'Total Value (USD)',    type:'number',ph:'0'},
+      {id:'value_lkr',        lbl:'Total Value (LKR)',    type:'number',ph:'0'},
+      {id:'wallet_address',   lbl:'Wallet Address (optional)',type:'text',ph:'0x...'},
+    ]
+  },
+  income:{
+    title:'Add Income Entry',
+    table:'income',
+    stateKey:'income',
+    fields:[
+      {id:'date',        lbl:'Date',          type:'date'},
+      {id:'account_id',  lbl:'Account',       type:'select',opts:['__BANK__']},
+      {id:'source',      lbl:'Income Source', type:'select',opts:['Salary','Freelance','Business','Interest','Dividend','Rental','Gift','Refund','Other']},
+      {id:'description', lbl:'Description',   type:'text',  ph:'e.g. Monthly salary'},
+      {id:'amount',      lbl:'Amount (LKR)',  type:'number',ph:'0'},
+    ]
+  },
 };
 
 let curModal=null;
+
+// Build dynamic "paid from" options from banks + cards + crypto wallets
+function getPaidFromOptions(){
+  const opts=[];
+  S.data.banks.forEach(b=>opts.push(b.account_name+' ('+b.bank_name+')'));
+  S.data.cards.forEach(c=>opts.push(c.card_name+' ('+c.bank+')'));
+  S.data.crypto.forEach(c=>opts.push(c.coin_symbol+' Wallet — '+c.wallet_name));
+  if(!opts.length) opts.push('Cash');
+  opts.push('Cash','Other');
+  return [...new Set(opts)];
+}
+
+// Build bank account options for income form
+function getBankOptions(){
+  if(!S.data.banks.length) return [{v:'none',l:'— Add a bank account first —'}];
+  return S.data.banks.map(b=>({v:b.id,l:b.account_name+' · '+b.bank_name}));
+}
 
 function openModal(key){
   curModal=key;
   const F=FORMS[key];
   setText('mtitle',F.title);
+
   $('mbody').innerHTML=F.fields.map(f=>{
-    if(f.type==='select') return `<div class="mfg"><label>${f.lbl}</label>
-      <select id="mf-${f.id}">${f.opts.map(o=>`<option value="${o}">${o}</option>`).join('')}</select></div>`;
+    if(f.type==='select'){
+      let opts=f.opts;
+      if(opts[0]==='__DYNAMIC__') opts=getPaidFromOptions();
+      if(opts[0]==='__BANK__'){
+        const bOpts=getBankOptions();
+        return `<div class="mfg"><label>${f.lbl}</label>
+          <select id="mf-${f.id}">${bOpts.map(o=>`<option value="${esc(o.v)}">${esc(o.l)}</option>`).join('')}</select></div>`;
+      }
+      return `<div class="mfg"><label>${f.lbl}</label>
+        <select id="mf-${f.id}">${opts.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join('')}</select></div>`;
+    }
     const def=f.type==='date'?` value="${today()}"`:f.type==='number'?' value="0"':'';
+    // Stock symbol gets autocomplete wrapper
+    if(key==='stocks' && f.id==='symbol'){
+      return `<div class="mfg"><label>${f.lbl}</label>
+        <div class="ac-wrap">
+          <input type="text" id="mf-symbol" placeholder="${f.ph||''}" autocomplete="off"/>
+          <div class="ac-drop dn" id="ac-drop"></div>
+        </div></div>`;
+    }
     return `<div class="mfg"><label>${f.lbl}</label>
       <input type="${f.type}" id="mf-${f.id}" placeholder="${f.ph||''}"${def}/></div>`;
   }).join('');
+
   $('mov').classList.remove('dn');
-  // auto-focus first text field
   setTimeout(()=>$('mbody').querySelector('input[type=text]')?.focus(),40);
+
+  // Wire up stock autocomplete after DOM is built
+  if(key==='stocks') wireStockAutocomplete();
 }
 
 function closeModal(){ $('mov').classList.add('dn'); curModal=null; }
@@ -1537,10 +1715,201 @@ async function rmItem(key,id){
 }
 window.rmItem=rmItem;
 
+// ── STOCK AUTOCOMPLETE ────────────────────────────────────────────────
+const STOCK_DB=[
+  // International
+  {s:'AAPL',n:'Apple Inc.',ex:'NASDAQ'},{s:'MSFT',n:'Microsoft Corporation',ex:'NASDAQ'},
+  {s:'GOOGL',n:'Alphabet Inc.',ex:'NASDAQ'},{s:'AMZN',n:'Amazon.com Inc.',ex:'NASDAQ'},
+  {s:'TSLA',n:'Tesla Inc.',ex:'NASDAQ'},{s:'NVDA',n:'NVIDIA Corporation',ex:'NASDAQ'},
+  {s:'META',n:'Meta Platforms Inc.',ex:'NASDAQ'},{s:'NFLX',n:'Netflix Inc.',ex:'NASDAQ'},
+  {s:'AMD',n:'Advanced Micro Devices',ex:'NASDAQ'},{s:'INTC',n:'Intel Corporation',ex:'NASDAQ'},
+  {s:'JPM',n:'JPMorgan Chase & Co.',ex:'NYSE'},{s:'BAC',n:'Bank of America Corp.',ex:'NYSE'},
+  {s:'V',n:'Visa Inc.',ex:'NYSE'},{s:'MA',n:'Mastercard Inc.',ex:'NYSE'},
+  {s:'WMT',n:'Walmart Inc.',ex:'NYSE'},{s:'KO',n:'Coca-Cola Company',ex:'NYSE'},
+  {s:'DIS',n:'The Walt Disney Company',ex:'NYSE'},{s:'SPOT',n:'Spotify Technology',ex:'NYSE'},
+  {s:'UBER',n:'Uber Technologies',ex:'NYSE'},{s:'BABA',n:'Alibaba Group',ex:'NYSE'},
+  // CSE (Colombo Stock Exchange)
+  {s:'COMB.N0000',n:'Commercial Bank of Ceylon',ex:'CSE'},{s:'DIAL.N0000',n:'Dialog Axiata PLC',ex:'CSE'},
+  {s:'JKH.N0000',n:'John Keells Holdings PLC',ex:'CSE'},{s:'SAMP.N0000',n:'Sampath Bank PLC',ex:'CSE'},
+  {s:'HNB.N0000',n:'Hatton National Bank PLC',ex:'CSE'},{s:'LOLC.N0000',n:'LOLC Holdings PLC',ex:'CSE'},
+  {s:'CARS.N0000',n:'Carson Cumberbatch PLC',ex:'CSE'},{s:'DIPD.N0000',n:'Dipped Products PLC',ex:'CSE'},
+  {s:'VONE.N0000',n:'Vision Care Optical Centres',ex:'CSE'},{s:'BRWN.N0000',n:'Browns Investments PLC',ex:'CSE'},
+  {s:'CTHR.N0000',n:'C T Holdings PLC',ex:'CSE'},{s:'RICH.N0000',n:'Richard Pieris & Company',ex:'CSE'},
+  {s:'KAPI.N0000',n:'Kapila Holdings PLC',ex:'CSE'},{s:'GREG.N0000',n:'Greens Holdings PLC',ex:'CSE'},
+  {s:'NAMU.N0000',n:'Nations Lanka Finance',ex:'CSE'},{s:'TJL.N0000',n:'Textured Jersey Lanka',ex:'CSE'},
+];
+
+function wireStockAutocomplete(){
+  const inp=$('mf-symbol');
+  const drop=$('ac-drop');
+  if(!inp||!drop) return;
+
+  let debounce=null;
+  inp.addEventListener('input',()=>{
+    clearTimeout(debounce);
+    const q=inp.value.trim().toUpperCase();
+    if(q.length<2){ drop.classList.add('dn'); return; }
+    debounce=setTimeout(()=>showAC(q),120);
+  });
+
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Escape') drop.classList.add('dn');
+  });
+
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.ac-wrap')) drop.classList.add('dn');
+  },{once:false});
+}
+
+function showAC(q){
+  const drop=$('ac-drop');
+  if(!drop) return;
+  const results=STOCK_DB.filter(s=>s.s.startsWith(q)||s.n.toUpperCase().includes(q)).slice(0,8);
+
+  if(!results.length){
+    // Try Finnhub search if key configured
+    if(CFG.FINNHUB_KEY!=='YOUR_FINNHUB_KEY'){
+      drop.innerHTML='<div class="ac-loading">Searching…</div>';
+      drop.classList.remove('dn');
+      fetch(`https://finnhub.io/api/v1/search?q=${encodeURIComponent(q)}&token=${CFG.FINNHUB_KEY}`)
+        .then(r=>r.json()).then(d=>{
+          const items=(d.result||[]).slice(0,8);
+          if(!items.length){ drop.classList.add('dn'); return; }
+          drop.innerHTML=items.map(i=>`
+            <div class="ac-item" data-sym="${esc(i.symbol)}" data-name="${esc(i.description)}">
+              <span class="ac-sym">${esc(i.symbol)}</span>
+              <span class="ac-name">${esc(i.description)}</span>
+            </div>`).join('');
+          wireACItems();
+        }).catch(()=>drop.classList.add('dn'));
+    } else { drop.classList.add('dn'); }
+    return;
+  }
+
+  drop.innerHTML=results.map(r=>`
+    <div class="ac-item" data-sym="${esc(r.s)}" data-name="${esc(r.n)}">
+      <span class="ac-sym">${esc(r.s)}</span>
+      <span class="ac-name">${esc(r.n)} <span class="bdg">${r.ex}</span></span>
+    </div>`).join('');
+  drop.classList.remove('dn');
+  wireACItems();
+}
+
+function wireACItems(){
+  const drop=$('ac-drop');
+  drop.querySelectorAll('.ac-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+      const sym=item.dataset.sym;
+      const name=item.dataset.name;
+      const symInp=$('mf-symbol');
+      const nameInp=$('mf-company_name');
+      if(symInp) symInp.value=sym;
+      if(nameInp) nameInp.value=name;
+      drop.classList.add('dn');
+      // Fetch current price
+      if(sym && CFG.FINNHUB_KEY!=='YOUR_FINNHUB_KEY'){
+        fetchPrice(sym).then(p=>{
+          const cp=$('mf-current_price');
+          if(p&&cp) cp.value=p.toFixed(2);
+        });
+      }
+      $('mf-shares')?.focus();
+    });
+  });
+}
+
+// ── STATEMENT PANEL ───────────────────────────────────────────────────
+window.showStatement=function(bankId){
+  S.stmtBankId=bankId;
+  const bank=S.data.banks.find(b=>b.id==bankId);
+  if(!bank) return;
+  setText('stmt-title', bank.account_name);
+  setText('stmt-sub', bank.bank_name+' · '+esc(bank.currency||'LKR'));
+  renderStatement(bankId);
+  $('stmt-panel').classList.add('open');
+  $('stmt-bd').classList.add('on');
+};
+
+$('stmt-close').addEventListener('click',()=>{
+  $('stmt-panel').classList.remove('open');
+  $('stmt-bd').classList.remove('on');
+  S.stmtBankId=null;
+});
+$('stmt-bd').addEventListener('click',()=>{
+  $('stmt-panel').classList.remove('open');
+  $('stmt-bd').classList.remove('on');
+});
+
+$('stmt-add-income').addEventListener('click',()=>{
+  closeStmt();
+  openModal('income');
+  // Pre-select the current bank in income form after modal opens
+  setTimeout(()=>{
+    const sel=$('mf-account_id');
+    if(sel&&S.stmtBankId) sel.value=S.stmtBankId;
+  },80);
+});
+
+function closeStmt(){
+  $('stmt-panel').classList.remove('open');
+  $('stmt-bd').classList.remove('on');
+}
+
+function renderStatement(bankId){
+  const bank=S.data.banks.find(b=>b.id==bankId);
+  if(!bank) return;
+
+  const incomeEntries=S.data.income.filter(i=>i.account_id==bankId);
+  const expenseEntries=S.data.expenses.filter(e=>e.paid_from&&e.paid_from.startsWith(bank.account_name));
+
+  const totalInc=incomeEntries.reduce((s,i)=>s+(+i.amount||0),0);
+  const totalExp=expenseEntries.reduce((s,e)=>s+(+e.amount||0),0);
+  const net=totalInc-totalExp;
+
+  // Merge and sort all transactions by date desc
+  const all=[
+    ...incomeEntries.map(i=>({...i,_type:'inc',_date:i.date,_label:i.source+(i.description?' — '+i.description:'')})),
+    ...expenseEntries.map(e=>({...e,_type:'exp',_date:e.date,_label:e.category+(e.description?' — '+e.description:'')})),
+  ].sort((a,b)=>b._date.localeCompare(a._date));
+
+  // Group by month
+  const byMonth={};
+  all.forEach(t=>{
+    const mk=t._date.slice(0,7); // YYYY-MM
+    if(!byMonth[mk]) byMonth[mk]=[];
+    byMonth[mk].push(t);
+  });
+  const months=Object.keys(byMonth).sort((a,b)=>b.localeCompare(a));
+
+  const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  $('stmt-body').innerHTML=`
+    <div class="stmt-summary">
+      <div class="stmt-stat"><label>Total Income</label><div class="sv pos">${fmt(totalInc)}</div></div>
+      <div class="stmt-stat"><label>Total Expenses</label><div class="sv neg">${fmt(totalExp)}</div></div>
+      <div class="stmt-stat"><label>Net Cash Flow</label><div class="sv ${net>=0?'pos':'neg'}">${fmt(net)}</div></div>
+    </div>
+    ${months.length?months.map(mk=>{
+      const [y,m]=mk.split('-');
+      const mLabel=mn[+m-1]+' '+y;
+      const rows=byMonth[mk].map(t=>`
+        <div class="stmt-row stmt-${t._type}">
+          <div class="stmt-icon">${t._type==='inc'?'↑':'↓'}</div>
+          <div class="stmt-info">
+            <div class="stmt-desc">${esc(t._label)}</div>
+            <div class="stmt-meta">${t._date}</div>
+          </div>
+          <div class="stmt-amt">${t._type==='inc'?'+':'−'}${fmt(+t.amount)}</div>
+        </div>`).join('');
+      return `<div class="stmt-month-lbl">${mLabel}</div>${rows}`;
+    }).join(''):'<div class="stmt-empty">No transactions yet.<br>Add income or log expenses paid from this account.</div>'}`;
+}
+
 // ── BUTTON → MODAL WIRING ─────────────────────────────────────────────
 const BTN_MAP={
   'badd':'banks','cadd':'cards','sadd':'stocks',
-  'fdadd':'fd','funadd':'funds','exadd':'expenses','budadd':'budgets'
+  'fdadd':'fd','funadd':'funds','exadd':'expenses',
+  'budadd':'budgets','cryptoadd':'crypto'
 };
 Object.entries(BTN_MAP).forEach(([bid,key])=>{
   const b=$(bid); if(b) b.addEventListener('click',()=>openModal(key));
@@ -1626,6 +1995,33 @@ create table budgets (
 );
 alter table budgets enable row level security;
 create policy "own" on budgets for all using (auth.uid()=user_id);
+
+create table crypto_wallets (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  wallet_name text not null, coin_symbol text not null,
+  amount numeric(20,8) not null default 0,
+  buy_price_usd numeric(18,6) default 0,
+  current_price_usd numeric(18,6) default 0,
+  value_usd numeric(18,2) default 0,
+  value_lkr numeric(18,2) default 0,
+  wallet_address text,
+  created_at timestamptz default now()
+);
+alter table crypto_wallets enable row level security;
+create policy "own" on crypto_wallets for all using (auth.uid()=user_id);
+
+create table income (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  account_id uuid, date date not null default current_date,
+  source text not null, description text,
+  amount numeric(15,2) not null,
+  created_at timestamptz default now()
+);
+alter table income enable row level security;
+create policy "own" on income for all using (auth.uid()=user_id);
+create index on income(user_id, date);
 
 ═══════════════════════════════════════════════════════════════════════════ -->
 </body>
