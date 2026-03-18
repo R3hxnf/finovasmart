@@ -148,12 +148,42 @@ img{max-width:100%}
 .ni.on{background:linear-gradient(135deg,rgba(59,130,246,.16),rgba(59,130,246,.05));
   color:var(--blue);border-color:rgba(59,130,246,.24)}.ni.on .ni-dot{color:var(--blue)}
 .sbf{padding:.95rem 1.2rem;border-top:1px solid var(--bd)}
-.ubadge{display:flex;align-items:center;gap:.7rem;margin-bottom:.85rem}
+
+/* Avatar */
 .uav{width:36px;height:36px;border-radius:50%;
   background:linear-gradient(135deg,var(--blue),var(--purple));
   display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;color:#fff;flex-shrink:0}
 .un{font-size:.875rem;font-weight:600}.ur{font-size:.72rem;color:var(--t2)}
-.sbacts{display:flex;gap:.5rem}
+
+/* Desktop profile banner — sits at bottom of sidebar */
+.ubadge{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem;
+  cursor:pointer;border-radius:var(--r10);padding:.45rem .5rem;margin:0 -.5rem .5rem;
+  transition:background var(--tr)}
+.ubadge:hover{background:var(--gl2)}
+.ubadge-desktop{display:flex;align-items:center;gap:.7rem;cursor:pointer;
+  border-radius:var(--r10);padding:.45rem .5rem;margin:0 -.5rem .5rem;
+  transition:background var(--tr)}
+.ubadge-desktop:hover{background:var(--gl2)}
+
+/* Mobile profile banner — shown at top of drawer, hidden on desktop */
+.sb-profile-banner{
+  display:none;
+  align-items:center;gap:.9rem;
+  padding:1.1rem 1.2rem 1rem;
+  border-bottom:1px solid var(--bd);
+  cursor:pointer;
+  background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(167,139,250,.05));
+  -webkit-tap-highlight-color:transparent;
+  transition:background var(--tr);
+}
+.sb-profile-banner:active{background:var(--gl2)}
+.sb-profile-banner .uav{width:44px;height:44px;font-size:1.1rem;flex-shrink:0}
+.sb-profile-info{flex:1;min-width:0}
+.sb-profile-info .un{font-size:1rem;font-weight:700;letter-spacing:-.01em}
+.sb-profile-info .ur{font-size:.74rem;color:var(--t2);margin-top:.1rem;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-signout{opacity:.5;font-size:.85rem;flex-shrink:0;transition:opacity var(--tr)}
+.sb-signout:hover{opacity:1}
 .sbbd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
 .sbbd.on{display:block}
 
@@ -166,7 +196,6 @@ img{max-width:100%}
 .hbtn{display:none;font-size:1.3rem;color:var(--t2);cursor:pointer}
 #tbtitle{font-size:.98rem;font-weight:600;flex:1}
 .tbr{display:flex;align-items:center;gap:.7rem;margin-left:auto}
-#tmtog{display:none}
 .live{display:flex;align-items:center;gap:.38rem;font-size:.72rem;color:var(--green);font-weight:600}
 .ldot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:lpulse 2s ease-in-out infinite}
 @keyframes lpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.78)}}
@@ -324,7 +353,19 @@ img{max-width:100%}
 .mfg label{font-size:.72rem;font-weight:700;color:var(--t2);letter-spacing:.04em;text-transform:uppercase}
 .mfg input,.mfg select{width:100%;padding:.68rem .95rem;background:var(--ele);
   border:1.5px solid var(--bd);border-radius:var(--r10);font-size:.9rem;
+  height:48px;box-sizing:border-box;
   transition:border var(--tr),box-shadow var(--tr);color:var(--t1)}
+.mfg input[type="date"]{
+  color-scheme:dark;
+  background:var(--ele);color:var(--t1);
+}
+[data-theme=light] .mfg input[type="date"]{
+  color-scheme:light;
+  background:var(--ele);color:var(--t1);
+}
+.mfg textarea{width:100%;padding:.68rem .95rem;background:var(--ele);
+  border:1.5px solid var(--bd);border-radius:var(--r10);font-size:.9rem;
+  transition:border var(--tr),box-shadow var(--tr);color:var(--t1);resize:vertical;min-height:80px;box-sizing:border-box}
 .mfg input:focus,.mfg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--bgl)}
 .mfg select option{background:var(--ele);color:var(--t1)}
 .mcl{width:30px;height:30px;display:flex;align-items:center;justify-content:center;
@@ -399,8 +440,6 @@ img{max-width:100%}
 .alogo-svg{width:44px;height:44px;flex-shrink:0}
 
 .emp{grid-column:1/-1;text-align:center;color:var(--t2);padding:2.5rem;font-size:.875rem}
-.stup{font-size:.75rem;color:var(--t2);margin-top:.2rem}
-
 /* stock price badge */
 .live-price{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;
   background:rgba(74,222,128,.1);color:var(--green);border-radius:99px;
@@ -486,98 +525,265 @@ img{max-width:100%}
 /* ── TOPBAR MOBILE ACTIONS ── */
 .tb-actions{display:none;align-items:center;gap:.35rem;margin-left:.25rem}
 @media(max-width:860px){
-  .tb-actions{display:flex}
-  .tb-actions .iBtn{width:34px;height:34px;font-size:.95rem;flex-shrink:0}
-  /* Hide duplicate sidebar theme+logout on mobile — they're in the topbar */
-  .sbacts{display:none}
+  /* Show mobile profile banner at top of drawer */
+  .sb-profile-banner{display:flex}
+  /* Hide the desktop banner inside sbf on mobile */
+  .ubadge-desktop{display:none!important}
+
+  /* Topbar: push theme + refresh to the far right corner */
+  .tb{padding:.75rem 1rem}
+  .tbr{margin-left:auto;gap:.4rem}
+  .tbr .live{display:none}         /* hide "Live" text on mobile */
+  #tb-qadd{display:none}           /* FAB handles quick-add on mobile */
+  .tbr .iBtn{width:38px;height:38px}
 }
 
-/* ════════════════════ RESPONSIVE ════════════════════ */
-@media(max-width:1100px){
-  .sgrid{grid-template-columns:repeat(2,1fr)}
-  .cgrid{grid-template-columns:1fr}.wide{grid-column:1}
-}
-/* ── FAB (central + button) ── */
-.fab{
-  position:fixed;bottom:80px;right:1.4rem;
-  width:54px;height:54px;border-radius:50%;
-  background:var(--blue);color:#fff;font-size:1.8rem;line-height:1;
-  display:none;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(59,130,246,.55);
-  z-index:300;border:none;cursor:pointer;
-  transition:transform .18s cubic-bezier(.4,0,.2,1),box-shadow .18s;
-}
-.fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(59,130,246,.7)}
-.fab:active{transform:scale(.95)}
-@media(max-width:860px){.fab{display:flex}}
-.fab-menu{
-  position:fixed;bottom:148px;right:1.4rem;
-  display:flex;flex-direction:column;gap:.5rem;
-  z-index:300;align-items:flex-end;
-  animation:sIn .18s ease both;
-}
-.fab-item{
-  background:var(--ele);color:var(--t1);
-  border:1.5px solid var(--bd);border-radius:var(--r10);
-  padding:.6rem 1.1rem;font-size:.85rem;font-weight:600;
-  cursor:pointer;box-shadow:var(--sh);white-space:nowrap;
-  transition:all var(--tr);
-}
-.fab-item:hover{background:var(--gl2);border-color:var(--bd2)}
 /* ── CASH STATEMENT ── */
-.cstmt-row{display:flex;align-items:center;gap:.7rem;padding:.6rem 0;
-  border-bottom:1px solid var(--bd);font-size:.84rem}
+.cstmt-row{display:flex;align-items:center;gap:.7rem;padding:.6rem 0;border-bottom:1px solid var(--bd);font-size:.84rem}
 .cstmt-row:last-child{border-bottom:none}
 .cstmt-in .cstmt-amt{color:var(--green);font-weight:700;font-variant-numeric:tabular-nums}
 .cstmt-out .cstmt-amt{color:var(--red);font-weight:700;font-variant-numeric:tabular-nums}
 .cstmt-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
 .cstmt-in .cstmt-icon{background:rgba(74,222,128,.12)}
 .cstmt-out .cstmt-icon{background:rgba(248,113,113,.12)}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — TABLET
+══════════════════════════════════════════════════════ */
+@media(max-width:1100px){
+  .sgrid{grid-template-columns:repeat(2,1fr)}
+  .cgrid{grid-template-columns:1fr}.wide{grid-column:1}
+}
+
+/* ══════════════════════════════════════════════════════
+   MOBILE NAVIGATION BAR
+══════════════════════════════════════════════════════ */
+/* FAB */
+.fab{
+  position:fixed;bottom:76px;right:1.2rem;
+  width:52px;height:52px;border-radius:50%;
+  background:var(--blue);color:#fff;font-size:1.7rem;line-height:1;
+  display:none;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(59,130,246,.55);
+  z-index:300;border:none;cursor:pointer;
+  transition:transform .18s cubic-bezier(.4,0,.2,1),box-shadow .18s;
+}
+.fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(59,130,246,.7)}
+.fab:active{transform:scale(.94)}
+@media(max-width:860px){.fab{display:flex}}
+.fab-menu{
+  position:fixed;bottom:144px;right:1.2rem;
+  display:flex;flex-direction:column;gap:.45rem;
+  z-index:300;align-items:flex-end;
+  animation:sIn .18s ease both;
+}
+.fab-item{
+  background:var(--ele);color:var(--t1);
+  border:1.5px solid var(--bd);border-radius:var(--r10);
+  padding:.65rem 1.1rem;font-size:.85rem;font-weight:600;
+  cursor:pointer;box-shadow:var(--sh);white-space:nowrap;
+  transition:all var(--tr);
+}
+.fab-item:active{transform:scale(.97)}
+
+/* Bottom nav bar */
 .mobile-nav{
   display:none;
   position:fixed;bottom:0;left:0;right:0;
   background:var(--sur);
-  border-top:1.5px solid var(--bd);
+  border-top:1px solid var(--bd);
   z-index:200;
-  padding:0 0 env(safe-area-inset-bottom,0);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
+  padding-bottom:env(safe-area-inset-bottom,0);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
 }
 .mobile-nav{display:none;flex-direction:row;align-items:stretch}
 .mni{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:2px;padding:.6rem .3rem .55rem;
-  font-size:.62rem;font-weight:600;color:var(--t2);cursor:pointer;
-  transition:color var(--tr);text-align:center;min-width:0;border:none;background:none;
-  text-decoration:none;
+  gap:3px;padding:.55rem .2rem calc(.55rem + env(safe-area-inset-bottom,0));
+  font-size:.6rem;font-weight:600;color:var(--t2);cursor:pointer;
+  transition:color .15s;text-align:center;min-width:0;border:none;background:none;
+  text-decoration:none;-webkit-tap-highlight-color:transparent;
 }
-.mni-icon{font-size:1.25rem;line-height:1}
+.mni-icon{font-size:1.3rem;line-height:1;transition:transform .15s}
 .mni.on{color:var(--blue)}
+.mni.on .mni-icon{transform:scale(1.12)}
 .mni-more{color:var(--t2)}
 
+/* ══════════════════════════════════════════════════════
+   MOBILE — 860px and below
+══════════════════════════════════════════════════════ */
 @media(max-width:860px){
+  /* Layout */
   :root{--sw:0px}
-  .sb{width:272px;transform:translateX(-100%)}
-  .sb.open{transform:translateX(0)}
+  .sb{width:280px;transform:translateX(-100%);border-radius:0 var(--r16) var(--r16) 0}
+  .sb.open{transform:translateX(0);box-shadow:8px 0 40px rgba(0,0,0,.4)}
   #sbclose{display:flex}
-  .mn{margin-left:0;padding-bottom:64px}.hbtn{display:flex}
-  #thtog{display:none}#tmtog{display:flex}
-  .ct{padding:1.1rem}.hero{flex-direction:column;gap:1rem}
-  .hval{font-size:1.9rem}
-  .nwg,.pst,.esum{grid-template-columns:1fr}
-  .sgrid{grid-template-columns:1fr 1fr}
+  .mn{margin-left:0;padding-bottom:72px}
+  .hbtn{display:flex}
   .mobile-nav{display:flex}
   .tb .hbtn{display:flex}
-  .stmt-panel{width:100vw}
+  .tb-actions{display:flex}
+  .tb-actions .iBtn{width:36px;height:36px;font-size:.95rem;flex-shrink:0}
+
+  /* Content */
+  .ct{padding:.9rem .9rem 1.5rem}
+  .sh{flex-direction:column;align-items:flex-start;gap:.6rem;margin-bottom:1.2rem}
+  .sh h1{font-size:1.45rem}
+  .sh .btn{align-self:stretch;justify-content:center}
+
+  /* Hero */
+  .hero{flex-direction:column;gap:0}
+  .hval{font-size:2rem}
+  .hero-split{flex-direction:column!important}
+  .hero-split .hero-half+.hero-half{border-left:none!important;border-top:1px solid var(--bd)!important;background:none!important}
+
+  /* Stat grid — 2 columns */
+  .sgrid{grid-template-columns:repeat(2,1fr);gap:.7rem}
+  .sc{padding:.9rem 1rem;gap:.7rem}
+  .sicon{font-size:1.5rem}
+  .sval{font-size:1rem}
+
+  /* Charts */
+  .cgrid{grid-template-columns:1fr}
+  .wide{grid-column:1}
+  .cc{padding:1rem}
+
+  /* Cards/items grid */
+  .ig{grid-template-columns:1fr;gap:.8rem}
+  .itm{padding:1.1rem}
+
+  /* Statement panel */
+  .stmt-panel{width:100vw;border-radius:0}
+  .stmt-body{padding:1rem}
+  .stmt-summary{grid-template-columns:1fr 1fr}
+
+  /* Net worth */
+  .nwg{grid-template-columns:1fr;gap:.8rem}
+  .pst,.esum{grid-template-columns:1fr 1fr;gap:.9rem}
+
+  /* Loans */
+  .loan-card .gc{padding:.45rem .6rem}
+
+  /* Calendar */
+  .cal-cell{min-height:52px;padding:.25rem .3rem}
+  .cal-date{font-size:.75rem}
+
+  /* Topbar */
+  .tbr{gap:.5rem}
+  .tbr .live{display:none}
+  #tb-qadd{display:none}
+
+  /* Modal */
+  .mdl{max-width:100%;border-radius:var(--r16) var(--r16) 0 0;max-height:92vh}
+  .mov{align-items:flex-end;padding:0}
+  .mb{padding:1rem}
+  .mh{padding:1rem 1rem 0}
+  .mf{padding:0 1rem 1rem;gap:.5rem}
+  .mf .btn{flex:1;padding:.72rem}
 }
+
+/* ══════════════════════════════════════════════════════
+   MOBILE — 520px and below (small phones)
+══════════════════════════════════════════════════════ */
 @media(max-width:520px){
-  .sgrid{grid-template-columns:1fr}
-  .hval,.bnrv{font-size:1.65rem}
-  .sh h1{font-size:1.4rem}
-  .sh{flex-direction:column;align-items:flex-start}
+  /* Typography */
+  body{font-size:14px}
+  .sh h1{font-size:1.3rem}
+  .hval,.bnrv{font-size:1.6rem}
+
+  /* Single column stats on very small screens */
+  .sgrid{grid-template-columns:1fr 1fr;gap:.6rem}
+  .sc{padding:.8rem .9rem}
+  .sicon{font-size:1.35rem}
+  .sval{font-size:.92rem;margin-top:.1rem}
+  .sv label{font-size:.62rem}
+
+  /* Portfolio */
+  .pst{grid-template-columns:1fr 1fr}
+
+  /* Banner */
+  .bnrv{font-size:1.5rem}
+  .bnr{padding:1.1rem 1.3rem}
+
+  /* Content padding */
+  .ct{padding:.75rem .75rem 1.5rem}
+
+  /* Section header */
+  .sh{gap:.5rem;margin-bottom:1rem}
+
+  /* Tables — hide less critical columns */
+  .tbl th:nth-child(3),.tbl td:nth-child(3),
   .tbl th:nth-child(4),.tbl td:nth-child(4),
   .tbl th:nth-child(5),.tbl td:nth-child(5){display:none}
-  .stmt-summary{grid-template-columns:1fr 1fr}
+  .tbl td,.tbl th{padding:.65rem .7rem;font-size:.78rem}
+
+  /* Expense table keep date + cat + amount + del */
+  #ex-body tr td:nth-child(4){display:none}
+
+  /* Statement */
+  .stmt-summary{grid-template-columns:1fr}
+
+  /* Item cards */
+  .itm{padding:1rem}
+  .iamt{font-size:1.3rem}
+
+  /* Net worth */
+  .nwtot{font-size:.82rem}
+  .nwr{font-size:.8rem}
+
+  /* Loans compact */
+  .loan-card>div[style*="grid-template-columns:1fr 1fr 1fr"]{
+    grid-template-columns:1fr 1fr!important
+  }
+
+  /* Calendar */
+  .cal-cell{min-height:44px;padding:.2rem .2rem}
+  .cal-date{font-size:.68rem}
+  .cal-day-hdr{font-size:.58rem;padding:.3rem 0}
+
+  /* Auth card */
+  .acard{padding:1.8rem 1.4rem}
+
+  /* Cash page chart hide on tiny screens */
+  #ch-cashflow{display:none}
+}
+
+/* ══════════════════════════════════════════════════════
+   MOBILE — Touch interaction polish
+══════════════════════════════════════════════════════ */
+@media(hover:none){
+  /* Remove hover transforms that feel laggy on touch */
+  .itm:hover,.sc:hover,.gc.itm:hover{transform:none}
+  .bp:hover{transform:none;box-shadow:none}
+  /* Larger tap targets */
+  .bdel{padding:.4rem .8rem;font-size:.78rem;min-height:36px}
+  .transfer-btn,.mature-btn{padding:.42rem .85rem;font-size:.78rem;min-height:36px}
+  .iBtn{width:40px;height:40px}
+  /* Active state for touch feedback */
+  .btn:active{opacity:.82;transform:scale(.98)}
+  .gc.itm:active{opacity:.9}
+  .bdel:active{opacity:.75}
+}
+
+/* ══════════════════════════════════════════════════════
+   AUTH — Mobile login card
+══════════════════════════════════════════════════════ */
+@media(max-width:480px){
+  #auth-ov{align-items:flex-end;padding:0}
+  .acard{
+    border-radius:var(--r22) var(--r22) 0 0;
+    padding:1.8rem 1.4rem calc(1.8rem + env(safe-area-inset-bottom,0));
+    max-width:100%;width:100%;animation:slideUp .38s cubic-bezier(.4,0,.2,1) both;
+  }
+  @keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+  .alogo-t{font-size:1.5rem}
+  .atag{font-size:.84rem;margin-bottom:1.4rem}
+  .orb.o3{display:none}
+  /* Inputs larger touch targets */
+  .fg input{padding:.82rem 1rem;font-size:16px} /* 16px prevents iOS zoom */
+  .btn.bp.bfull{padding:.82rem;font-size:.94rem}
+  .btn-google{padding:.82rem 1rem;font-size:.9rem}
 }
 </style>
 </head>
@@ -652,6 +858,13 @@ img{max-width:100%}
       </button>
     </div>
     <p id="amsg"></p>
+    <!-- Theme toggle + branding footer -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:1.4rem;padding-top:1rem;border-top:1px solid var(--bd)">
+      <button id="auth-theme-btn" title="Toggle theme" style="display:flex;align-items:center;gap:.45rem;font-size:.75rem;font-weight:600;color:var(--t2);background:none;border:1.5px solid var(--bd);border-radius:99px;padding:.32rem .8rem;cursor:pointer;transition:all var(--tr)">
+        <span id="auth-theme-icon">☀</span><span id="auth-theme-lbl">Light</span>
+      </button>
+      <p style="font-size:.7rem;color:var(--t3);margin:0">Made by <strong style="color:var(--t2)">Rehan Fernando</strong></p>
+    </div>
   </div>
 </div>
 
@@ -659,12 +872,12 @@ img{max-width:100%}
 <div id="app" class="dn">
   <div class="sbbd" id="sbbd"></div>
   <aside class="sb" id="sb">
+    <!-- Sidebar header: logo + close on desktop, profile banner on mobile -->
     <div class="sbh">
       <div class="logo">
         <svg class="logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="32" height="32" rx="8" fill="#3b82f6"/>
           <rect width="32" height="32" rx="8" fill="white" fill-opacity="0.08"/>
-          <!-- F letterform -->
           <rect x="7" y="7" width="5" height="18" rx="1.5" fill="white"/>
           <rect x="7" y="7" width="17" height="5" rx="1.5" fill="white"/>
           <rect x="7" y="15" width="13" height="5" rx="1.5" fill="white"/>
@@ -673,6 +886,18 @@ img{max-width:100%}
       </div>
       <button id="sbclose" class="iBtn">✕</button>
     </div>
+
+    <!-- Mobile-only profile banner at top of drawer -->
+    <div class="sb-profile-banner" id="ubadge-btn" title="Account Settings">
+      <div class="uav" id="uav">A</div>
+      <div class="sb-profile-info">
+        <div class="un" id="uname">User</div>
+        <div class="ur">Tap to manage account &nbsp;⚙</div>
+      </div>
+      <button id="btn-out" class="iBtn sb-signout" title="Sign out"
+        onclick="event.stopPropagation()">⏻</button>
+    </div>
+
     <nav class="sbnav">
       <a class="ni on"  data-s="dash">    <span class="ni-dot">◉</span> Overview</a>
       <a class="ni" data-s="banks">   <span class="ni-dot">◉</span> Bank Accounts</a>
@@ -689,17 +914,22 @@ img{max-width:100%}
       <a class="ni" data-s="networth"><span class="ni-dot">◉</span> Net Worth</a>
       <a class="ni" data-s="calendar"><span class="ni-dot">◉</span> Calendar</a>
     </nav>
+
     <div class="sbf">
-      <div class="ubadge">
-        <div class="uav" id="uav">A</div>
-        <div><div class="un" id="uname">User</div><div class="ur">Personal Account</div></div>
+      <!-- Desktop-only profile banner at bottom -->
+      <div class="ubadge ubadge-desktop" title="Account Settings">
+        <div class="uav uav-d">A</div>
+        <div style="flex:1;min-width:0">
+          <div class="un" id="uname-d">User</div>
+          <div class="ur">⚙ Manage account</div>
+        </div>
+        <button id="btn-out-d" class="iBtn" title="Sign out"
+          style="flex-shrink:0;opacity:.55;font-size:.85rem"
+          onclick="event.stopPropagation()">⏻</button>
       </div>
-      <div class="sbacts">
-        <button class="iBtn" id="thtog"  title="Theme">☽</button>
-        <button class="iBtn" id="tmtog"  title="Theme">☽</button>
-        <button class="iBtn" id="btn-acct" title="Account Settings">⚙</button>
-        <button class="iBtn" id="btn-out" title="Sign out">⏻</button>
-      </div>
+      <p style="font-size:.65rem;color:var(--t3);text-align:center;margin-top:.6rem">
+        Made by <strong style="color:var(--t2)">Rehan Fernando</strong>
+      </p>
     </div>
   </aside>
 
@@ -710,12 +940,8 @@ img{max-width:100%}
       <div class="tbr">
         <div class="live"><div class="ldot"></div>Live</div>
         <button class="iBtn" id="rf-btn" title="Refresh prices">↻</button>
-        <button class="btn bp" id="tb-qadd" style="font-size:.78rem;padding:.42rem .85rem;gap:.3rem" title="Quick add transaction">＋ Add</button>
-      </div>
-      <div class="tb-actions">
-        <button class="iBtn" id="tb-qadd-m" title="Quick add">＋</button>
         <button class="iBtn" id="tb-theme" title="Toggle theme">☽</button>
-        <button class="iBtn" id="tb-logout" title="Sign out" style="font-size:.85rem">⏻</button>
+        <button class="btn bp" id="tb-qadd" style="font-size:.78rem;padding:.42rem .85rem;gap:.3rem" title="Quick add">＋ Add</button>
       </div>
     </header>
 
@@ -762,6 +988,9 @@ img{max-width:100%}
         <div class="ins gc"><h3>🤖 AI Insights</h3><div class="insl" id="ins-list">
           <div class="insit"><span class="insic">⏳</span><p>Loading insights…</p></div>
         </div></div>
+        <div style="text-align:center;padding:1.2rem 0 .4rem;font-size:.72rem;color:var(--t3)">
+          Made with ♥ by <strong style="color:var(--t2)">Rehan Fernando</strong> · Finova Personal Finance
+        </div>
       </section>
 
       <!-- BANKS -->
@@ -1007,30 +1236,99 @@ img{max-width:100%}
 <div class="sbbd dn" id="fab-bd"></div>
 
 <!-- PASSWORD RESET OVERLAY (shown when URL has #type=recovery) -->
-<div class="auth-ov dn" id="reset-ov" style="z-index:10000">
-  <div class="orbs"><div class="orb o1"></div><div class="orb o2"></div></div>
-  <div class="acard">
-    <div class="alogo">
-      <svg class="alogo-svg" viewBox="0 0 44 44" fill="none">
-        <rect width="44" height="44" rx="12" fill="#3b82f6"/>
-        <rect width="44" height="44" rx="12" fill="white" fill-opacity="0.08"/>
-        <rect x="10" y="10" width="7" height="24" rx="2" fill="white"/>
-        <rect x="10" y="10" width="23" height="7" rx="2" fill="white"/>
-        <rect x="10" y="21" width="18" height="7" rx="2" fill="white"/>
-      </svg>
-      <span class="alogo-t">Finova</span>
+<!-- ══════════ PASSWORD RESET OVERLAY (triggered by PASSWORD_RECOVERY event) ══════════ -->
+<div id="reset-ov" class="dn" style="
+  position:fixed;inset:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  padding:1.2rem;animation:sIn .25s ease both">
+  <div style="
+    width:100%;max-width:420px;
+    background:var(--gl);backdrop-filter:blur(40px) saturate(180%);
+    border:1.5px solid var(--bd2);border-radius:var(--r22);
+    box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);
+    padding:2.2rem 2rem;animation:sup .3s cubic-bezier(.4,0,.2,1) both">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.35rem">
+      <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--blue),#6366f1);
+        display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">🔐</div>
+      <div>
+        <div style="font-size:1.15rem;font-weight:700;letter-spacing:-.03em">Set New Password</div>
+        <div style="font-size:.78rem;color:var(--t2);margin-top:.1rem">Choose a strong password for your account</div>
+      </div>
     </div>
-    <p class="atag" style="margin-bottom:1.4rem">Set a new password for your account.</p>
-    <div class="fg" style="margin-bottom:.9rem"><label>New Password</label>
-      <input id="rp-pw1" type="password" placeholder="Min. 6 characters" autocomplete="new-password"/></div>
-    <div class="fg" style="margin-bottom:.9rem"><label>Confirm Password</label>
-      <input id="rp-pw2" type="password" placeholder="Repeat password" autocomplete="new-password"/></div>
-    <button id="btn-reset-pw" class="btn bp bfull">Set New Password</button>
-    <p id="rp-msg" style="min-height:1rem;font-size:.8rem;text-align:center;margin-top:.6rem"></p>
+    <!-- Progress indicator -->
+    <div style="height:3px;background:var(--ele);border-radius:99px;margin:1.2rem 0 1.5rem;overflow:hidden">
+      <div id="rp-progress" style="height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:99px;transition:width .3s ease"></div>
+    </div>
+    <!-- Fields -->
+    <div style="display:flex;flex-direction:column;gap:.85rem;margin-bottom:1.1rem">
+      <div class="fg">
+        <label>New Password</label>
+        <input id="rp-pw1" type="password" placeholder="Min. 6 characters" autocomplete="new-password"
+          style="height:48px;font-size:15px"/>
+      </div>
+      <div class="fg">
+        <label>Confirm Password</label>
+        <input id="rp-pw2" type="password" placeholder="Repeat password" autocomplete="new-password"
+          style="height:48px;font-size:15px"/>
+      </div>
+      <!-- Live strength indicator -->
+      <div id="rp-strength" style="font-size:.74rem;color:var(--t3);min-height:1rem;margin-top:-.4rem"></div>
+    </div>
+    <button id="btn-reset-pw" class="btn bp bfull" style="height:48px;font-size:.93rem;font-weight:700">
+      Update Password
+    </button>
+    <p id="rp-msg" style="min-height:1.1rem;font-size:.8rem;font-weight:600;text-align:center;margin-top:.75rem;color:var(--red)"></p>
+    <!-- Branding -->
+    <p style="text-align:center;font-size:.68rem;color:var(--t3);margin-top:1rem">Finova · Secure password update</p>
   </div>
 </div>
 
-<!-- STATEMENT PANEL -->
+<!-- ══════════ VAULT UNLOCK OVERLAY (shown after auth if PIN not in sessionStorage) ══════════ -->
+<div id="vault-ov" class="dn" style="
+  position:fixed;inset:0;z-index:99998;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  padding:1.2rem;animation:sIn .25s ease both">
+  <div style="
+    width:100%;max-width:380px;
+    background:var(--gl);backdrop-filter:blur(40px) saturate(180%);
+    border:1.5px solid var(--bd2);border-radius:var(--r22);
+    box-shadow:0 28px 72px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.07);
+    padding:2.2rem 2rem;animation:sup .3s cubic-bezier(.4,0,.2,1) both;
+    text-align:center">
+    <!-- Lock icon -->
+    <div style="width:60px;height:60px;border-radius:50%;
+      background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(167,139,250,.2));
+      border:1.5px solid rgba(59,130,246,.3);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.6rem;margin:0 auto 1.2rem">🔐</div>
+    <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:.35rem;letter-spacing:-.03em">Vault Locked</h2>
+    <p style="font-size:.82rem;color:var(--t2);margin-bottom:1.6rem;line-height:1.5">
+      Enter your Master PIN to decrypt your financial data.<br>
+      <span style="font-size:.72rem;color:var(--t3)">The PIN never leaves your device.</span>
+    </p>
+    <div class="fg" style="text-align:left;margin-bottom:1rem">
+      <label>Master PIN</label>
+      <input id="vault-pin" type="password" placeholder="Enter your PIN"
+        autocomplete="off" inputmode="numeric"
+        style="height:52px;font-size:1.3rem;letter-spacing:.35em;text-align:center;font-family:monospace"/>
+    </div>
+    <button id="vault-unlock-btn" class="btn bp bfull" style="height:48px;font-size:.93rem;font-weight:700">
+      🔓 Unlock Vault
+    </button>
+    <!-- First-time setup hint -->
+    <p id="vault-hint" style="font-size:.75rem;color:var(--t3);margin-top:.85rem;line-height:1.5">
+      First time? Choose any PIN — it will be used to encrypt all your data going forward.
+    </p>
+    <p id="vault-msg" style="font-size:.8rem;font-weight:600;min-height:1.1rem;margin-top:.5rem;color:var(--red)"></p>
+    <!-- Escape hatch: sign out without unlocking -->
+    <button onclick="$('btn-out')?.click()" style="font-size:.72rem;color:var(--t3);background:none;border:none;cursor:pointer;margin-top:.7rem;text-decoration:underline">
+      Sign out instead
+    </button>
+  </div>
+</div>
 <div class="stmt-panel" id="stmt-panel">
   <div class="stmt-head">
     <div>
@@ -1130,21 +1428,39 @@ function applyTheme(t){
   syncThemeIcons();
 }
 applyTheme(S.theme);
-[$('thtog'),$('tmtog')].forEach(b=>b&&b.addEventListener('click',()=>applyTheme(S.theme==='dark'?'light':'dark')));
 
-// Mobile topbar theme + logout (tb-logout already wired at bottom — skip dupe)
+// Mobile topbar theme toggle
 $('tb-theme')?.addEventListener('click',()=>applyTheme(S.theme==='dark'?'light':'dark'));
 
-// Sync tb-theme icon
+// Auth page theme toggle (on login screen, before user is signed in)
+// Wired directly to the DOM element (not via init state machine)
+document.getElementById('auth-theme-btn')?.addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme')||'dark';
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('fv_theme',next);
+  // Also update S.theme if available
+  if(typeof S!=='undefined') S.theme=next;
+  syncAuthThemeBtn(next);
+});
+function syncAuthThemeBtn(t){
+  const icon=document.getElementById('auth-theme-icon');
+  const lbl=document.getElementById('auth-theme-lbl');
+  if(icon) icon.textContent=t==='dark'?'☀':'☽';
+  if(lbl)  lbl.textContent=t==='dark'?'Light':'Dark';
+}
+// Initialise auth theme button to reflect current theme
+syncAuthThemeBtn(S.theme);
+
+// Sync all theme icons in app
 function syncThemeIcons(){
   const ic=S.theme==='dark'?'☀':'☽';
-  [$('thtog'),$('tmtog'),$('tb-theme')].forEach(b=>{ if(b) b.textContent=ic; });
+  const tb=$('tb-theme'); if(tb) tb.textContent=ic;
+  syncAuthThemeBtn(S.theme);
 }
 function fmtTs(){ return new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
-function setLU(id){ const e=$(id); if(e){ e.textContent='Updated: '+fmtTs(); } }
 // Global last updated for overview
 function touchGlobal(){ localStorage.setItem('fv_lu_global_'+S.user?.id, fmtTs()); const e=$('lu-dash'); if(e) e.textContent='Updated: '+(localStorage.getItem('fv_lu_global_'+S.user?.id)||'—'); }
-function loadLU(id,key){ const e=$(id); if(e) e.textContent='Updated: '+(localStorage.getItem('fv_lu_'+key+'_'+S.user?.id)||'—'); }
 function saveLU(key){ const v=fmtTs(); localStorage.setItem('fv_lu_'+key+'_'+S.user?.id,v); touchGlobal(); return v; }
 
 // ── AUTH MESSAGE ──────────────────────────────────────────────────────
@@ -1195,64 +1511,150 @@ $('btn-forgot')?.addEventListener('click',async()=>{
 });
 
 // ── GOOGLE OAUTH ──────────────────────────────────────────────────────
-async function signInWithGoogle(){
+// Production URL — change this if you deploy elsewhere
+const PROD_URL='https://finovasmart.netlify.app';
+
+async function signInWithGoogle(e){
   if(!sb){ amsg('Supabase not configured.'); return; }
-  const btn=document.activeElement;
-  if(btn) { btn.disabled=true; btn.textContent='Redirecting to Google…'; }
+  // Use e.currentTarget — document.activeElement is unreliable on mobile iOS/Android
+  const btn=e?.currentTarget||null;
+  const origHTML=btn?btn.innerHTML:null;
+  if(btn){ btn.disabled=true; btn.innerHTML=`<span style="display:inline-flex;align-items:center;gap:.5rem"><svg viewBox="0 0 24 24" width="18" height="18" style="animation:spin .7s linear infinite"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="30 60" stroke-linecap="round"/></svg>Redirecting…</span>`; }
   amsg('');
   try{
-    // Detect current origin for redirect — works for both local dev and production
-    const redirectTo=window.location.origin+window.location.pathname;
+    // Use production URL on deployed site, current origin in local dev
+    // This prevents the mobile black-screen issue caused by mismatched redirect URLs
+    const isLocal=window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1'||window.location.protocol==='file:';
+    const redirectTo=isLocal?(window.location.origin+window.location.pathname):PROD_URL;
     const {error}=await sb.auth.signInWithOAuth({
       provider:'google',
       options:{
         redirectTo,
-        queryParams:{ access_type:'offline', prompt:'consent' },
+        skipBrowserRedirect:false,  // ensures full-page redirect on mobile (no popup)
       }
     });
-    if(error){ amsg(error.message); if(btn){ btn.disabled=false; btn.innerHTML=googleBtnHTML; } }
-    // On success Supabase redirects the page — no further JS needed
-  }catch(e){
-    amsg('Google sign-in error: '+e.message);
-    if(btn){ btn.disabled=false; btn.innerHTML=googleBtnHTML; }
+    if(error){
+      amsg(error.message);
+      if(btn){ btn.disabled=false; btn.innerHTML=origHTML; }
+    }
+    // On success the browser navigates away — no further JS needed here
+  }catch(e2){
+    amsg('Google sign-in error: '+e2.message);
+    if(btn){ btn.disabled=false; btn.innerHTML=origHTML; }
   }
 }
-
-const googleBtnHTML=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;flex-shrink:0"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google`;
 
 $('btn-google-signin')?.addEventListener('click', signInWithGoogle);
 $('btn-google-signup')?.addEventListener('click', signInWithGoogle);
 
 // ── PASSWORD RESET PAGE (fires when email link redirects here) ─────────
-(function checkPasswordReset(){
-  const hash=window.location.hash||'';
-  const params=new URLSearchParams(hash.replace('#',''));
-  const isReset=params.get('type')==='recovery'||hash.includes('type=recovery');
-  if(!isReset) return;
-  // Show reset overlay, hide normal auth
-  const ro=$('reset-ov'); if(ro) ro.classList.remove('dn');
-  const ao=$('auth-ov'); if(ao) ao.classList.add('dn');
-  // Supabase sets the session from the URL hash automatically
-  $('btn-reset-pw')?.addEventListener('click',async()=>{
-    const pw1=($('rp-pw1').value||'');
-    const pw2=($('rp-pw2').value||'');
+// ── RESET PASSWORD MODAL ──────────────────────────────────────────────
+// Called by onAuthStateChange when event==='PASSWORD_RECOVERY'
+// Shows the inline password reset overlay over whatever is currently visible.
+function showResetPasswordModal(){
+  const ov=$('reset-ov');
+  if(!ov) return;
+
+  // Hide the auth screen if visible, show the reset overlay
+  $('auth-ov')?.classList.add('dn');
+  ov.classList.remove('dn');
+  ov.style.display='flex';
+
+  // Focus first field
+  setTimeout(()=>$('rp-pw1')?.focus(), 80);
+
+  // ── Live password strength indicator ─────────────────────────────
+  $('rp-pw1')?.addEventListener('input',()=>{
+    const pw=$('rp-pw1').value;
+    const bar=$('rp-progress');
+    const msg=$('rp-strength');
+    if(!pw){ if(bar) bar.style.width='0%'; if(msg) msg.textContent=''; return; }
+    let score=0;
+    if(pw.length>=6) score++;
+    if(pw.length>=10) score++;
+    if(/[A-Z]/.test(pw)) score++;
+    if(/[0-9]/.test(pw)) score++;
+    if(/[^A-Za-z0-9]/.test(pw)) score++;
+    const labels=[null,'Weak','Fair','Good','Strong','Very Strong'];
+    const colors=[null,'var(--red)','var(--amber)','var(--amber)','var(--green)','var(--teal)'];
+    const widths=[0,20,40,60,80,100];
+    if(bar){ bar.style.width=widths[score]+'%'; bar.style.background=colors[score]||'var(--blue)'; }
+    if(msg){ msg.textContent=score>0?labels[score]+' password':''; msg.style.color=colors[score]||'var(--t2)'; }
+  });
+
+  // ── Confirm field match indicator ─────────────────────────────────
+  $('rp-pw2')?.addEventListener('input',()=>{
+    const msg=$('rp-msg');
+    const v1=$('rp-pw1').value, v2=$('rp-pw2').value;
+    if(!v2) { if(msg) msg.textContent=''; return; }
+    if(v1===v2){ msg.textContent='✓ Passwords match'; msg.style.color='var(--green)'; }
+    else        { msg.textContent='Passwords do not match'; msg.style.color='var(--red)'; }
+  });
+
+  // ── Submit handler ────────────────────────────────────────────────
+  const btn=$('btn-reset-pw');
+  if(btn) btn.onclick=async()=>{
+    const pw1=($('rp-pw1').value||'').trim();
+    const pw2=($('rp-pw2').value||'').trim();
     const msg=$('rp-msg');
     msg.textContent=''; msg.style.color='var(--red)';
-    if(pw1.length<6){ msg.textContent='Password must be at least 6 characters.'; return; }
-    if(pw1!==pw2){ msg.textContent='Passwords do not match.'; return; }
-    if(!sb){ msg.textContent='Supabase not configured.'; return; }
+
+    if(pw1.length<6){  msg.textContent='Password must be at least 6 characters.'; return; }
+    if(pw1!==pw2){     msg.textContent='Passwords do not match.'; return; }
+    if(!sb){           msg.textContent='Supabase not configured.'; return; }
+
+    btn.disabled=true; btn.textContent='Updating…';
     const {error}=await sb.auth.updateUser({password:pw1});
-    if(error){ msg.textContent=error.message; }
-    else{
+    btn.disabled=false; btn.textContent='Update Password';
+
+    if(error){
+      msg.textContent=error.message;
+    } else {
+      // ✅ Success — close modal, clear hash, show toast, land on dashboard
       msg.style.color='var(--green)';
-      msg.textContent='✅ Password updated! Signing you in…';
-      setTimeout(()=>{
-        const ro=$('reset-ov'); if(ro) ro.classList.add('dn');
-        window.location.hash='';
-      },1800);
+      msg.textContent='✅ Password updated successfully!';
+
+      // Close overlay and clear the recovery hash from the URL
+      setTimeout(async()=>{
+        ov.classList.add('dn');
+        ov.style.display='';
+        if(window.location.hash) window.history.replaceState(null,'',window.location.pathname+window.location.search);
+
+        // Ensure dashboard is visible (it may not have launched yet if user
+        // arrived cold from the email link)
+        if($('app').classList.contains('dn')){
+          if(!S.user&&sb){
+            const {data:{session}}=await sb.auth.getSession();
+            if(session?.user){ S.user=session.user; await loadAll(); launch(); }
+          } else if(S.user){
+            launch();
+          }
+        }
+        toast('🔐 Password updated! You are now signed in.','s');
+      }, 1400);
     }
-  });
-  [$('rp-pw1'),$('rp-pw2')].forEach(i=>i?.addEventListener('keydown',e=>{ if(e.key==='Enter') $('btn-reset-pw')?.click(); }));
+  };
+
+  // Enter key on both fields
+  [$('rp-pw1'),$('rp-pw2')].forEach(i=>i?.addEventListener('keydown',e=>{
+    if(e.key==='Enter') $('btn-reset-pw')?.click();
+  }));
+}
+
+// ── Legacy URL-hash recovery fallback ─────────────────────────────────
+// Handles old-style Supabase v1 links that embed the tokens in the hash.
+// The onAuthStateChange PASSWORD_RECOVERY event is the primary path;
+// this catches any edge cases where the event fires before the listener is ready.
+(function checkHashRecovery(){
+  const hash=window.location.hash||'';
+  if(!hash.includes('type=recovery')) return;
+  // Give the Supabase SDK 800ms to parse the hash and fire the event.
+  // If it hasn't shown the modal yet, open it manually.
+  setTimeout(()=>{
+    if(!$('reset-ov') || $('reset-ov').classList.contains('dn')){
+      showResetPasswordModal();
+    }
+  }, 800);
 })();
 
 // ── CENTRAL FAB (quick add / transfer) ────────────────────────────────
@@ -1372,37 +1774,62 @@ $('btn-signup').addEventListener('click', async()=>{
 [$('su-nm'),$('su-em'),$('su-pw')].forEach(i=>i&&i.addEventListener('keydown',e=>{ if(e.key==='Enter') $('btn-signup').click(); }));
 
 // ── LOGOUT ────────────────────────────────────────────────────────────
-$('btn-out').addEventListener('click',async()=>{
+async function doSignOut(){
   clearInterval(S.stockRefreshTimer);
   if(S.realtimeChannel&&sb) sb.removeChannel(S.realtimeChannel);
+  clearVaultKey(); // wipe the encryption key from memory and sessionStorage
   if(sb) await sb.auth.signOut();
   S.user=null;
   location.reload();
-});
+}
+$('btn-out').addEventListener('click', doSignOut);
+$('btn-out-d')?.addEventListener('click', doSignOut);
 
 // ── AUTH STATE CHANGE — single launch point ───────────────────────────
-// Fires for: email/password sign-in, Google OAuth callback, token refresh, page reload
+// Handles: email/password, Google OAuth, token refresh, PASSWORD_RECOVERY
 if(sb){
   sb.auth.onAuthStateChange(async(event,session)=>{
+
+    // ── PASSWORD RECOVERY — user clicked the email reset link ─────────
+    // Supabase auto-authenticates the user via the link tokens and fires
+    // this event. We intercept it before the dashboard launches and show
+    // the inline password reset modal instead.
+    if(event==='PASSWORD_RECOVERY'){
+      S.user=session?.user||S.user;
+    // If the dashboard hasn't loaded yet, silently launch it in background
+    // so the user lands on their dashboard after resetting (not the auth screen)
+    if($('app').classList.contains('dn')){
+      if(session?.user&&!S.user){ S.user=session.user; await loadAll(); launch(); }
+    }
+      showResetPasswordModal();
+      return; // Do NOT fall through to normal login flow
+    }
+
+    // ── NORMAL SIGNED_IN / INITIAL_SESSION ────────────────────────────
     if((event==='SIGNED_IN' || event==='INITIAL_SESSION') && session?.user && !S.user){
       S.user = session.user;
 
-      // ── Google OAuth first-time onboarding ────────────────────────
-      // If the user signed in via Google and has no data rows yet,
-      // we treat it as a clean new account (Net Worth = 0, no pre-load noise).
-      // The provider check ensures we only do this for OAuth users.
+      // Google OAuth first-time onboarding
       const isOAuth=session.user?.app_metadata?.provider==='google'||
                     (session.user?.identities||[]).some(id=>id.provider==='google');
       const isNewOAuth=isOAuth && event==='SIGNED_IN' &&
                        !session.user?.user_metadata?.finova_initialized;
       if(isNewOAuth&&sb){
-        // Mark as initialized so we don't repeat this on subsequent logins
         await sb.auth.updateUser({data:{finova_initialized:true}}).catch(()=>{});
       }
 
+      // Try to restore vault key from sessionStorage (survives page refresh)
+      await loadVaultKeyFromSession();
+
       await loadAll();
       launch();
+
+      // Show vault overlay if no key was restored — user must enter PIN
+      if(!_vaultKey){
+        showVaultOverlay();
+      }
     }
+
     if(event==='SIGNED_OUT'){
       S.user=null;
     }
@@ -1429,12 +1856,201 @@ async function loadAll(){
   ];
   await Promise.all(tbls.map(async({key,tbl})=>{
     const {data,error}=await sb.from(tbl).select('*').eq('user_id',uid).order('created_at',{ascending:false});
-    if(!error) S.data[key]=data||[];
+    if(!error){
+      // Decrypt any encrypted fields if vault key is available
+      S.data[key] = _vaultKey ? await decryptTable(tbl, data||[]) : (data||[]);
+    }
   }));
 }
 
-// ── SUPABASE INSERT ───────────────────────────────────────────────────
-// Allowed columns per table — prevents "column not found in schema cache" errors
+// ══════════════════════════════════════════════════════════════════════
+// ZERO-KNOWLEDGE CLIENT-SIDE ENCRYPTION (AES-GCM via Web Crypto API)
+// ══════════════════════════════════════════════════════════════════════
+//
+// ARCHITECTURE DECISION:
+//   Numeric fields (balance, amount, principal) stay as plaintext numbers
+//   so all .reduce() / dashboard math works without decryption on every render.
+//   SENSITIVE IDENTIFIERS (account names, account numbers, wallet addresses,
+//   descriptions, loan names) are encrypted — these are the fields that would
+//   expose personal financial identity if the DB were leaked.
+//
+//   The Master PIN + user.id → PBKDF2 → AES-GCM CryptoKey lives only in
+//   sessionStorage (as a serialised JWK). It never hits the network.
+// ══════════════════════════════════════════════════════════════════════
+
+// Tables and their fields that get encrypted
+const CSE_MAP = {
+  bank_accounts: ['account_name','account_number','bank_name'],
+  loans:         ['loan_name','lender','description'],
+  expenses:      ['description'],
+  income:        ['description'],
+  crypto_wallets:['wallet_name','wallet_address'],
+  physical_assets:['asset_name','description'],
+};
+
+// In-memory vault key — set on unlock, cleared on sign-out
+let _vaultKey = null;
+const VAULT_SS_KEY = 'fv_vk';   // sessionStorage key for the serialised JWK
+
+// ── Key Derivation ─────────────────────────────────────────────────────
+async function deriveVaultKey(pin, userId){
+  const enc = new TextEncoder();
+  // Base material: PIN as password
+  const baseKey = await crypto.subtle.importKey(
+    'raw', enc.encode(pin), 'PBKDF2', false, ['deriveKey']
+  );
+  // Salt: userId so the same PIN produces different keys for different users
+  const salt = enc.encode(userId);
+  return crypto.subtle.deriveKey(
+    { name:'PBKDF2', salt, iterations:100_000, hash:'SHA-256' },
+    baseKey,
+    { name:'AES-GCM', length:256 },
+    true,   // extractable so we can store in sessionStorage
+    ['encrypt','decrypt']
+  );
+}
+
+// Persist key in sessionStorage (survives page refresh within session)
+async function persistVaultKey(key){
+  const jwk = await crypto.subtle.exportKey('jwk', key);
+  sessionStorage.setItem(VAULT_SS_KEY, JSON.stringify(jwk));
+  _vaultKey = key;
+}
+
+async function loadVaultKeyFromSession(){
+  const raw = sessionStorage.getItem(VAULT_SS_KEY);
+  if(!raw) return null;
+  try{
+    const jwk = JSON.parse(raw);
+    _vaultKey = await crypto.subtle.importKey(
+      'jwk', jwk, { name:'AES-GCM' }, true, ['encrypt','decrypt']
+    );
+    return _vaultKey;
+  }catch{ return null; }
+}
+
+function clearVaultKey(){
+  _vaultKey = null;
+  sessionStorage.removeItem(VAULT_SS_KEY);
+}
+
+// ── AES-GCM Encrypt / Decrypt ─────────────────────────────────────────
+// Ciphertext format stored in DB: "b64iv:b64ciphertext"
+// Prefix "enc:" marks encrypted values so we can detect and skip re-encryption
+const ENC_PREFIX = 'enc:';
+
+async function encryptField(plainText){
+  if(!_vaultKey || plainText == null) return plainText;
+  const str = String(plainText);
+  if(str.startsWith(ENC_PREFIX)) return str; // already encrypted
+  const enc = new TextEncoder();
+  const iv  = crypto.getRandomValues(new Uint8Array(12)); // unique IV per call
+  const ct  = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, _vaultKey, enc.encode(str));
+  const b64iv = btoa(String.fromCharCode(...iv));
+  const b64ct = btoa(String.fromCharCode(...new Uint8Array(ct)));
+  return ENC_PREFIX + b64iv + ':' + b64ct;
+}
+
+async function decryptField(cipherText){
+  if(!_vaultKey || cipherText == null) return cipherText;
+  const str = String(cipherText);
+  if(!str.startsWith(ENC_PREFIX)) return str; // plaintext — pass through
+  try{
+    const raw = str.slice(ENC_PREFIX.length);
+    const sep = raw.indexOf(':');
+    if(sep < 0) return str;
+    const iv  = Uint8Array.from(atob(raw.slice(0, sep)), c=>c.charCodeAt(0));
+    const ct  = Uint8Array.from(atob(raw.slice(sep+1)),  c=>c.charCodeAt(0));
+    const pt  = await crypto.subtle.decrypt({ name:'AES-GCM', iv }, _vaultKey, ct);
+    return new TextDecoder().decode(pt);
+  }catch{
+    // Wrong PIN or corrupted — return a placeholder so the UI doesn't crash
+    return '[encrypted]';
+  }
+}
+
+// ── Encrypt a whole record before DB write ────────────────────────────
+async function encryptRecord(tbl, rec){
+  if(!_vaultKey) return rec;
+  const fields = CSE_MAP[tbl];
+  if(!fields) return rec;
+  const out = {...rec};
+  for(const f of fields){
+    if(out[f] != null) out[f] = await encryptField(out[f]);
+  }
+  return out;
+}
+
+// ── Decrypt a whole record after DB read ──────────────────────────────
+async function decryptRecord(tbl, rec){
+  if(!_vaultKey || !rec) return rec;
+  const fields = CSE_MAP[tbl];
+  if(!fields) return rec;
+  const out = {...rec};
+  for(const f of fields){
+    if(out[f] != null) out[f] = await decryptField(out[f]);
+  }
+  return out;
+}
+
+async function decryptTable(tbl, rows){
+  if(!rows?.length) return rows||[];
+  return Promise.all(rows.map(r=>decryptRecord(tbl,r)));
+}
+
+// ── Show / Hide Vault Overlay ─────────────────────────────────────────
+function showVaultOverlay(){
+  const ov = $('vault-ov');
+  if(!ov) return;
+  ov.classList.remove('dn');
+  ov.style.display = 'flex';
+  $('vault-msg').textContent = '';
+  $('vault-pin').value = '';
+  setTimeout(()=>$('vault-pin')?.focus(), 80);
+}
+function hideVaultOverlay(){
+  const ov = $('vault-ov');
+  if(ov){ ov.classList.add('dn'); ov.style.display = ''; }
+}
+
+// ── Vault Unlock Button ───────────────────────────────────────────────
+$('vault-unlock-btn')?.addEventListener('click', async()=>{
+  const pin = ($('vault-pin').value||'').trim();
+  const msg = $('vault-msg');
+  msg.textContent = '';
+  if(!pin){ msg.textContent = 'Please enter your PIN.'; return; }
+  if(pin.length < 4){ msg.textContent = 'PIN must be at least 4 characters.'; return; }
+  if(!S.user){ msg.textContent = 'No user session — please sign in again.'; return; }
+
+  const btn = $('vault-unlock-btn');
+  btn.disabled = true; btn.textContent = '🔓 Unlocking…';
+
+  try{
+    const key = await deriveVaultKey(pin, S.user.id);
+    await persistVaultKey(key);
+
+    // Re-decrypt all already-loaded data with the new key
+    if(S.data.banks.length)    S.data.banks    = await decryptTable('bank_accounts',    S.data.banks);
+    if(S.data.loans.length)    S.data.loans    = await decryptTable('loans',            S.data.loans);
+    if(S.data.expenses.length) S.data.expenses = await decryptTable('expenses',         S.data.expenses);
+    if(S.data.income.length)   S.data.income   = await decryptTable('income',           S.data.income);
+    if(S.data.crypto.length)   S.data.crypto   = await decryptTable('crypto_wallets',   S.data.crypto);
+    if(S.data.assets.length)   S.data.assets   = await decryptTable('physical_assets',  S.data.assets);
+
+    hideVaultOverlay();
+    renderAll();
+    toast('🔐 Vault unlocked', 's');
+  }catch(e){
+    msg.textContent = 'Unlock failed: ' + e.message;
+  }finally{
+    btn.disabled = false; btn.textContent = '🔓 Unlock Vault';
+  }
+});
+
+// Enter key on PIN field
+$('vault-pin')?.addEventListener('keydown', e=>{ if(e.key==='Enter') $('vault-unlock-btn')?.click(); });
+
+// ══════════════════════════════════════════════════════════════════════
 const ALLOWED_COLS={
   bank_accounts:   ['bank_name','account_name','balance','currency','account_number','funding_source','source_account_id','user_id'],
   cards:           ['card_name','bank','credit_limit','outstanding','due_date','card_number','user_id'],
@@ -1460,9 +2076,13 @@ function sanitiseRecord(tbl, rec){
 async function dbInsert(tbl,record){
   if(!sb) return {data:record,error:null};
   record.user_id=S.user.id;
-  const clean=sanitiseRecord(tbl,record);
+  let clean=sanitiseRecord(tbl,record);
+  // Encrypt sensitive fields before they leave the browser
+  if(_vaultKey) clean = await encryptRecord(tbl, clean);
   const {data,error}=await sb.from(tbl).insert([clean]).select().single();
-  return {data,error};
+  // Decrypt the returned record so the in-memory state stays readable
+  const decrypted = data && _vaultKey ? await decryptRecord(tbl, data) : data;
+  return {data: decrypted, error};
 }
 
 // ── SUPABASE DELETE ───────────────────────────────────────────────────
@@ -1613,9 +2233,10 @@ function launch(){
   $('app').classList.remove('dn');
   const name=S.user?.user_metadata?.full_name||S.user?.email?.split('@')[0]||'User';
   setText('uname',name); setText('gname',name.split(' ')[0]);
-  $('uav').textContent=name[0].toUpperCase();
-  // init cash display
-  const cd=$('cash-display'); if(cd) cd.textContent=fmt(getCash());
+  setText('uname-d',name);
+  const initials=name[0].toUpperCase();
+  $('uav').textContent=initials;
+  const uavD=$('uav-d'); if(uavD) uavD.textContent=initials;
   // sync theme icons including mobile topbar
   syncThemeIcons();
   // load per-section last-updated timestamps
@@ -1772,24 +2393,6 @@ function svgSparkline(data,w,h,color){
     <path d="${fill}" fill="url(#sg)"/>
     <polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`;
-}
-
-function svgBars(labels,values,w,h){
-  if(!labels||!labels.length) return '<p style="color:var(--t2);padding:1.5rem;text-align:center;font-size:.82rem">No data yet</p>';
-  const max=Math.max(...values,1);
-  const pH=22, pT=8, pL=0, pR=0;
-  const bW=((w-pL-pR)/labels.length)*0.62;
-  const gap=((w-pL-pR)/labels.length);
-  const tc=getComputedStyle(document.documentElement).getPropertyValue('--t2').trim()||'#888';
-  let out='';
-  labels.forEach((l,i)=>{
-    const bh=Math.max(2,((values[i]||0)/max)*(h-pH-pT));
-    const x=pL+i*gap+(gap-bW)/2;
-    const y=pT+(h-pH-pT)-bh;
-    out+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bW.toFixed(1)}" height="${bh.toFixed(1)}" rx="4" fill="${PALETTE[0]}" opacity=".82"/>
-    <text x="${(x+bW/2).toFixed(1)}" y="${h-2}" text-anchor="middle" font-size="10" fill="${tc}">${l}</text>`;
-  });
-  return `<svg width="${w}" height="${h}" style="display:block;width:100%;overflow:visible" viewBox="0 0 ${w} ${h}">${out}</svg>`;
 }
 
 function svgDonut(labels,values,size){
@@ -2053,12 +2656,27 @@ function renderBanks(){
   $('banks-list').innerHTML=banks.length?banks.map(b=>{
     const inc=S.data.income.filter(i=>String(i.account_id)===String(b.id)).reduce((s,i)=>s+(+i.amount||0),0);
     const exp=S.data.expenses.filter(e=>(e.paid_from||'').toLowerCase().includes((b.account_name||'').toLowerCase())).reduce((s,e)=>s+(+e.amount||0),0);
+    // Format account number: show last 4 digits, mask the rest
+    const acctNum=b.account_number||'';
+    const acctDisplay=acctNum.length>4
+      ? '•••• '+acctNum.slice(-4)
+      : acctNum;
     return `<div class="gc itm">
       <div class="ih">
         <div><div class="inm">${esc(b.account_name)}</div><div class="isub">${esc(b.bank_name)}</div></div>
         <span class="bdg">${esc(b.currency||'LKR')}</span>
       </div>
       <div class="iamt">${fmt(+b.balance)}</div>
+      ${acctNum?`<div style="display:flex;align-items:center;gap:.5rem;font-size:.76rem;color:var(--t2);font-family:monospace;letter-spacing:.06em">
+        <span>🏦</span>
+        <span id="acct-num-${b.id}">${esc(acctDisplay)}</span>
+        <button onclick="toggleAcctNum('${b.id}','${esc(acctNum)}')"
+          style="font-size:.68rem;color:var(--blue);background:none;border:none;cursor:pointer;padding:.1rem .3rem;border-radius:4px;transition:background var(--tr)"
+          title="Show/hide full number">👁</button>
+        <button onclick="copyText('${esc(acctNum)}','Account number copied!')"
+          style="font-size:.68rem;color:var(--t2);background:none;border:none;cursor:pointer;padding:.1rem .3rem;border-radius:4px;transition:background var(--tr)"
+          title="Copy account number">📋</button>
+      </div>`:''}
       <div style="display:flex;gap:1rem;font-size:.78rem">
         <span class="pos">↑ Income: ${fmt(inc)}</span>
         <span class="neg">↓ Expenses: ${fmt(exp)}</span>
@@ -2207,7 +2825,19 @@ function renderCrypto(){
       </div>
       <div class="iamt">${fmt(val)}</div>
       <div class="isub">≈ $${fmtD(usd)} · Buy: $${fmtD(+c.buy_price_usd)} · Now: $${fmtD(+c.current_price_usd)}</div>
-      ${(c.wallet_address||c.account_number)?`<div class="crypto-addr">📍 ${esc(c.wallet_address||c.account_number)}</div>`:''}
+      ${c.wallet_address?`
+      <div style="display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--t2)">
+        <span style="flex-shrink:0">📍</span>
+        <span id="waddr-${c.id}" style="font-family:monospace;font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px" title="${esc(c.wallet_address||'')}">
+          ${esc(truncateAddr(c.wallet_address||''))}
+        </span>
+        <button onclick="toggleWalletAddr('${c.id}','${esc(c.wallet_address||'')}')"
+          style="font-size:.68rem;color:var(--blue);background:none;border:none;cursor:pointer;flex-shrink:0;padding:.1rem .3rem;border-radius:4px"
+          title="Show full address">👁</button>
+        <button onclick="copyText('${esc(c.wallet_address||'')}','Wallet address copied!')"
+          style="font-size:.68rem;color:var(--t2);background:none;border:none;cursor:pointer;flex-shrink:0;padding:.1rem .3rem;border-radius:4px"
+          title="Copy address">📋</button>
+      </div>`:''}
       <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.25rem">
         <button class="mature-btn" onclick="sellCrypto('${c.id}')">↗ Sell / Transfer</button>
         <button class="bdel" onclick="rmItem('crypto','${c.id}')">Delete</button>
@@ -2619,7 +3249,7 @@ const FORMS={
       {id:'amount',         lbl:'Amount (coins held)',      type:'number',ph:'0'},
       {id:'buy_price_usd',  lbl:'Buy Price per coin (USD)', type:'number',ph:'0'},
       {id:'funded_from',    lbl:'Funded From',             type:'select',opts:['__BANKSRC__']},
-      {id:'account_number', lbl:'Wallet Address',          type:'text',  ph:'0x… (optional)',optional:true},
+      {id:'wallet_address', lbl:'Wallet Address',          type:'text',  ph:'0x… (optional)',optional:true},
     ]
   },
   income:{
@@ -3335,9 +3965,8 @@ function addCashLog(type,amt,note){ // type: 'in'|'out'
   if(log.length>200) log.length=200; // keep last 200 entries
   localStorage.setItem('fv_cashlog_'+S.user.id,JSON.stringify(log));
 }
-function setCash(v,logEntry){
+function setCash(v){
   localStorage.setItem('fv_cash_'+S.user.id, v);
-  const d=$('cash-display'); if(d) d.textContent=fmt(v);
   const d3=$('cash-page-bal'); if(d3) d3.textContent=fmt(v);
 }
 
@@ -3792,6 +4421,65 @@ Object.entries(BTN_MAP).forEach(([bid,key])=>{
 
 // ── XSS ESCAPE ───────────────────────────────────────────────────────
 function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+
+// ── ACCOUNT NUMBER / WALLET ADDRESS HELPERS ───────────────────────────
+function truncateAddr(addr){
+  if(!addr) return '';
+  if(addr.length<=12) return addr;
+  // Long addresses (crypto): show first 6 + … + last 4
+  if(addr.length>20) return addr.slice(0,8)+'…'+addr.slice(-6);
+  // Medium (bank): mask middle
+  return addr.slice(0,4)+'••••'+addr.slice(-4);
+}
+
+// Toggle full/masked bank account number
+const _acctNumShown={};
+window.toggleAcctNum=function(id,fullNum){
+  const el=document.getElementById('acct-num-'+id);
+  if(!el) return;
+  _acctNumShown[id]=!_acctNumShown[id];
+  if(_acctNumShown[id]){
+    el.textContent=fullNum;
+    el.style.letterSpacing='.08em';
+  } else {
+    const masked=fullNum.length>4?'•••• '+fullNum.slice(-4):fullNum;
+    el.textContent=masked;
+    el.style.letterSpacing='.06em';
+  }
+};
+
+// Toggle full/truncated wallet address
+const _walletShown={};
+window.toggleWalletAddr=function(id,fullAddr){
+  const el=document.getElementById('waddr-'+id);
+  if(!el) return;
+  _walletShown[id]=!_walletShown[id];
+  if(_walletShown[id]){
+    el.textContent=fullAddr;
+    el.style.maxWidth='100%';
+    el.style.overflow='visible';
+    el.style.whiteSpace='normal';
+    el.style.wordBreak='break-all';
+  } else {
+    el.textContent=truncateAddr(fullAddr);
+    el.style.maxWidth='180px';
+    el.style.overflow='hidden';
+    el.style.whiteSpace='nowrap';
+    el.style.wordBreak='normal';
+  }
+};
+
+// Copy to clipboard with toast
+window.copyText=function(text,msg){
+  navigator.clipboard?.writeText(text).then(()=>toast(msg||'Copied!','s')).catch(()=>{
+    // Fallback for older browsers / file:// protocol
+    const ta=document.createElement('textarea');
+    ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast(msg||'Copied!','s');
+  });
+};
 
 // ════════════════════════════════════════════════════════
 // LOANS MODULE
@@ -4273,7 +4961,11 @@ function renderCalDetail(ds, evs){
 // ════════════════════════════════════════════════════════
 // ACCOUNT MANAGEMENT
 // ════════════════════════════════════════════════════════
-$('btn-acct')?.addEventListener('click',()=>{
+// Account Settings — ubadge-btn (mobile banner) and desktop banner
+$('ubadge-btn')?.addEventListener('click',()=>{ closeSB(); setTimeout(openAccountSettings,150); });
+document.querySelector('.ubadge-desktop')?.addEventListener('click', openAccountSettings);
+
+function openAccountSettings(){
   if(!sb||!S.user){ toast('Not connected to Supabase.','e'); return; }
   const user=S.user;
   const email=user.email||'';
@@ -4319,7 +5011,13 @@ $('btn-acct')?.addEventListener('click',()=>{
       if(error){ msgEl.textContent=error.message;msgEl.style.color='var(--red)'; }
       else{
         msgEl.textContent='✅ Account updated successfully!';msgEl.style.color='var(--green)';
-        if(newName){ setText('uname',newName); setText('gname',newName.split(' ')[0]); $('uav').textContent=newName[0].toUpperCase(); }
+        if(newName){
+          setText('uname',newName); setText('uname-d',newName);
+          setText('gname',newName.split(' ')[0]);
+          const ini=newName[0].toUpperCase();
+          $('uav').textContent=ini;
+          const uavD=$('uav-d'); if(uavD) uavD.textContent=ini;
+        }
         setTimeout(()=>{ $('msave').textContent=origSaveLabel; $('msave').onclick=origSave; $('msave').disabled=false; closeModal(); },1500);
         return;
       }
@@ -4373,34 +5071,9 @@ $('btn-acct')?.addEventListener('click',()=>{
       );
     });
   },50);
-});
-
-// ── Redirect tb-logout to btn-out ────────────────────────────────────
-$('tb-logout')?.addEventListener('click',()=>$('btn-out')?.click());
+} // end openAccountSettings
 
 // ── QUICK-ADD TRANSACTION (topbar + button) ───────────────────────────
-const AUTO_DESCS={
-  'Salary':'Monthly salary credit',
-  'Freelance':'Freelance payment received',
-  'Business':'Business income',
-  'Interest':'Interest income',
-  'Dividend':'Dividend payment',
-  'Rental':'Rental income',
-  'Stock Sale':'Stock Sale — proceeds',
-  'FD Maturity':'Fixed Deposit Withdrawal — maturity proceeds',
-  'Fund Redemption':'Fund Redemption — proceeds',
-  'Crypto Sale':'Crypto Sale — proceeds',
-  'Physical Asset Sale':'Physical Assets Transfer — asset proceeds',
-  'Loan Repayment':'Loan repayment',
-  'Food':'Food & dining',
-  'Transport':'Transport',
-  'Utilities':'Utilities & bills',
-  'Entertainment':'Entertainment',
-  'Healthcare':'Healthcare',
-  'Shopping':'Shopping',
-  'Education':'Education',
-};
-
 const QA_INCOME_CATS=['Salary','Freelance','Business','Interest','Dividend','Rental','Investment Return','Stock Sale','FD Maturity','Fund Redemption','Crypto Sale','Physical Asset Sale','Gift','Refund','Other Income'];
 const QA_EXPENSE_CATS=['Food','Transport','Rent','Bills & Utilities','Healthcare','Shopping','Education','Entertainment','Loan Repayment','Insurance','Maintenance','Subscription','Others'];
 
@@ -4578,7 +5251,7 @@ function openQuickAdd(){
   };
 }
 
-['tb-qadd','tb-qadd-m'].forEach(id=>{ $(id)?.addEventListener('click',openQuickAdd); });
+$('tb-qadd')?.addEventListener('click', openQuickAdd);
 
 } // end init()
 })();
@@ -4822,6 +5495,33 @@ drop trigger if exists trg_ledger_balance_sync on unified_ledger;
 create trigger trg_ledger_balance_sync
   after insert on unified_ledger
   for each row execute function sync_bank_balance_from_ledger();
+
+-- ═══════════════════════════════════════════════════════════
+-- ZERO-KNOWLEDGE CSE — SCHEMA MIGRATION
+-- Run if you are enabling client-side encryption for the first time.
+-- Numeric fields that store encrypted strings must be TEXT columns.
+-- ═══════════════════════════════════════════════════════════
+
+-- bank_accounts: account_name and bank_name may store encrypted text
+-- These columns are already TEXT so no change needed.
+-- account_number is already TEXT.
+
+-- loans: loan_name, lender already TEXT.
+
+-- expenses / income: description already TEXT.
+
+-- crypto_wallets: wallet_name, wallet_address already TEXT.
+
+-- physical_assets: asset_name, description already TEXT.
+
+-- NOTE: Numeric columns (balance, amount, principal_amount etc.) are NOT
+-- encrypted — they remain NUMERIC so all dashboard math (.reduce sums)
+-- works without client-side decryption on every render. Only string
+-- identifiers that expose personal financial identity are encrypted.
+
+-- If you want to verify no numeric columns were accidentally changed:
+-- SELECT column_name, data_type FROM information_schema.columns
+-- WHERE table_name='bank_accounts' AND table_schema='public';
 
 -- ═══════════════════════════════════════════
 -- MIGRATION HELPERS (safe to run any time)
