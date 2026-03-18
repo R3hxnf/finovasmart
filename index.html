@@ -1292,39 +1292,63 @@ img{max-width:100%}
   background:rgba(0,0,0,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   padding:1.2rem;animation:sIn .25s ease both">
   <div style="
-    width:100%;max-width:380px;
+    width:100%;max-width:390px;
     background:var(--gl);backdrop-filter:blur(40px) saturate(180%);
     border:1.5px solid var(--bd2);border-radius:var(--r22);
     box-shadow:0 28px 72px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.07);
-    padding:2.2rem 2rem;animation:sup .3s cubic-bezier(.4,0,.2,1) both;
+    padding:2.2rem 2rem 1.8rem;animation:sup .3s cubic-bezier(.4,0,.2,1) both;
     text-align:center">
-    <!-- Lock icon -->
-    <div style="width:60px;height:60px;border-radius:50%;
+
+    <!-- Icon -->
+    <div id="vault-icon" style="width:60px;height:60px;border-radius:50%;
       background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(167,139,250,.2));
       border:1.5px solid rgba(59,130,246,.3);
       display:flex;align-items:center;justify-content:center;
-      font-size:1.6rem;margin:0 auto 1.2rem">🔐</div>
-    <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:.35rem;letter-spacing:-.03em">Vault Locked</h2>
-    <p style="font-size:.82rem;color:var(--t2);margin-bottom:1.6rem;line-height:1.5">
-      Enter your Master PIN to decrypt your financial data.<br>
-      <span style="font-size:.72rem;color:var(--t3)">The PIN never leaves your device.</span>
+      font-size:1.6rem;margin:0 auto 1.1rem">🔐</div>
+
+    <h2 id="vault-title" style="font-size:1.2rem;font-weight:700;margin-bottom:.3rem;letter-spacing:-.03em">Vault Locked</h2>
+    <p id="vault-subtitle" style="font-size:.82rem;color:var(--t2);margin-bottom:1.3rem;line-height:1.5">
+      Unlock to access your encrypted financial data.
     </p>
-    <div class="fg" style="text-align:left;margin-bottom:1rem">
-      <label>Master PIN</label>
-      <input id="vault-pin" type="password" placeholder="Enter your PIN"
-        autocomplete="off" inputmode="numeric"
-        style="height:52px;font-size:1.3rem;letter-spacing:.35em;text-align:center;font-family:monospace"/>
+
+    <!-- Passkey button — shown when passkey is registered -->
+    <div id="vault-passkey-section" class="dn" style="margin-bottom:1rem">
+      <button id="vault-passkey-btn" class="btn bp bfull" style="height:52px;font-size:.95rem;font-weight:700;
+        background:linear-gradient(135deg,#1a1a2e,#16213e);border:1.5px solid rgba(99,102,241,.5);
+        display:flex;align-items:center;justify-content:center;gap:.65rem">
+        <span style="font-size:1.3rem">🪪</span>
+        <span>Unlock with Passkey</span>
+      </button>
+      <p style="font-size:.72rem;color:var(--t3);margin:.55rem 0 .8rem">
+        Uses your device biometric or screen lock
+      </p>
+      <div style="display:flex;align-items:center;gap:.6rem;color:var(--t3);font-size:.72rem;margin-bottom:.9rem">
+        <div style="flex:1;height:1px;background:var(--bd)"></div>or use PIN<div style="flex:1;height:1px;background:var(--bd)"></div>
+      </div>
     </div>
-    <button id="vault-unlock-btn" class="btn bp bfull" style="height:48px;font-size:.93rem;font-weight:700">
-      🔓 Unlock Vault
-    </button>
-    <!-- First-time setup hint -->
-    <p id="vault-hint" style="font-size:.75rem;color:var(--t3);margin-top:.85rem;line-height:1.5">
-      First time? Choose any PIN — it will be used to encrypt all your data going forward.
-    </p>
-    <p id="vault-msg" style="font-size:.8rem;font-weight:600;min-height:1.1rem;margin-top:.5rem;color:var(--red)"></p>
-    <!-- Escape hatch: sign out without unlocking -->
-    <button onclick="$('btn-out')?.click()" style="font-size:.72rem;color:var(--t3);background:none;border:none;cursor:pointer;margin-top:.7rem;text-decoration:underline">
+
+    <!-- PIN section -->
+    <div id="vault-pin-section">
+      <div class="fg" style="text-align:left;margin-bottom:.75rem">
+        <label id="vault-pin-lbl">Master PIN</label>
+        <input id="vault-pin" type="password" placeholder="Enter PIN"
+          autocomplete="off" inputmode="numeric"
+          style="height:52px;font-size:1.3rem;letter-spacing:.35em;text-align:center;font-family:monospace"/>
+      </div>
+      <div id="vault-confirm-wrap" class="fg dn" style="text-align:left;margin-bottom:.75rem">
+        <label>Confirm PIN</label>
+        <input id="vault-pin2" type="password" placeholder="Repeat PIN"
+          autocomplete="off" inputmode="numeric"
+          style="height:52px;font-size:1.3rem;letter-spacing:.35em;text-align:center;font-family:monospace"/>
+      </div>
+      <button id="vault-unlock-btn" class="btn bp bfull" style="height:48px;font-size:.93rem;font-weight:700">
+        🔓 Unlock with PIN
+      </button>
+    </div>
+
+    <p id="vault-hint" style="font-size:.73rem;color:var(--t3);margin-top:.8rem;line-height:1.55"></p>
+    <p id="vault-msg"  style="font-size:.8rem;font-weight:600;min-height:1.1rem;margin-top:.35rem;color:var(--red)"></p>
+    <button onclick="$('btn-out')?.click()" style="font-size:.72rem;color:var(--t3);background:none;border:none;cursor:pointer;margin-top:.65rem;text-decoration:underline">
       Sign out instead
     </button>
   </div>
@@ -2002,53 +2026,327 @@ async function decryptTable(tbl, rows){
 function showVaultOverlay(){
   const ov = $('vault-ov');
   if(!ov) return;
+
+  const uid = S.user?.id || '';
+  const hasToken    = !!localStorage.getItem('fv_vtok_' + uid);
+  const hasPasskey  = !!localStorage.getItem('fv_pk_' + uid);
+  const isCreate    = !hasToken;
+
+  // Passkey section — show if a credential is registered
+  $('vault-passkey-section').classList.toggle('dn', !hasPasskey);
+
+  // Title / subtitle / labels
+  $('vault-title').textContent = isCreate ? '🔑 Create Vault PIN' : '🔐 Vault Locked';
+  $('vault-subtitle').innerHTML = isCreate
+    ? 'Choose a Master PIN to protect your financial data.<br><span style="font-size:.72rem;color:var(--t3)">Keep it safe — there is no recovery option.</span>'
+    : 'Unlock with your passkey or Master PIN.';
+  $('vault-pin-lbl').textContent    = isCreate ? 'Choose a PIN (min 4 digits)' : 'Master PIN';
+  $('vault-unlock-btn').textContent = isCreate ? '🔐 Create PIN & Encrypt' : '🔓 Unlock with PIN';
+  $('vault-confirm-wrap').classList.toggle('dn', !isCreate);
+  $('vault-hint').textContent = isCreate
+    ? '⚠️ Forgotten PINs cannot be recovered. You can register a passkey after creating your PIN.'
+    : '';
+
+  $('vault-msg').textContent = '';
+  $('vault-pin').value  = '';
+  if($('vault-pin2')) $('vault-pin2').value = '';
+
   ov.classList.remove('dn');
   ov.style.display = 'flex';
-  $('vault-msg').textContent = '';
-  $('vault-pin').value = '';
-  setTimeout(()=>$('vault-pin')?.focus(), 80);
+  // Auto-trigger passkey if available (best UX)
+  if(hasPasskey && !isCreate){
+    setTimeout(()=>attemptPasskeyUnlock(), 300);
+  } else {
+    setTimeout(()=>$('vault-pin')?.focus(), 80);
+  }
 }
+
 function hideVaultOverlay(){
   const ov = $('vault-ov');
   if(ov){ ov.classList.add('dn'); ov.style.display = ''; }
 }
 
-// ── Vault Unlock Button ───────────────────────────────────────────────
-$('vault-unlock-btn')?.addEventListener('click', async()=>{
-  const pin = ($('vault-pin').value||'').trim();
+// ── Vault sentinel ────────────────────────────────────────────────────
+const VAULT_SENTINEL = 'finova-vault-ok-v1';
+
+async function saveVaultToken(key, userId){
+  const prev = _vaultKey; _vaultKey = key;
+  const token = await encryptField(VAULT_SENTINEL);
+  _vaultKey = prev;
+  localStorage.setItem('fv_vtok_' + userId, token);
+}
+
+async function verifyVaultKey(key, userId){
+  const token = localStorage.getItem('fv_vtok_' + userId);
+  if(!token) return true; // first-time setup
+  const prev = _vaultKey; _vaultKey = key;
+  const dec = await decryptField(token);
+  _vaultKey = prev;
+  return dec === VAULT_SENTINEL;
+}
+
+// ── After successful unlock — shared finalise logic ───────────────────
+async function finaliseUnlock(key, isCreate){
+  await persistVaultKey(key);
+  if(!isCreate){
+    // Decrypt in-memory data that was loaded raw before PIN entry
+    S.data.banks    = await decryptTable('bank_accounts',   S.data.banks);
+    S.data.loans    = await decryptTable('loans',           S.data.loans);
+    S.data.expenses = await decryptTable('expenses',        S.data.expenses);
+    S.data.income   = await decryptTable('income',          S.data.income);
+    S.data.crypto   = await decryptTable('crypto_wallets',  S.data.crypto);
+    S.data.assets   = await decryptTable('physical_assets', S.data.assets);
+  }
+  hideVaultOverlay();
+  renderAll();
+
+  // Offer passkey registration after first PIN unlock if not yet registered
+  if(!localStorage.getItem('fv_pk_' + S.user.id) && passkeySupported()){
+    setTimeout(()=>offerPasskeyRegistration(), 800);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// WEBAUTHN PASSKEY IMPLEMENTATION
+// Uses the PRF extension (Chrome 116+, Safari 17+, Firefox 119+) to
+// derive AES-GCM key material directly from the authenticator.
+// Falls back to credential ID as salt for PBKDF2 if PRF unavailable.
+// ══════════════════════════════════════════════════════════════════════
+
+const VAULT_RP = { id: location.hostname || 'localhost', name: 'Finova Vault' };
+const PASSKEY_LS = 'fv_pk_';   // localStorage key prefix for credential ID (base64url)
+
+function passkeySupported(){
+  return !!(window.PublicKeyCredential && navigator.credentials?.create);
+}
+
+// PRF salt — deterministic per-app constant (not secret)
+const PRF_SALT = new TextEncoder().encode('finova-vault-prf-v1');
+
+// Convert ArrayBuffer ↔ base64url
+function ab2b64(buf){ return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,''); }
+function b642ab(s){ const b=atob(s.replace(/-/g,'+').replace(/_/g,'/')); return Uint8Array.from(b,c=>c.charCodeAt(0)).buffer; }
+
+// Derive a 256-bit AES-GCM key from raw PRF output (or credential ID as fallback)
+async function keyFromBytes(bytes){
+  const raw = bytes instanceof ArrayBuffer ? bytes : bytes.buffer;
+  return crypto.subtle.importKey('raw', raw.slice(0,32), {name:'AES-GCM'}, true, ['encrypt','decrypt']);
+}
+
+// PBKDF2 key from credential ID bytes (PRF fallback)
+async function keyFromCredId(credIdBuf, userId){
+  const enc = new TextEncoder();
+  const base = await crypto.subtle.importKey('raw', credIdBuf, 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt:enc.encode(userId), iterations:100_000, hash:'SHA-256'},
+    base, {name:'AES-GCM', length:256}, true, ['encrypt','decrypt']
+  );
+}
+
+// ── Register a new passkey ────────────────────────────────────────────
+async function registerPasskey(){
+  if(!passkeySupported()) throw new Error('WebAuthn not supported in this browser.');
+  const uid  = S.user.id;
+  const name = S.user.email || 'Finova User';
+  const challenge = crypto.getRandomValues(new Uint8Array(32));
+  const userId    = crypto.getRandomValues(new Uint8Array(16)); // opaque user handle
+
+  const cred = await navigator.credentials.create({ publicKey:{
+    challenge,
+    rp: VAULT_RP,
+    user:{ id: userId, name, displayName: 'Finova Vault' },
+    pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],
+    authenticatorSelection:{ userVerification:'required', residentKey:'preferred' },
+    timeout: 60000,
+    extensions:{ prf:{ eval:{ first: PRF_SALT } } }
+  }});
+
+  // Store credential ID so we can look it up on assertion
+  localStorage.setItem(PASSKEY_LS + uid, ab2b64(cred.rawId));
+
+  // Check if PRF output is available right from registration
+  const prfResult = cred.getClientExtensionResults()?.prf?.results?.first;
+  if(prfResult){
+    // PRF available — derive key directly and update vault token
+    const key = await keyFromBytes(prfResult);
+    // If vault already set up with PIN, we need to re-save the token with the passkey key
+    // so the passkey can verify itself. We encrypt the current sentinel with this key.
+    await saveVaultToken(key, uid);
+    // Store a flag that PRF is available
+    localStorage.setItem(PASSKEY_LS + uid + '_prf', '1');
+    return { key, method:'prf' };
+  }
+  // PRF not available — use credential ID as PBKDF2 salt
+  const key = await keyFromCredId(cred.rawId, uid);
+  return { key, method:'credid' };
+}
+
+// ── Assert (authenticate) with passkey ───────────────────────────────
+async function assertPasskey(){
+  const uid     = S.user?.id;
+  const credId  = localStorage.getItem(PASSKEY_LS + uid);
+  if(!credId) throw new Error('No passkey registered for this account.');
+
+  const challenge = crypto.getRandomValues(new Uint8Array(32));
+  const assertion = await navigator.credentials.get({ publicKey:{
+    challenge,
+    rpId: VAULT_RP.id,
+    allowCredentials:[{ id: b642ab(credId), type:'public-key' }],
+    userVerification: 'required',
+    timeout: 60000,
+    extensions:{ prf:{ eval:{ first: PRF_SALT } } }
+  }});
+
+  const prfResult = assertion.getClientExtensionResults()?.prf?.results?.first;
+  const hasPrf    = localStorage.getItem(PASSKEY_LS + uid + '_prf') === '1';
+
+  if(prfResult && hasPrf){
+    // PRF path — derive key from authenticator output
+    return { key: await keyFromBytes(prfResult), method:'prf' };
+  }
+  // Fallback — use credential ID as PBKDF2 salt
+  return { key: await keyFromCredId(assertion.rawId, uid), method:'credid' };
+}
+
+// ── Passkey Unlock flow ───────────────────────────────────────────────
+async function attemptPasskeyUnlock(){
   const msg = $('vault-msg');
+  const btn = $('vault-passkey-btn');
+  if(btn){ btn.disabled=true; btn.querySelector('span:last-child').textContent='Waiting for authenticator…'; }
   msg.textContent = '';
-  if(!pin){ msg.textContent = 'Please enter your PIN.'; return; }
-  if(pin.length < 4){ msg.textContent = 'PIN must be at least 4 characters.'; return; }
-  if(!S.user){ msg.textContent = 'No user session — please sign in again.'; return; }
+  try{
+    const {key} = await assertPasskey();
+    const ok = await verifyVaultKey(key, S.user.id);
+    if(!ok){
+      msg.style.color='var(--red)';
+      msg.textContent='❌ Passkey verification failed. Try your PIN instead.';
+      return;
+    }
+    await finaliseUnlock(key, false);
+    toast('🪪 Vault unlocked with passkey', 's');
+  }catch(e){
+    // User cancelled or error — fail silently, let them use PIN
+    if(e.name !== 'NotAllowedError'){
+      msg.style.color='var(--t2)';
+      msg.textContent = 'Passkey failed: ' + e.message;
+    }
+  }finally{
+    if(btn){ btn.disabled=false; btn.querySelector('span:last-child').textContent='Unlock with Passkey'; }
+  }
+}
+
+// ── Offer passkey registration after PIN unlock ───────────────────────
+// Shows an in-app banner (outside the vault overlay) so the user can tap it
+function offerPasskeyRegistration(){
+  if(!passkeySupported()) return;
+  // Remove any existing banner
+  document.getElementById('passkey-offer-banner')?.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'passkey-offer-banner';
+  banner.style.cssText = `
+    position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+    z-index:9999;max-width:420px;width:calc(100% - 2rem);
+    background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(167,139,250,.12));
+    border:1.5px solid rgba(99,102,241,.4);border-radius:var(--r16);
+    padding:1rem 1.1rem;display:flex;align-items:center;gap:.85rem;
+    box-shadow:0 8px 32px rgba(0,0,0,.4);
+    animation:sIn .3s cubic-bezier(.4,0,.2,1) both;
+  `;
+  banner.innerHTML = `
+    <span style="font-size:1.5rem;flex-shrink:0">🪪</span>
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:700;font-size:.875rem;margin-bottom:.15rem">Register a Passkey</div>
+      <div style="font-size:.75rem;color:var(--t2)">Use Face ID, fingerprint or device PIN next time</div>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-shrink:0">
+      <button id="passkey-offer-yes" style="
+        background:var(--blue);color:#fff;border:none;border-radius:var(--r10);
+        padding:.42rem .85rem;font-size:.8rem;font-weight:700;cursor:pointer;
+        transition:opacity .15s">Set up</button>
+      <button id="passkey-offer-no" style="
+        background:none;color:var(--t3);border:1px solid var(--bd);border-radius:var(--r10);
+        padding:.42rem .7rem;font-size:.8rem;cursor:pointer">Later</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+
+  // Auto-dismiss after 12s
+  const timer = setTimeout(()=>banner.remove(), 12000);
+
+  document.getElementById('passkey-offer-no')?.addEventListener('click',()=>{
+    clearTimeout(timer); banner.remove();
+  });
+
+  document.getElementById('passkey-offer-yes')?.addEventListener('click', async()=>{
+    clearTimeout(timer); banner.remove();
+    const btn = document.getElementById('passkey-offer-yes');
+    try{
+      await registerPasskey();
+      toast('🪪 Passkey registered! Tap it on next login.', 's');
+    }catch(e){
+      if(e.name !== 'NotAllowedError'){
+        toast('Passkey registration failed: ' + e.message, 'e');
+      }
+    }
+  });
+}
+
+// ── Passkey button in overlay ─────────────────────────────────────────
+$('vault-passkey-btn')?.addEventListener('click', attemptPasskeyUnlock);
+
+// ── PIN Unlock Button ─────────────────────────────────────────────────
+$('vault-unlock-btn')?.addEventListener('click', async()=>{
+  const pin  = ($('vault-pin')?.value  || '').trim();
+  const pin2 = ($('vault-pin2')?.value || '').trim();
+  const msg  = $('vault-msg');
+  msg.textContent = '';
+
+  if(!pin)            { msg.textContent = 'Please enter your PIN.'; return; }
+  if(pin.length < 4)  { msg.textContent = 'PIN must be at least 4 characters.'; return; }
+  if(!S.user)         { msg.textContent = 'No user session — please sign in again.'; return; }
+
+  const hasToken = !!localStorage.getItem('fv_vtok_' + S.user.id);
+  const isCreate = !hasToken;
+
+  if(isCreate){
+    if(!pin2)        { msg.textContent = 'Please confirm your PIN.'; return; }
+    if(pin !== pin2) { msg.textContent = 'PINs do not match. Try again.'; return; }
+  }
 
   const btn = $('vault-unlock-btn');
-  btn.disabled = true; btn.textContent = '🔓 Unlocking…';
+  btn.disabled=true; btn.textContent = isCreate ? '🔐 Setting up…' : '🔓 Verifying…';
 
   try{
     const key = await deriveVaultKey(pin, S.user.id);
-    await persistVaultKey(key);
-
-    // Re-decrypt all already-loaded data with the new key
-    if(S.data.banks.length)    S.data.banks    = await decryptTable('bank_accounts',    S.data.banks);
-    if(S.data.loans.length)    S.data.loans    = await decryptTable('loans',            S.data.loans);
-    if(S.data.expenses.length) S.data.expenses = await decryptTable('expenses',         S.data.expenses);
-    if(S.data.income.length)   S.data.income   = await decryptTable('income',           S.data.income);
-    if(S.data.crypto.length)   S.data.crypto   = await decryptTable('crypto_wallets',   S.data.crypto);
-    if(S.data.assets.length)   S.data.assets   = await decryptTable('physical_assets',  S.data.assets);
-
-    hideVaultOverlay();
-    renderAll();
-    toast('🔐 Vault unlocked', 's');
+    if(isCreate){
+      await saveVaultToken(key, S.user.id);
+      await finaliseUnlock(key, true);
+      toast('🔐 Vault created! Your data is now encrypted.', 's');
+    } else {
+      const ok = await verifyVaultKey(key, S.user.id);
+      if(!ok){
+        msg.style.color='var(--red)';
+        msg.textContent='❌ Incorrect PIN. Please try again.';
+        $('vault-pin').value=''; $('vault-pin').focus();
+        return;
+      }
+      await finaliseUnlock(key, false);
+      toast('🔐 Vault unlocked', 's');
+    }
   }catch(e){
-    msg.textContent = 'Unlock failed: ' + e.message;
+    msg.style.color='var(--red)';
+    msg.textContent='Error: '+e.message;
   }finally{
-    btn.disabled = false; btn.textContent = '🔓 Unlock Vault';
+    btn.disabled=false;
+    btn.textContent = isCreate ? '🔐 Create PIN & Encrypt' : '🔓 Unlock with PIN';
   }
 });
 
-// Enter key on PIN field
-$('vault-pin')?.addEventListener('keydown', e=>{ if(e.key==='Enter') $('vault-unlock-btn')?.click(); });
+// Enter key on PIN fields
+[$('vault-pin'),$('vault-pin2')].forEach(inp=>
+  inp?.addEventListener('keydown',e=>{ if(e.key==='Enter') $('vault-unlock-btn')?.click(); })
+);
 
 // ══════════════════════════════════════════════════════════════════════
 const ALLOWED_COLS={
@@ -5045,8 +5343,8 @@ function openAccountSettings(){
           document.body.appendChild(overlay);
 
           try{
-            // Step 1: Clear all localStorage data first
-            ['fv_cash_','fv_cashlog_','fv_theme','fv_lu_'].forEach(k=>{
+            // Step 1: Clear all localStorage data first (including vault token)
+            ['fv_cash_','fv_cashlog_','fv_theme','fv_lu_','fv_vtok_','fv_pk_'].forEach(k=>{
               Object.keys(localStorage).filter(key=>key.includes(k)).forEach(key=>localStorage.removeItem(key));
             });
 
