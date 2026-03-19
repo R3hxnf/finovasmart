@@ -27,7 +27,7 @@
 <script>
 // ── AUTHOR / BRANDING ─────────────────────────────────────────────────
 // Replace with your website URL — shown on all "Made by Rehan Fernando" links.
-const AUTHOR_WEBSITE = 'https://www.linkedin.com/in/rehan-fernando/'; // ← update this URL
+window.AUTHOR_WEBSITE = 'https://rehanfernando.com'; // ← update this URL
 
 window.CFG = {
   SUPABASE_URL:       'https://bcyyacarlinxuqaztrpf.supabase.co',       // e.g. https://abc.supabase.co
@@ -896,7 +896,7 @@ img{max-width:100%}
       <button id="auth-theme-btn" title="Toggle theme" style="display:flex;align-items:center;gap:.45rem;font-size:.75rem;font-weight:600;color:var(--t2);background:none;border:1.5px solid var(--bd);border-radius:99px;padding:.32rem .8rem;cursor:pointer;transition:all var(--tr)">
         <span id="auth-theme-icon">☀</span><span id="auth-theme-lbl">Light</span>
       </button>
-      <p style="font-size:.7rem;color:var(--t3);margin:0">Made by <a id="author-link-auth" href="#" target="_blank" rel="noopener" style="color:var(--t2);text-decoration:none;font-weight:700">Rehan Fernando</a></p>
+      <p style="font-size:.7rem;color:var(--t3);margin:0">Made by <a id="author-link-auth" href="https://rehanfernando.com" target="_blank" rel="noopener" style="color:var(--t2);text-decoration:none;font-weight:700">Rehan Fernando</a></p>
     </div>
   </div>
 </div>
@@ -961,7 +961,7 @@ img{max-width:100%}
           onclick="event.stopPropagation()">⏻</button>
       </div>
       <p style="font-size:.65rem;color:var(--t3);text-align:center;margin-top:.6rem">
-        Made by <a id="author-link-sb" href="#" target="_blank" rel="noopener" style="color:var(--t2);text-decoration:none;font-weight:700">Rehan Fernando</a>
+        Made by <a id="author-link-sb" href="https://rehanfernando.com" target="_blank" rel="noopener" style="color:var(--t2);text-decoration:none;font-weight:700">Rehan Fernando</a>
       </p>
     </div>
   </aside>
@@ -1027,7 +1027,7 @@ img{max-width:100%}
           <div class="insit"><span class="insic">⏳</span><p>Loading insights…</p></div>
         </div></div>
         <div style="text-align:center;padding:1.2rem 0 .4rem;font-size:.72rem;color:var(--t3)">
-          Made with ♥ by <a id="author-link-dash" href="#" target="_blank" rel="noopener" style="color:var(--t2);text-decoration:none;font-weight:700">Rehan Fernando</a> · Finova Personal Finance
+          Made with ♥ by <a id="author-link-dash" href="https://rehanfernando.com" target="_blank" rel="noopener" style="color:var(--t2);text-decoration:none;font-weight:700">Rehan Fernando</a> · Finova Personal Finance
         </div>
       </section>
 
@@ -1386,7 +1386,7 @@ img{max-width:100%}
 
     <p id="vault-hint" style="font-size:.73rem;color:var(--t3);margin-top:.8rem;line-height:1.55"></p>
     <p id="vault-msg"  style="font-size:.8rem;font-weight:600;min-height:1.1rem;margin-top:.35rem;color:var(--red)"></p>
-    <button onclick="$('btn-out')?.click()" style="font-size:.72rem;color:var(--t3);background:none;border:none;cursor:pointer;margin-top:.65rem;text-decoration:underline">
+    <button id="vault-signout-btn" style="font-size:.72rem;color:var(--t3);background:none;border:none;cursor:pointer;margin-top:.65rem;text-decoration:underline">
       Sign out instead
     </button>
   </div>
@@ -1475,7 +1475,74 @@ img{max-width:100%}
   </div>
 </div>
 
-<div class="stmt-panel" id="stmt-panel">
+<!-- ══════════ DEVICE VERIFIED OVERLAY ══════════ -->
+<div id="device-verified-ov" class="dn" style="
+  position:fixed;inset:0;z-index:999999;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#0b0b12 0%,#0d1f14 50%,#0b0b12 100%);
+  padding:1.2rem">
+  <div style="
+    width:100%;max-width:420px;
+    background:linear-gradient(135deg,rgba(74,222,128,.08),rgba(45,212,191,.06));
+    backdrop-filter:blur(40px) saturate(180%);
+    border:1.5px solid rgba(74,222,128,.4);border-radius:var(--r22);
+    box-shadow:0 0 60px rgba(74,222,128,.15),0 28px 72px rgba(0,0,0,.7);
+    padding:2.8rem 2.2rem 2.4rem;text-align:center;
+    animation:sup .4s cubic-bezier(.4,0,.2,1) both">
+
+    <!-- Animated checkmark -->
+    <div style="width:80px;height:80px;border-radius:50%;margin:0 auto 1.4rem;position:relative;
+      background:linear-gradient(135deg,rgba(74,222,128,.2),rgba(45,212,191,.15));
+      border:2px solid rgba(74,222,128,.5);
+      box-shadow:0 0 30px rgba(74,222,128,.25);
+      display:flex;align-items:center;justify-content:center;font-size:2.2rem;
+      animation:pulse-green 2s ease-in-out infinite">✅</div>
+
+    <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:.5rem;letter-spacing:-.03em;
+      background:linear-gradient(135deg,#4ade80,#2dd4bf);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+      Device Verified!
+    </h2>
+    <p style="font-size:.9rem;color:var(--t2);line-height:1.65;margin-bottom:.5rem">
+      Your device has been verified successfully.
+    </p>
+    <p style="font-size:.82rem;color:var(--t3);line-height:1.6;margin-bottom:1.8rem">
+      You may now return to your original device.<br>
+      It has been automatically unlocked.
+    </p>
+
+    <!-- Countdown bar -->
+    <div style="margin-bottom:1.4rem">
+      <div style="font-size:.72rem;color:var(--t3);margin-bottom:.4rem">
+        Auto sign-out in <span id="dv-countdown">5:00</span>
+      </div>
+      <div style="height:3px;background:var(--bd);border-radius:99px;overflow:hidden">
+        <div id="dv-bar" style="height:100%;width:100%;
+          background:linear-gradient(90deg,#4ade80,#2dd4bf);
+          border-radius:99px;transition:width 1s linear"></div>
+      </div>
+    </div>
+
+    <button id="dv-continue-btn" class="btn bfull" style="
+      height:50px;font-size:.95rem;font-weight:700;margin-bottom:.65rem;
+      background:linear-gradient(135deg,#4ade80,#2dd4bf);color:#0b1a0f;
+      border-radius:var(--r10);letter-spacing:.01em">
+      Continue to Finova →
+    </button>
+    <button onclick="window.close()" style="
+      font-size:.75rem;color:var(--t3);background:none;border:none;
+      cursor:pointer;text-decoration:underline">
+      Close this tab
+    </button>
+  </div>
+</div>
+
+<style>
+@keyframes pulse-green{
+  0%,100%{box-shadow:0 0 20px rgba(74,222,128,.2)}
+  50%{box-shadow:0 0 40px rgba(74,222,128,.45)}
+}
+</style>
   <div class="stmt-head">
     <div>
       <h2 id="stmt-title">Account Statement</h2>
@@ -1666,6 +1733,7 @@ async function fetchExchangeRates(){
     const d = await r.json();
     if(d.result === 'success' && d.rates){
       _currencyRates = d.rates;
+      _usingFallbackRates = false;
       USD_TO_LKR_RATE = d.rates['LKR'] || 320;
       const badge = $('currency-badge');
       if(badge) badge.textContent = _currencyCode;
@@ -1675,18 +1743,20 @@ async function fetchExchangeRates(){
   return false;
 }
 
+// True when live rates haven't loaded yet and we're using offline fallbacks
+let _usingFallbackRates = true;
+
 // Convert an amount (in user's storage currency) to the active display currency
+// Returns a plain string (no HTML). Call fmtWithWarn() for the ⚠️ tooltip version.
 function fmt(n){
   n = +n || 0;
   const info = getCurrencyInfo();
-  // Convert: storage currency → USD → display currency
-  const storageRate = _currencyRates[_storageCurrency] || FALLBACK_RATES[_storageCurrency] || 320;
-  const targetRate  = _currencyRates[_currencyCode]    || FALLBACK_RATES[_currencyCode]    || 1;
+  const storageRate = (_usingFallbackRates ? FALLBACK_RATES : _currencyRates)[_storageCurrency] || FALLBACK_RATES[_storageCurrency] || 320;
+  const targetRate  = (_usingFallbackRates ? FALLBACK_RATES : _currencyRates)[_currencyCode]    || FALLBACK_RATES[_currencyCode]    || 1;
   let converted;
   if(_storageCurrency === _currencyCode){
-    converted = n; // same currency, no conversion needed
+    converted = n;
   } else {
-    // n / storageRate = USD amount; USD * targetRate = display currency
     converted = (n / storageRate) * targetRate;
   }
   const abs = Math.abs(converted);
@@ -1696,6 +1766,14 @@ function fmt(n){
   else if(abs >= 1000)str = Math.round(converted).toLocaleString(info.locale);
   else                str = converted.toLocaleString(info.locale,{minimumFractionDigits:2,maximumFractionDigits:2});
   return info.symbol+'\u00a0'+str;
+}
+
+// HTML version — appends ⚠️ tooltip when offline/fallback rates are in use
+function fmtH(n){
+  const base = fmt(n);
+  if(!_usingFallbackRates) return base;
+  return `${base}<span title="Calculated using offline rates" style="
+    font-size:.65em;color:var(--amber);vertical-align:super;cursor:help;margin-left:.15em">⚠</span>`;
 }
 
 // ── END CURRENCY SYSTEM ─────────────────────────────────────────────
@@ -2115,6 +2193,10 @@ async function doSignOut(){
 }
 $('btn-out').addEventListener('click', doSignOut);
 $('btn-out-d')?.addEventListener('click', doSignOut);
+// Vault overlay sign-out button — wired here (inside init) where doSignOut is in scope
+$('vault-signout-btn')?.addEventListener('click', doSignOut);
+// Also expose globally so any future inline handlers can call it safely
+window.doFinovaSignOut = doSignOut;
 
 // ── AUTH STATE CHANGE — single launch point ───────────────────────────
 // Handles: email/password, Google OAuth, token refresh, PASSWORD_RECOVERY
@@ -2141,18 +2223,11 @@ if(sb){
     // ── NORMAL SIGNED_IN / INITIAL_SESSION ────────────────────────────
     if((event==='SIGNED_IN' || event==='INITIAL_SESSION') && session?.user){
 
-      // ── Magic link device verification return ─────────────────────────
-      // Detect if this SIGNED_IN is from a magic link click on a tab that
-      // is currently showing the "Verify This Device" wait screen.
-      // The wait screen sets sessionStorage 'fv_dev_verify_pending' = '1'.
-      // IMPORTANT: only treat it as a verification if S.user is ALREADY set
-      // (meaning the app was already loaded and is waiting). If S.user is null
-      // this is a fresh login, not a magic-link return for device verification.
+      // ── Case 1: Same-tab magic link return (app was already loaded, wait screen showing)
       const isWaitingForVerify = !!sessionStorage.getItem('fv_dev_verify_pending');
       if(isWaitingForVerify && S.user && event === 'SIGNED_IN'){
-        // App already loaded — verify the device and signal the wait screen
         await completeMagicLinkVerification(session.user.id);
-        // ── Dispatch any pending action set before the magic link was sent ─
+        // Dispatch pending actions (device removal, account deletion)
         const uid = session.user.id;
         const removeDeviceId = localStorage.getItem(PA_REMOVE_DEVICE + uid);
         const deleteAccount  = localStorage.getItem(PA_DELETE_ACCOUNT + uid);
@@ -2163,12 +2238,10 @@ if(sb){
               .eq('user_id', uid).eq('device_id', removeDeviceId);
             toast('✅ Device removed successfully.', 's');
           }catch(e){ toast('❌ Device removal failed: '+e.message, 'e'); }
-          // Reload devices list if account settings is open
           if(typeof loadDevicesHtml === 'function') await loadDevicesHtml();
         }
         if(deleteAccount){
           localStorage.removeItem(PA_DELETE_ACCOUNT + uid);
-          // Run the nuclear delete RPC
           try{
             ['fv_cash_','fv_cashlog_','fv_theme','fv_lu_','fv_vtok_','fv_vtok_pk_','fv_pk_','fv_vk_','fv_device_','fv_currency','fv_base_currency'].forEach(k=>{
               Object.keys(localStorage).filter(key=>key.startsWith(k)||key.includes(k)).forEach(key=>localStorage.removeItem(key));
@@ -2183,33 +2256,64 @@ if(sb){
         return;
       }
 
-      // ── Normal first-time login ───────────────────────────────────────
+      // ── Case 2: Fresh login (new tab, new session, or magic link opened in any tab)
       if(!S.user){
         S.user = session.user;
+        const uid = S.user.id;
+
+        // Check if this tab was opened by clicking a device-verification magic link.
+        // We set 'fv_ml_device_verify_<uid>' in localStorage just before sending the link.
+        // This key survives across tabs — so the tab that clicked the link can detect intent.
+        const isDeviceVerifyLink = event === 'SIGNED_IN' &&
+          localStorage.getItem('fv_ml_device_verify_' + uid) === '1';
+
+        if(isDeviceVerifyLink){
+          // ── Magic link clicked: verify device, show success, signal original tab ──
+          // Remove the intent key immediately so it isn't reused
+          localStorage.removeItem('fv_ml_device_verify_' + uid);
+
+          // Verify/register this device (fromFreshSignIn=true handles any device ID)
+          await checkAndRegisterDevice(true);
+
+          // Show a clean "Verified" overlay — do NOT load the full app again
+          showDeviceVerifiedOverlay();
+          return;
+        }
+
+        // ── Normal login (password, Google OAuth, or INITIAL_SESSION token refresh) ──
 
         // Google OAuth first-time onboarding
-        const isOAuth=session.user?.app_metadata?.provider==='google'||
-                      (session.user?.identities||[]).some(id=>id.provider==='google');
-        const isNewOAuth=isOAuth && event==='SIGNED_IN' &&
-                         !session.user?.user_metadata?.finova_initialized;
-        if(isNewOAuth&&sb){
+        const isOAuth = session.user?.app_metadata?.provider==='google' ||
+                        (session.user?.identities||[]).some(id=>id.provider==='google');
+        const isNewOAuth = isOAuth && event==='SIGNED_IN' &&
+                           !session.user?.user_metadata?.finova_initialized;
+        if(isNewOAuth && sb){
           await sb.auth.updateUser({data:{finova_initialized:true}}).catch(()=>{});
         }
 
-        // Try to restore vault key from localStorage (device-persistent)
+        // ── Step 1: Restore vault key from localStorage (fast — just deserializes)
         await loadVaultKeyFromSession();
 
-        await loadAll();
-        launch();
+        // ── Step 2: Device registration check — BEFORE loading data so the
+        //    wait screen appears IMMEDIATELY without waiting for DB queries.
+        // Always pass false here — magic link returns are handled separately
+        // by the isDeviceVerifyLink branch above. Passing true here would
+        // auto-verify any new device on every normal password login, skipping
+        // the email verification step entirely.
+        const deviceOk = await handleDeviceRegistration(false);
+        if(!deviceOk) return;
 
-        // Check device registration — passes true so a magic-link click in a new
-        // tab (Scenario B/C) auto-verifies the device row without re-sending email
-        const deviceOk = await handleDeviceRegistration(event === 'SIGNED_IN');
-        if(!deviceOk) return; // sign-out was triggered inside handleDeviceRegistration
-
-        // Show vault overlay if no key was restored — user must set/enter Master Key
+        // ── Step 3: Show vault overlay IMMEDIATELY (before data finishes loading)
+        //    The overlay sits on top — user enters PIN while data loads in parallel.
+        launch(); // show app shell (empty state — data arrives shortly)
         if(!_vaultKey){
           showVaultOverlay();
+          // Load data in background while user enters PIN
+          loadAll().then(()=>{ if(_vaultKey) renderAll(); });
+        } else {
+          // Vault key available — load data then render
+          await loadAll();
+          renderAll();
         }
       }
     }
@@ -2455,13 +2559,21 @@ async function checkAndRegisterDevice(fromFreshSignIn = false){
   try{
     const { data, error } = await sb.from('registered_devices')
       .select('*').eq('user_id', uid).eq('device_id', did).maybeSingle();
-    // If table doesn't exist yet, treat as first-run (graceful degradation)
-    if(error && (error.code === '42P01' || error.message?.includes('does not exist'))){
-      console.warn('[Finova] registered_devices table missing — skipping device check. Run the DDL from the schema section.');
-      return 'ok';
+    if(error){
+      // Missing table — graceful degradation (new deployment)
+      if(error.code === '42P01' || error.message?.includes('does not exist')){
+        console.warn('[Finova] registered_devices table missing — run DDL.');
+        return 'ok';
+      }
+      // Any other DB error — security system offline
+      console.error('[Finova] Device check DB error:', error.message);
+      return 'error';
     }
     existing = data;
-  }catch(e){ console.warn('[Finova] Device check error:', e); return 'ok'; }
+  }catch(e){
+    console.warn('[Finova] Device check exception:', e);
+    return 'error';
+  }
 
   if(existing){
     if(existing.is_verified){
@@ -2504,21 +2616,25 @@ async function checkAndRegisterDevice(fromFreshSignIn = false){
 
   if(count >= 3) return 'blocked';
 
-  if(count === 0){
-    // First device — auto-register, no magic link needed
+  // fromFreshSignIn = user just clicked a magic link — email ownership proved.
+  // Register this device as VERIFIED immediately regardless of which physical
+  // device they clicked from. This ends the loop.
+  if(count === 0 || fromFreshSignIn){
     try{
-      await sb.from('registered_devices').insert({
+      await sb.from('registered_devices').upsert({
         device_id:   did,
         user_id:     uid,
         device_name: dname,
         last_used:   new Date().toISOString(),
         is_verified: true
-      });
+      }, { onConflict: 'device_id,user_id' });
     }catch(_){}
+    // Signal the original waiting tab if this was a magic link click
+    if(fromFreshSignIn) localStorage.setItem('fv_dev_verify_done_' + uid, '1');
     return 'ok';
   }
 
-  // 2nd or 3rd device — insert unverified row, then send magic link
+  // 2nd or 3rd device on normal login — insert unverified row, send magic link
   try{
     await sb.from('registered_devices').upsert({
       device_id:   did,
@@ -2543,7 +2659,12 @@ async function checkAndRegisterDevice(fromFreshSignIn = false){
 async function sendDeviceMagicLink(){
   if(!S.user?.email) return { ok:false, error:'No email on account.' };
   try{
-    // redirectTo ensures the magic link click lands back in this app
+    // Set intent key BEFORE sending so the tab that clicks the magic link
+    // knows it was sent for device verification (not normal login)
+    if(S.user?.id) localStorage.setItem('fv_ml_device_verify_' + S.user.id, '1');
+
+    // redirectTo: use PROD_URL for any non-localhost hostname to prevent
+    // private-IP/mobile-data redirect failures.
     const isLocal = window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1'||window.location.protocol==='file:';
     const redirectTo = isLocal ? (window.location.origin+window.location.pathname) : PROD_URL;
     const { error } = await sb.auth.signInWithOtp({
@@ -2551,11 +2672,14 @@ async function sendDeviceMagicLink(){
       options: { shouldCreateUser: false, emailRedirectTo: redirectTo }
     });
     if(error){
+      // Clean up intent key if send failed
+      if(S.user?.id) localStorage.removeItem('fv_ml_device_verify_' + S.user.id);
       console.warn('[Finova] Magic link send failed:', error.message);
       return { ok:false, error: error.message };
     }
     return { ok:true };
   }catch(e){
+    if(S.user?.id) localStorage.removeItem('fv_ml_device_verify_' + S.user.id);
     console.warn('[Finova] Magic link send exception:', e);
     return { ok:false, error: e.message };
   }
@@ -2596,7 +2720,6 @@ function showMagicLinkWaitScreen(email, onResend){
     const msg  = document.getElementById('otp-msg');
     const cncl = document.getElementById('otp-cancel-btn');
 
-    // Set a SESSION flag — this tab is now waiting for magic link verification.
     sessionStorage.setItem(DEVICE_VERIFY_PENDING_KEY, '1');
 
     tEl.textContent = '📧 Check Your Email';
@@ -2609,13 +2732,15 @@ function showMagicLinkWaitScreen(email, onResend){
     msg.textContent    = '';
     rsnd.textContent   = '🔁 Resend link';
     rsnd.style.display = '';
-    cncl.textContent   = 'Cancel';
+    cncl.textContent   = 'Sign out instead';
     cncl.style.display = '';
 
     ov.classList.remove('dn');
     ov.style.display = 'flex';
 
     let resolved = false;
+    let realtimeChannel = null;
+    let fallbackTimer  = null;
 
     function cleanup(result){
       if(resolved) return;
@@ -2625,7 +2750,12 @@ function showMagicLinkWaitScreen(email, onResend){
       ov.style.display = '';
       rsnd.onclick = null;
       cncl.onclick = null;
-      if(pollTimer) clearInterval(pollTimer);
+      // Unsubscribe Realtime channel
+      if(realtimeChannel && sb){
+        sb.removeChannel(realtimeChannel);
+        realtimeChannel = null;
+      }
+      if(fallbackTimer) clearInterval(fallbackTimer);
       resolve(result);
     }
 
@@ -2637,24 +2767,46 @@ function showMagicLinkWaitScreen(email, onResend){
       setTimeout(()=>{ rsnd.textContent = '🔁 Resend link'; }, 4000);
     };
 
-    cncl.onclick = () => cleanup(false);
+    cncl.onclick = () => {
+      cleanup(false);
+      if(typeof doSignOut === 'function') doSignOut();
+    };
 
-    // Poll: check if completeMagicLinkVerification() set the "done" flag.
-    // sessionStorage = same-tab signal (Scenario A).
-    // localStorage   = cross-tab signal (Scenario B: new tab verified, this tab still waiting).
-    const DONE_KEY     = 'fv_dev_verify_done';
+    const currentDevId = getDeviceId();
     const DONE_LS_KEY  = 'fv_dev_verify_done_' + (S.user?.id || '');
-    sessionStorage.removeItem(DONE_KEY);
-    localStorage.removeItem(DONE_LS_KEY); // clear any stale signal
+    const DONE_SS_KEY  = 'fv_dev_verify_done';
+    sessionStorage.removeItem(DONE_SS_KEY);
+    localStorage.removeItem(DONE_LS_KEY);
 
-    const pollTimer = setInterval(()=>{
-      const done = sessionStorage.getItem(DONE_KEY) || localStorage.getItem(DONE_LS_KEY);
+    // ── Primary: Supabase Realtime subscription ──────────────────────────
+    // Fires instantly when the magic link tab updates is_verified = true.
+    if(sb && S.user){
+      realtimeChannel = sb.channel('device_check_' + currentDevId)
+        .on('postgres_changes', {
+          event:  'UPDATE',
+          schema: 'public',
+          table:  'registered_devices',
+          filter: `device_id=eq.${currentDevId}`
+        }, payload => {
+          if(payload.new?.is_verified === true){
+            // Signal same-tab sessionStorage too (completeMagicLinkVerification may not have run here)
+            sessionStorage.setItem(DONE_SS_KEY, '1');
+            cleanup(true);
+          }
+        })
+        .subscribe();
+    }
+
+    // ── Fallback: localStorage poll (cross-tab, cross-device) ────────────
+    // Catches the case where Realtime isn't available or fires before subscribe completes.
+    fallbackTimer = setInterval(()=>{
+      const done = sessionStorage.getItem(DONE_SS_KEY) || localStorage.getItem(DONE_LS_KEY);
       if(done){
-        sessionStorage.removeItem(DONE_KEY);
+        sessionStorage.removeItem(DONE_SS_KEY);
         localStorage.removeItem(DONE_LS_KEY);
         cleanup(true);
       }
-    }, 600);
+    }, 800);
   });
 }
 
@@ -2667,6 +2819,45 @@ function showOtpModal({ title, subtitle, onResend }){
 // Handle the full device registration flow after login
 async function handleDeviceRegistration(fromFreshSignIn = false){
   const status = await checkAndRegisterDevice(fromFreshSignIn);
+  if(status === 'ok') return true;
+
+  if(status === 'error'){
+    // Security system offline — show blocker, do not allow access
+    return new Promise(resolve => {
+      const ov   = document.getElementById('otp-modal-ov');
+      const tEl  = document.getElementById('otp-modal-title');
+      const sEl  = document.getElementById('otp-modal-sub');
+      const rsnd = document.getElementById('otp-resend-btn');
+      const cncl = document.getElementById('otp-cancel-btn');
+      const msg  = document.getElementById('otp-msg');
+
+      tEl.textContent    = '🔒 Security System Offline';
+      sEl.innerHTML      = 'Could not connect to the device security service.<br><br>' +
+        '<span style="font-size:.8rem;color:var(--amber)">This may be a temporary network issue. ' +
+        'Please check your connection and try again.</span>';
+      rsnd.style.display = '';
+      rsnd.textContent   = '🔄 Retry';
+      if(msg) msg.textContent = '';
+      ov.classList.remove('dn');
+      ov.style.display = 'flex';
+      cncl.textContent = 'Sign Out';
+      rsnd.onclick = async () => {
+        rsnd.disabled = true; rsnd.textContent = 'Retrying…';
+        ov.classList.add('dn'); ov.style.display = '';
+        rsnd.onclick = null; cncl.onclick = null;
+        const retryOk = await handleDeviceRegistration(fromFreshSignIn);
+        resolve(retryOk);
+      };
+      cncl.onclick = () => {
+        rsnd.style.display = '';
+        cncl.textContent = 'Cancel';
+        rsnd.onclick = null; cncl.onclick = null;
+        ov.classList.add('dn'); ov.style.display = '';
+        resolve(false);
+        doSignOut();
+      };
+    });
+  }
   if(status === 'ok') return true;
 
   if(status === 'blocked'){
@@ -2712,8 +2903,7 @@ async function handleDeviceRegistration(fromFreshSignIn = false){
   const verified = await showMagicLinkWaitScreen(email, sendDeviceMagicLink);
 
   if(!verified){
-    // User cancelled
-    await doSignOut();
+    // User clicked "Sign out instead" — doSignOut already called inside the wait screen
     return false;
   }
   return true;
@@ -2769,6 +2959,77 @@ function showVaultOverlay(){
 function hideVaultOverlay(){
   const ov = $('vault-ov');
   if(ov){ ov.classList.add('dn'); ov.style.display = ''; }
+}
+
+// ── Device Verified Overlay ───────────────────────────────────────────
+// Shown when the magic link is opened in a new tab/device.
+// Auto signs out after 5 min of inactivity. No data is ever fetched here.
+function showDeviceVerifiedOverlay(){
+  const ov = $('device-verified-ov');
+  if(!ov) return;
+  ov.classList.remove('dn');
+  ov.style.display = 'flex';
+
+  // ── 5-minute countdown + inactivity auto sign-out ─────────────────
+  const TOTAL_MS    = 5 * 60 * 1000; // 5 minutes
+  let remaining     = TOTAL_MS;
+  let lastActivity  = Date.now();
+  let signedOut     = false;
+
+  // Reset inactivity timer on any user interaction
+  const resetActivity = () => { lastActivity = Date.now(); };
+  ['mousemove','keydown','touchstart','click'].forEach(ev =>
+    document.addEventListener(ev, resetActivity, { passive:true })
+  );
+
+  const countdownEl = $('dv-countdown');
+  const barEl       = $('dv-bar');
+
+  const tick = setInterval(()=>{
+    const idle = Date.now() - lastActivity;
+    // Only count down when idle (no interaction for > 10s)
+    if(idle > 10000) remaining -= 1000;
+    remaining = Math.max(0, remaining);
+
+    // Update countdown display
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.floor((remaining % 60000) / 1000);
+    if(countdownEl) countdownEl.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+    if(barEl)       barEl.style.width = (remaining / TOTAL_MS * 100) + '%';
+
+    if(remaining <= 0 && !signedOut){
+      signedOut = true;
+      clearInterval(tick);
+      ['mousemove','keydown','touchstart','click'].forEach(ev =>
+        document.removeEventListener(ev, resetActivity)
+      );
+      // Sign out silently — this tab was only for verification
+      if(sb) sb.auth.signOut().catch(()=>{});
+      // Replace overlay with signed-out message
+      ov.innerHTML = `<div style="text-align:center;color:var(--t2);padding:2rem">
+        <div style="font-size:2rem;margin-bottom:.8rem">⏱</div>
+        <p style="font-weight:700;margin-bottom:.4rem">Session Ended</p>
+        <p style="font-size:.82rem">Signed out due to inactivity.</p>
+      </div>`;
+    }
+  }, 1000);
+
+  // ── "Continue to Finova" button — loads the full app on this tab ──
+  $('dv-continue-btn')?.addEventListener('click', async ()=>{
+    signedOut = true;
+    clearInterval(tick);
+    ['mousemove','keydown','touchstart','click'].forEach(ev =>
+      document.removeEventListener(ev, resetActivity)
+    );
+    ov.classList.add('dn');
+    ov.style.display = '';
+    // Now launch the full app normally
+    await loadVaultKeyFromSession();
+    await loadAll();
+    launch();
+    if(!_vaultKey) showVaultOverlay();
+    else renderAll();
+  }, { once: true });
 }
 
 // ── Vault sentinel ────────────────────────────────────────────────────
@@ -3441,7 +3702,7 @@ function launch(){
   // Decrypt cash balance + log from localStorage before first render
   _loadCashAsync().then(()=>{ renderAll(); });
   if(SB_READY){
-    S.stockRefreshTimer=setInterval(refreshStockPrices,CFG.REFRESH_MS);
+    scheduleStockRefresh();
     refreshStockPrices();
     subscribeRealtime();
     subscribeBalances();
@@ -3485,7 +3746,28 @@ function closeSB(){ $('sb').classList.remove('open'); $('sbbd').classList.remove
 $('sbclose').addEventListener('click',closeSB);
 $('sbbd').addEventListener('click',closeSB);
 
-// ── STOCK PRICE APIs ──────────────────────────────────────────────────
+// ── SMART STOCK REFRESH ─────────────────────────────────────────────────
+// Returns true if US markets are likely open (Mon–Fri, 9:30–16:00 EST)
+function isMarketOpen(){
+  const now = new Date();
+  // Convert to EST (UTC-5) / EDT (UTC-4) — approximate using fixed UTC-5 offset
+  const est = new Date(now.getTime() - (5 * 60 * 60 * 1000));
+  const day  = est.getUTCDay(); // 0=Sun, 6=Sat
+  if(day === 0 || day === 6) return false; // weekend
+  const h = est.getUTCHours(), m = est.getUTCMinutes();
+  const mins = h * 60 + m;
+  return mins >= 9 * 60 + 30 && mins < 16 * 60; // 9:30–16:00 EST
+}
+
+function scheduleStockRefresh(){
+  if(S.stockRefreshTimer) clearInterval(S.stockRefreshTimer);
+  const interval = isMarketOpen() ? CFG.REFRESH_MS : 1800000; // 1 min or 30 min
+  S.stockRefreshTimer = setInterval(()=>{
+    refreshStockPrices();
+    // Re-schedule on each tick so the interval adapts as market hours change
+    scheduleStockRefresh();
+  }, interval);
+}
 async function fetchPrice(symbol){
   // Skip CSE stocks for live API (not supported by these APIs)
   if(symbol.includes('.N')||symbol.includes('.X')) return null;
@@ -3542,31 +3824,35 @@ async function refreshStockPrices(){
 $('rf-btn').addEventListener('click',refreshStockPrices);
 
 // ── TOTALS HELPER ─────────────────────────────────────────────────────
+// Integer-math helpers — convert to cents, operate, convert back
+const toCents = v => Math.round((+v||0)*100);
+const fromCents = c => c/100;
+
 function calcTotals(){
-  const banks  = S.data.banks.reduce((s,b)=>s+(+b.balance||0),0);
+  const banks  = fromCents(S.data.banks.reduce((s,b)=>s+toCents(b.balance),0));
   const cash   = getCash();
-  const fdv    = S.data.fd.reduce((s,f)=>s+fdMat(+f.principal,+f.rate||+f.interest_rate,f.start_date||f.start,f.maturity_date||f.maturity),0);
-  const funds  = S.data.funds.reduce((s,f)=>s+(+f.current_value||0),0);
-  const stocks = S.data.stocks.reduce((s,st)=>s+((+st.current_price||+st.purchase_price||0)*(+st.shares||0)),0);
-  const crypto = S.data.crypto.reduce((s,c)=>s+(+c.value_lkr||0),0);
-  const phyAssets = S.data.assets.reduce((s,a)=>{
-    const cv=calcAssetCurrentValue(a.category,+a.purchase_value||0,a.purchase_date);
-    return s+(cv>0?cv:(+a.current_value||+a.purchase_value||0));
+  const fdv    = S.data.fd.reduce((s,f)=>{
+    const mat = fdMat(+f.principal,+f.rate||+f.interest_rate,f.start_date||f.start,f.maturity_date||f.maturity);
+    return fromCents(toCents(s)+toCents(mat));
   },0);
-  const cards  = S.data.cards.reduce((s,c)=>s+(+c.outstanding||+c.outstanding_balance||0),0);
-  const loans  = S.data.loans.reduce((s,l)=>s+(+l.remaining_balance||0),0);
-  const assets = banks+cash+fdv+funds+stocks+crypto+phyAssets;
+  const funds  = fromCents(S.data.funds.reduce((s,f)=>s+toCents(f.current_value),0));
+  const stocks = fromCents(S.data.stocks.reduce((s,st)=>s+toCents((+st.current_price||+st.purchase_price||0)*(+st.shares||0)),0));
+  const crypto = fromCents(S.data.crypto.reduce((s,c)=>s+toCents(c.value_lkr),0));
+  const phyAssets = fromCents(S.data.assets.reduce((s,a)=>{
+    const cv=calcAssetCurrentValue(a.category,+a.purchase_value||0,a.purchase_date);
+    return s+toCents(cv>0?cv:(+a.current_value||+a.purchase_value||0));
+  },0));
+  const cards  = fromCents(S.data.cards.reduce((s,c)=>s+toCents(+c.outstanding||+c.outstanding_balance||0),0));
+  const loans  = fromCents(S.data.loans.reduce((s,l)=>s+toCents(l.remaining_balance),0));
+  const assets = fromCents(toCents(banks)+toCents(cash)+toCents(fdv)+toCents(funds)+toCents(stocks)+toCents(crypto)+toCents(phyAssets));
   const now=new Date(), ms=new Date(now.getFullYear(),now.getMonth(),1);
   const ws=new Date(now); ws.setDate(now.getDate()-7);
   const td=today();
-  const mExp  = S.data.expenses.filter(e=>new Date(e.date)>=ms).reduce((s,e)=>s+(+e.amount||0),0);
-  const wExp  = S.data.expenses.filter(e=>new Date(e.date)>=ws).reduce((s,e)=>s+(+e.amount||0),0);
-  const dExp  = S.data.expenses.filter(e=>e.date===td).reduce((s,e)=>s+(+e.amount||0),0);
-  const totExp= S.data.expenses.reduce((s,e)=>s+(+e.amount||0),0);
-  // Net worth = assets − card liabilities − loans
-  // NOTE: totExp is NOT subtracted here — bank balances already reflect all expense deductions.
-  // Subtracting totExp again would double-count every expense (BUG FIX #8).
-  const nw = assets - cards - loans;
+  const mExp  = fromCents(S.data.expenses.filter(e=>new Date(e.date)>=ms).reduce((s,e)=>s+toCents(e.amount),0));
+  const wExp  = fromCents(S.data.expenses.filter(e=>new Date(e.date)>=ws).reduce((s,e)=>s+toCents(e.amount),0));
+  const dExp  = fromCents(S.data.expenses.filter(e=>e.date===td).reduce((s,e)=>s+toCents(e.amount),0));
+  const totExp= fromCents(S.data.expenses.reduce((s,e)=>s+toCents(e.amount),0));
+  const nw = fromCents(toCents(assets)-toCents(cards)-toCents(loans));
   return {banks,cash,fdv,funds,stocks,crypto,phyAssets,cards,loans,assets,nw,mExp,wExp,dExp,totExp};
 }
 
@@ -5219,9 +5505,9 @@ function renderStatement(bankId){
     .map(e=>({_type:'xfr',_date:e.date,_label:e.description||'Internal Transfer',_sub:'Transfer',amount:+e.amount||0}));
 
   // NOTE: Income and outflow rows are separate — no deduplication needed (BUG FIX #31: removed misleading comment about dedup that never ran)
-  const totalInc=incomeRows.reduce((s,i)=>s+i.amount,0);
-  const totalExp=outRows.reduce((s,t)=>s+t.amount,0);
-  const net=totalInc-totalExp;
+  const totalInc = fromCents(incomeRows.reduce((s,i)=>s+toCents(i.amount),0));
+  const totalExp = fromCents(outRows.reduce((s,t)=>s+toCents(t.amount),0));
+  const net      = fromCents(toCents(totalInc)-toCents(totalExp));
 
   const all=[...incomeRows,...outRows,...xfrRows]
     .filter(t=>t._date&&t._date.length>=7)
@@ -6858,7 +7144,7 @@ create table if not exists registered_devices (
   last_used    timestamptz default now(),
   is_verified  boolean not null default false,
   created_at   timestamptz default now(),
-  unique(device_id, user_id)
+  constraint registered_devices_device_id_user_id_key unique(device_id, user_id)
 );
 
 alter table registered_devices enable row level security;
@@ -7161,6 +7447,43 @@ create trigger trg_ledger_balance_sync
 -- ═══════════════════════════════════════════
 -- MIGRATION HELPERS (safe to run any time)
 -- ═══════════════════════════════════════════
+
+-- ── registered_devices: ensure constraint is NAMED (required for upsert onConflict) ──
+-- If your table was created without a named constraint, this renames it safely.
+do $$ begin
+  -- Drop unnamed constraint if it exists under the auto-generated name
+  if exists (
+    select 1 from pg_constraint
+    where conrelid = 'registered_devices'::regclass
+    and contype = 'u'
+    and conname <> 'registered_devices_device_id_user_id_key'
+    and array_to_string(array(
+      select attname from pg_attribute
+      where attrelid = conrelid and attnum = any(conkey)
+      order by attnum
+    ), ',') = 'device_id,user_id'
+  ) then
+    execute (
+      select 'alter table registered_devices drop constraint ' || conname
+      from pg_constraint
+      where conrelid = 'registered_devices'::regclass
+      and contype = 'u'
+      and conname <> 'registered_devices_device_id_user_id_key'
+      limit 1
+    );
+  end if;
+  -- Add the named constraint if it doesn't exist yet
+  if not exists (
+    select 1 from pg_constraint
+    where conrelid = 'registered_devices'::regclass
+    and conname = 'registered_devices_device_id_user_id_key'
+  ) then
+    alter table registered_devices
+      add constraint registered_devices_device_id_user_id_key
+      unique (device_id, user_id);
+  end if;
+exception when others then null;
+end $$;
 
 -- user_preferences table (if upgrading from an older version)
 create table if not exists user_preferences (
